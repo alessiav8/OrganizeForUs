@@ -1,0 +1,31 @@
+<p style="color: green"></p>
+
+<h1>I tuoi gruppi</h1>
+
+<table class="table table-striped table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Nome</th>
+      <th>Descrizione</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@gruppos.each do |gruppo|%>
+      <tr>
+        <td><%= gruppo.nome %>
+        </td>
+        <td><%= gruppo.descrizione %>
+        </td>
+        <td><%= link_to 'Mostra gruppo', gruppo %>
+        </td>
+        <td><%= link_to 'Modifica gruppo',  edit_gruppo_path(gruppo)%>
+        </td>
+        <td><%= button_to 'Elimina gruppo', gruppo, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<br>
+<%=link_to 'Crea nuovo gruppo', new_gruppo_path, class:"btn btn-secondary"%>

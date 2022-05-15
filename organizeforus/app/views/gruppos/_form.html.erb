@@ -1,0 +1,30 @@
+<%= form_with(model: gruppo) do |form| %>
+  <% if gruppo.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(gruppo.errors.count, "error") %> prohibited this gruppo from being saved:</h2>
+
+      <ul>
+        <% gruppo.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field form group">
+    </br>
+    <% form.label :nome, style: "display: block" %>
+    <%= form.text_field :nome, class:"form-control", placeholder:"Nome" %>
+  </div>
+
+  <div class="field form group">
+    </br>
+    <% form.label :descrizione, style: "display: block" %>
+    <%= form.text_field :descrizione, class:"form-control", placeholder:"Descrizione"  %>
+  </div>
+
+  <div>
+    </br>
+    <%= form.submit class:'btn btn-secondary' %>
+  </div>
+<% end %>

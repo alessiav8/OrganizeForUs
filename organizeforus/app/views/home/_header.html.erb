@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar_light bg-light">
+  <div class="container-fluid">
+
+    <!--link_to tag per linkare su rails-->
+    <%=link_to 'Organize For Us', root_path, class:"navbar-brand"%>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%=link_to "About Us", home_about_path, class:"nav-link"%>
+        </li>
+
+        <%if user_signed_in? %>
+            <li class="nav-item">
+                <%= button_to 'Logout', destroy_user_session_path, method: :delete %>
+                <!--<%= link_to "Logout", destroy_user_session_path, 'data-turbo-method': :delete, class:"nav-link" %>-->
+                <!--QUESTA RIGA SOPRA è COERENTE ALLO STILE DEL SITO MA MI Dà PROBLEMI CON IL LOG OUT QUINDI AGGIUSTO DOPO-->
+                <!--NEL FRATTEMPO USO LA RIGA SOPRA, BUTTON_TO-->
+            </li>
+            <li class="nav-item">
+                <%=link_to "Modifica profilo", edit_user_registration_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <!--non fatto-->
+                <a class="nav-link" href="#">ProfiloNonFatto</a>
+            </li>
+            <li class="nav-item">
+                <%=link_to "Crea gruppo", new_gruppo_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <%=link_to "I tuoi gruppi", gruppos_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <!--non fatto-->
+                <a class="nav-link" href="#">I tuoi eventi</a>
+            </li>
+        <%else%>   
+            <li class="nav-item">
+                <%=link_to "Registrati", new_user_registration_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <%=link_to "Login", new_user_session_path, class:"nav-link"%>
+            </li>
+        <%end%>
+           
+      </ul>
+    </div>
+  </div>
+</nav>
