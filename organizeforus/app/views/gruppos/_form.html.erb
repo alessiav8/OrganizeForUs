@@ -23,6 +23,11 @@
     <%= form.text_field :descrizione, class:"form-control", placeholder:"Descrizione"  %>
   </div>
 
+  <div class="field form group">
+  </br>
+  <%= form.number_field :user_id, id: :gruppos_user_id, class:"form-control",value: current_user.id,type: :hidden %>
+  </div>
+
   <div>
     </br>
     <%= form.submit class:'btn btn-secondary' %>

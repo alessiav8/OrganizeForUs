@@ -1,5 +1,6 @@
 class GrupposController < ApplicationController
   before_action :set_gruppo, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, expect: [:index, :show]
 
   # GET /gruppos or /gruppos.json
   def index
@@ -65,6 +66,10 @@ class GrupposController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def gruppo_params
-      params.require(:gruppo).permit(:nome, :descrizione)
+      params.require(:gruppo).permit(:nome, :descrizione, :user_id)
+    end
+
+    def inside 
+      @gruppo=Gruppo.find(params[:id])
     end
 end
