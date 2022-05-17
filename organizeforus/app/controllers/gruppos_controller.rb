@@ -1,6 +1,7 @@
 class GrupposController < ApplicationController
   before_action :set_gruppo, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, expect: [:index, :show]
+  #se l'user non è autenticato non può fare nulla se non le cose specificate nella index e nella show
 
   # GET /gruppos or /gruppos.json
   def index

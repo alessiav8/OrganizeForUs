@@ -17,28 +17,28 @@
                 <%= button_to 'Logout', destroy_user_session_path, method: :delete %>
                 <!--<%= link_to "Logout", destroy_user_session_path, 'data-turbo-method': :delete, class:"nav-link" %>-->
                 <!--QUESTA RIGA SOPRA è COERENTE ALLO STILE DEL SITO MA MI Dà PROBLEMI CON IL LOG OUT QUINDI AGGIUSTO DOPO-->
-                <!--NEL FRATTEMPO USO LA RIGA SOPRA, BUTTON_TO-->
+                <!--NEL FRATTEMPO USO LA RIGA SOPRA ANCORA, BUTTON_TO, CHE FUNZIONA MA è BRUTTA DA VEDERE-->
             </li>
             <li class="nav-item">
-                <%=link_to "Modifica profilo", edit_user_registration_path, class:"nav-link"%>
-            </li>
-            <li class="nav-item">
-                <!--non fatto-->
-                <a class="nav-link" href="#">ProfiloAncoraNonFatto</a>
-            </li>
-            <li class="nav-item">
-                <%=link_to "Crea gruppo", new_gruppo_path, class:"nav-link"%>
-            </li>
-            <li class="nav-item">
-                <%=link_to "I tuoi gruppi", gruppos_path, class:"nav-link"%>
+                <%=link_to "Edit profile", edit_user_registration_path, class:"nav-link"%>
             </li>
             <li class="nav-item">
                 <!--non fatto-->
-                <a class="nav-link" href="#">I tuoi eventi</a>
+                <a class="nav-link" href="#">ProfileNONFATTO</a>
+            </li>
+            <li class="nav-item">
+                <%=link_to "Create group", new_gruppo_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <%=link_to "Your groups", gruppos_path, class:"nav-link"%>
+            </li>
+            <li class="nav-item">
+                <!--non fatto-->
+                <a class="nav-link" href="#">Your events</a>
             </li>
         <%else%>   
             <li class="nav-item">
-                <%=link_to "Registrati", new_user_registration_path, class:"nav-link"%>
+                <%=link_to "Sign up", new_user_registration_path, class:"nav-link"%>
             </li>
             <li class="nav-item">
                 <%=link_to "Login", new_user_session_path, class:"nav-link"%>

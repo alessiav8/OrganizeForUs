@@ -14,15 +14,16 @@
   <div class="field form group">
     </br>
     <% form.label :nome, style: "display: block" %>
-    <%= form.text_field :nome, class:"form-control", placeholder:"Nome" %>
+    <%= form.text_field :nome, class:"form-control", placeholder:"Name" %>
   </div>
 
   <div class="field form group">
     </br>
     <% form.label :descrizione, style: "display: block" %>
-    <%= form.text_field :descrizione, class:"form-control", placeholder:"Descrizione"  %>
+    <%= form.text_field :descrizione, class:"form-control", placeholder:"Description"  %>
   </div>
 
+  <!--campo nascosto per lo user_id che associa il gruppo all'utente che lo crea-->
   <div class="field form group">
   </br>
   <%= form.number_field :user_id, id: :gruppos_user_id, class:"form-control",value: current_user.id,type: :hidden %>
@@ -30,6 +31,6 @@
 
   <div>
     </br>
-    <%= form.submit class:'btn btn-secondary' %>
+    <%= form.submit class:'btn btn-secondary'%>
   </div>
 <% end %>
