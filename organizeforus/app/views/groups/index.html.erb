@@ -11,18 +11,18 @@
     </tr>
   </thead>
   <tbody>
-    <%@gruppos.each do |gruppo|%>
+    <%@groups.each do |group|%>
       <tr>
-        <td><%= gruppo.nome %>
+        <td><%= group.nome %>
         </td>
-        <td><%= gruppo.descrizione %>
+        <td><%= group.descrizione %>
         </td>
-        <td><%= link_to 'Show group', gruppo %>
+        <td><%= link_to 'Show group', group %>
         </td>
         
-          <td><%= link_to 'Edit group',  edit_gruppo_path(gruppo)%>
+          <td><%= link_to 'Edit group',  edit_gruppo_path(group)%>
           </td>
-          <td><%= button_to 'Delete group', gruppo, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>
       </tr>
     <%end%>

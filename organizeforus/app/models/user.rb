@@ -4,5 +4,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   #statement che associa un user a più gruppi     
-  has_many :gruppos
+  has_many :groups
 end

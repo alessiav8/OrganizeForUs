@@ -1,8 +1,8 @@
-class CreateGruppos < ActiveRecord::Migration[7.0]
+class CreateGroups < ActiveRecord::Migration[7.0]
   def change
     #questa è la migration non ancora pushata, fatta con
-    #rails g scaffold gruppo nome:string descrizione:string
-    create_table :gruppos do |t|
+    #rails g scaffold group nome:string descrizione:string
+    create_table :groups do |t|
       t.string :nome
       t.string :descrizione
 

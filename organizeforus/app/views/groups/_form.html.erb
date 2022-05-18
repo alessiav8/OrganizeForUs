@@ -1,10 +1,10 @@
-<%= form_with(model: gruppo) do |form| %>
-  <% if gruppo.errors.any? %>
+<%= form_with(model: group) do |form| %>
+  <% if group.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(gruppo.errors.count, "error") %> prohibited this gruppo from being saved:</h2>
+      <h2><%= pluralize(group.errors.count, "error") %> prohibited this group from being saved:</h2>
 
       <ul>
-        <% gruppo.errors.each do |error| %>
+        <% group.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -23,10 +23,10 @@
     <%= form.text_field :descrizione, class:"form-control", placeholder:"Description"  %>
   </div>
 
-  <!--campo nascosto per lo user_id che associa il gruppo all'utente che lo crea-->
+  <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">
   </br>
-  <%= form.number_field :user_id, id: :gruppos_user_id, class:"form-control",value: current_user.id,type: :hidden %>
+  <%= form.number_field :user_id, id: :groups_user_id, class:"form-control",value: current_user.id,type: :hidden %>
   </div>
  
   <div>

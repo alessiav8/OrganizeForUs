@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :gruppos
+  resources :groups
   #get 'home/index'
   root 'home#index'
   get 'home/about'
-  resources :gruppos do
+  resources :groups do
     resources :members 
   end 
-  get'gruppos/inside'
+  get'groups/inside'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
