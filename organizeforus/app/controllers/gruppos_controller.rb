@@ -1,6 +1,7 @@
 class GrupposController < ApplicationController
   before_action :set_gruppo, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, expect: [:index, :show]
+  before_action :correct_user, only: [:edit, :update, :destroy]
   #se l'user non è autenticato non può fare nulla se non le cose specificate nella index e nella show
 
   # GET /gruppos or /gruppos.json
@@ -59,6 +60,11 @@ class GrupposController < ApplicationController
     end
   end
 
+
+  def correct_user
+    @gruppo= current_user.gruppos.find_by(id: params[:id])
+    redirect_to root_path, notice: "Not Authorized to Edit this Group" if @gruppo.nil?
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_gruppo

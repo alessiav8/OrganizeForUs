@@ -1,0 +1,14 @@
+<%= form_with url:gruppo_members_url, model: [@gruppo, @gruppo.members.build ] do |form| %>
+    
+    <div class="field form group">
+      </br>
+      <% form.label :user, style: "display: block" %>
+      <%= form.text_field :user, class:"form-control", placeholder:"Enter user email" %>
+    </div>
+   
+    <div>
+      </br>
+      <%= form.submit class:'btn btn-secondary'%>
+    </div>
+  <% end %>
+  

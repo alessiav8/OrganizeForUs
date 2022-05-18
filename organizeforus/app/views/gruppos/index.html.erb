@@ -19,10 +19,11 @@
         </td>
         <td><%= link_to 'Show group', gruppo %>
         </td>
-        <td><%= link_to 'Edit group',  edit_gruppo_path(gruppo)%>
-        </td>
-        <td><%= button_to 'Delete group', gruppo, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
+        
+          <td><%= link_to 'Edit group',  edit_gruppo_path(gruppo)%>
+          </td>
+          <td><%= button_to 'Delete group', gruppo, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
       </tr>
     <%end%>
   </tbody>
