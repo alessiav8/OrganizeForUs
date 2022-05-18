@@ -5,26 +5,25 @@
 
   <div class="field form-group">
     <%= f.label :name, required: false %><br />
-    <%= f.text_field :name, disbled: true, disabled: true, class:"input form-control" %>
+    <%= f.text_field :name, disbled: true, class:"input form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :surname, required: false %><br />
-    <%= f.text_field :surname, disabled: true, class:"input form-control" %>
+    <%= f.text_field :surname, class:"input form-control" %>
   </div>
 
 <div class="field form-group">
     <%= f.label :Username %><br />
-    <%= f.text_field :username, disabled: true,  class:"input form-control" %>
+    <%= f.text_field :username, class:"input form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :Birthday %><br />
-    
-    <%= f.date_field :birthday, as: :date, html5: true, disabled: true, class:"form-control" %> 
+    <%= f.date_field :birthday, as: :date, html5: true, class:"form-control" %> 
   </div>
 
-  <div class="field">
+  <div class="field form-group">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
   </div>
@@ -33,21 +32,19 @@
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <br />
-    <%= f.password_field :password, autocomplete: "new-password", placeholder: "leave blank if you don't want to change it", class: "form-control" %>
-    <% if @minimum_password_length %>
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <div class="field form-group">
+    <%= f.label :new_password %> <br />
+    <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Password Confirmation", class: "form-control" %>
+  <div class="field form-group">
+    <%= f.label :repeat_password %> <br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field form-group">
     <%= f.label :current_password %> <br />
-    <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "we need your current password to confirm your changes", class: "form-control" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
   </div>
   </br>
   <div class="actions">
@@ -69,4 +66,4 @@
 
 <br/>
 
-<%= link_to "Back", :back %>
+<%= link_to "Back", :back , class:"btn btn-secondary"%>

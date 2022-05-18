@@ -5,17 +5,17 @@
 
   <div class="field form-group">
     <%= f.label :name %><br />
-    <%= f.text_field :name, placeholder: 'Name',  class:"input form-control" %>
+    <%= f.text_field :name,  class:"input form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :surname %><br />
-    <%= f.text_field :surname, placeholder: 'Surname',  class:"input form-control" %>
+    <%= f.text_field :surname,  class:"input form-control" %>
   </div>
 
 <div class="field form-group">
     <%= f.label :Username %><br />
-    <%= f.text_field :username, placeholder: 'Username',  class:"input form-control" %>
+    <%= f.text_field :username, class:"input form-control" %>
   </div>
 
   <div class="field form-group">
@@ -34,7 +34,7 @@
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
+    <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
   </div>
 
   <div class="field form-group">
