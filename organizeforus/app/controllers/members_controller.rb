@@ -3,20 +3,20 @@ class MembersController < ApplicationController
   end
 
   def new
-    @gruppo=Gruppo.find(params[:gruppo_id])
+    @group=Group.find(params[:group_id])
   end
 
   def create
-    @gruppo=Gruppo.find(params[:gruppo_id])
-    @member=@gruppo.members.create(member_params)
-    redirect_to gruppos_path
+    @group=Group.find(params[:group_id])
+    @member=@group.members.create(member_params)
+    redirect_to groups_path
   end
   
 
 private
   def member_params
     @user=User.find_by(id: params[:user])
-    redirect_to @gruppo ,notice: "Not Good" if @user.nil? 
+    redirect_to @group ,notice: "Not Good" if @user.nil? 
 
   end 
 end 

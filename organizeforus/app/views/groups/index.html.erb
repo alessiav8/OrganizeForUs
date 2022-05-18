@@ -1,12 +1,12 @@
 <p style="color: green"></p>
 
-<h1>I tuoi gruppi</h1>
+<h1>Your groups</h1>
 
 <table class="table table-striped table-bordered table-hover">
   <thead class="table-dark">
     <tr>
       <th>Name</th>
-      <th>Descrizione</th>
+      <th>Description</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,15 +17,15 @@
         </td>
         <td><%= group.descrizione %>
         </td>
-        <td><%= link_to 'Mostra group', group %>
+        <td><%= link_to 'Show group', group %>
         </td>
-        <td><%= link_to 'Modifica group',  edit_group_path(group)%>
+        <td><%= link_to 'Edit group',  edit_group_path(group)%>
         </td>
-        <td><%= button_to 'Elimina group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <%end%>
   </tbody>
 </table>
 <br>
-<%=link_to 'Crea nuovo group', new_group_path, class:"btn btn-secondary"%>
+<%=link_to 'Create new group', new_group_path, class:"btn btn-secondary"%>

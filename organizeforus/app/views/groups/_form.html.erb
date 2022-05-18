@@ -23,7 +23,7 @@
     <%= form.text_field :descrizione, class:"form-control", placeholder:"Description"  %>
   </div>
 
-  <!--campo nascosto per lo user_id che associa il gruppo all'utente che lo crea-->
+  <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">
   </br>
   <%= form.number_field :user_id, id: :groups_user_id, class:"form-control",value: current_user.id,type: :hidden %>
