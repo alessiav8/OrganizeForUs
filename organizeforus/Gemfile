@@ -84,3 +84,6 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+#Per generare le form di Sign Up ed Edit Profile
+gem "simple_form"
