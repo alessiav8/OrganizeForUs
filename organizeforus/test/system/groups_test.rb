@@ -23,7 +23,7 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test "should update Group" do
-    visit gruppo_url(@group)
+    visit group_url(@group)
     click_on "Edit this group", match: :first
 
     fill_in "Descrizione", with: @group.descrizione
@@ -35,7 +35,7 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test "should destroy Group" do
-    visit gruppo_url(@group)
+    visit group_url(@group)
     click_on "Destroy this group", match: :first
 
     assert_text "Group was successfully destroyed"

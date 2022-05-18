@@ -20,7 +20,7 @@
         <td><%= link_to 'Show group', group %>
         </td>
         
-          <td><%= link_to 'Edit group',  edit_gruppo_path(group)%>
+          <td><%= link_to 'Edit group',  edit_group_path(group)%>
           </td>
           <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>
@@ -29,4 +29,4 @@
   </tbody>
 </table>
 <br>
-<%=link_to 'Create new group', new_gruppo_path, class:"btn btn-secondary"%>
+<%=link_to 'Create new group', new_group_path, class:"btn btn-secondary"%>
