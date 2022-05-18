@@ -14,7 +14,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit groups_url
     click_on "New group"
 
-    fill_in "Descrizione", with: @group.descrizione
+    fill_in "Description", with: @group.description
     fill_in "Name", with: @group.name
     click_on "Create Group"
 
@@ -26,7 +26,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     click_on "Edit this group", match: :first
 
-    fill_in "Descrizione", with: @group.descrizione
+    fill_in "Description", with: @group.description
     fill_in "Name", with: @group.name
     click_on "Update Group"
 
