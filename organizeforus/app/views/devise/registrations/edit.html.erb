@@ -1,4 +1,4 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2>Edit profile <% resource_name.to_s.humanize %></h2>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
@@ -49,11 +49,12 @@
     <%= f.label :current_password %> <br />
     <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "we need your current password to confirm your changes", class: "form-control" %>
   </div>
-
+  </br>
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "Update", class:"btn btn-secondary"%>
   </div>
 <% end %>
+</br>
 
 <br/>
 
