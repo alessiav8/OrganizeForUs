@@ -310,5 +310,9 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
 
   config.navigational_formats = ['/', :html, :turbo_stream]
-  #questa riga aggiunta per sign out
+  #questa riga aggiunta per sign out (NON PIù NECESSARIA PER SIGN_OUT)
+
+  config.omniauth :facebook, '749402576225773', '74ac752a6c339c17b00d43e5886b6ce0', scope: 'public_profile,email', info_fields: 'email,first_name,last_name,gender,birthday,location,picture'
+
+  #OmniAuth.config.allowed_request_methods = [:get]
 end
