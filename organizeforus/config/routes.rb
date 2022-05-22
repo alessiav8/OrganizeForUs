@@ -10,11 +10,15 @@ Rails.application.routes.draw do
   #get 'home/index'
   root 'home#index'
   get 'home/about'
-  resources :groups do
-    resources :members 
-  end 
   
-  get'groups/inside'
+  resources :groups do
+    resources :members , only: [:new,:edit,:create]
+  end 
+
+  get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
+  get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
+
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

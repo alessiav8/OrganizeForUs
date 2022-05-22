@@ -13,6 +13,11 @@ class GroupsController < ApplicationController
   def show
   end
 
+  def show_work
+  end
+
+  def member_group
+  end
   # GET /groups/new
   def new
     #@group = Group.new

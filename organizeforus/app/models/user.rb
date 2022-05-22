@@ -6,7 +6,7 @@ class User < ApplicationRecord
          
   #statement che associa un user a più gruppi          
   has_many :groups
-
+  
 
   #Valido la presenza e l'unicità dei campi dell'utente:
   validates :name, presence: true

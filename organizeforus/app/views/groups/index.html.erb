@@ -11,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <%@groups.each do |group|%>
+    <% @groups.each do |group|%>
     <% if group.user == current_user%> <!--rende visibili i gruppi solo all'utente organizzatore-->
       <tr>
         <td><%= group.name %>
