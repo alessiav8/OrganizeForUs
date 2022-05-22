@@ -1,9 +1,9 @@
-<%= form_with url:group_members_url, model: [@group, @group.members.build ] do |form| %>
+<%= form_with url:group_members_url , model: [@group, @group.members.build ] do |form| %>
     
     <div class="field form group">
       </br>
-      <% form.label :user, style: "display: block" %>
-      <%= form.text_field :user, class:"form-control", placeholder:"Enter user email" %>
+      <% form.label :user_email, style: "display: block" %>
+      <%= form.text_field :user_email, class:"form-control", placeholder:"Enter user email" %>
     </div>
    
     <div>

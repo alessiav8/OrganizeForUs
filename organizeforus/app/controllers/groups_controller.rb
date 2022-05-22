@@ -2,6 +2,7 @@ class GroupsController < ApplicationController
   before_action :set_group, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, expect: [:index, :show]
   before_action :correct_user, only: [:edit, :update, :destroy]
+
   #se l'user non è autenticato non può fare nulla se non le cose specificate nella index e nella show
 
   # GET /groups or /groups.json
@@ -13,6 +14,11 @@ class GroupsController < ApplicationController
   def show
   end
 
+  def show_work
+  end
+
+  def member_group
+  end
   # GET /groups/new
   def new
     @group = Group.new
@@ -65,6 +71,8 @@ class GroupsController < ApplicationController
     @group= current_user.groups.find_by(id: params[:id])
     redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
   end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group

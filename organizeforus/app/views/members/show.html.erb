@@ -1,0 +1,16 @@
+<h1> List </h1>
+
+<% @group.members.each do |member| %>
+<td>   <%= member.user_email %> </td> 
+<%if @group.user==current_user %>
+
+<td> Status:  <%= member.invito %> </td> 
+<td>  <%= link_to "Delete", [:destroy, member.group, member] , data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              } %> 
+              </td>
+</tr>
+</p></table>
+<% end %>
+<% end %>

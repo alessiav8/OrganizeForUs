@@ -21,12 +21,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_234658) do
   end
 
   create_table "members", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.string "user_email", null: false
     t.integer "group_id", null: false
+    t.string "invito", default: "not accepted"
+    t.string "iscritto"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_members_on_group_id"
-    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -54,5 +55,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_19_234658) do
   end
 
   add_foreign_key "members", "groups"
-  add_foreign_key "members", "users"
 end
