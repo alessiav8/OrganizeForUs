@@ -91,3 +91,7 @@ gem "simple_form"
 #Per Autenticazione tramite facebook:
 gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
+
+#Per uploader e salvataggio imagine Utente.
+gem 'carrierwave', '~> 2.0'
+gem 'paperclip'

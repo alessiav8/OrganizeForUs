@@ -2,7 +2,9 @@
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
-
+   
+  <%= f.file_field :image %>
+   
   <div class="field form-group">
     <%= f.label :name, required: false %><br />
     <%= f.text_field :name, disbled: true, class:"input form-control" %>

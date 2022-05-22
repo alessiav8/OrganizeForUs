@@ -7,6 +7,7 @@ class User < ApplicationRecord
          
   #statement che associa un user a più gruppi          
   has_many :groups
+  has_attached_file :image, default_url: "pikachu.png"
 
 
   #Valido la presenza e l'unicità dei campi dell'utente:
@@ -16,6 +17,9 @@ class User < ApplicationRecord
   validates :birthday, presence: true
   validates :provider, presence:true
   validates :uid, presence:true
+
+
+ 
 
 =begin
   def self.from_omniauth(auth)
