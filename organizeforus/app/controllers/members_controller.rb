@@ -8,19 +8,13 @@ class MembersController < ApplicationController
 
   def show
     @group=Group.find(params[:group_id])
-
   end
+
+  
 
   def create
     @group=Group.find(params[:group_id])
-    member=@group.members.create(member_params)
-    
-    @user=User.find_by(email: params[:user_email])
-    if @user.nil? 
-      member.update(iscritto: 'false')
-    else 
-      member.update(iscritto: 'true')
-    end 
+    @member=@group.members.create(member_params)
     redirect_to group_url(@group)
 
   end

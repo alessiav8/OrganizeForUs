@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <% @groups.each do |group|%>
-    <% if group.user == current_user%> <!--rende visibili i gruppi solo all'utente organizzatore-->
+    <% if group.user == current_user || Member.where(group: group, user_email: current_user.email)!=nil %> <!--rende visibili i gruppi solo all' utente organizzatore-->
       <tr>
         <td><%= group.name %>
         </td>
