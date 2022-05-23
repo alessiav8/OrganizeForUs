@@ -15,9 +15,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     def facebook
         auth = request.env["omniauth.auth"]
         session["devise.facebook_data"] = request.env["omniauth.auth"]
-        @user = User.find_by(uid: auth.uid)
+        @user = User.find_by(provider: auth.provider, uid: auth.uid)
         if @user.present?
             sign_in_and_redirect @user, :event => :authentication
+            set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
         else
             @user = User.new("name"=>auth.info.name.split(" ")[0], "surname"=>auth.info.name.split(" ")[1], 
                              "email"=>auth.info.email, 

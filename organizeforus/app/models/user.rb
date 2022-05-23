@@ -15,8 +15,6 @@ class User < ApplicationRecord
   validates :surname, presence: true
   validates :username, presence: true, uniqueness: true
   validates :birthday, presence: true
-  validates :provider, presence:true
-  validates :uid, presence:true
 
 
  

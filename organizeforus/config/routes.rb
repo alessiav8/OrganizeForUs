@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   #Definita la route di sign_out:
   devise_scope :user do  
-    get '/users/sign_out' => 'devise/sessions#destroy'     
+    get '/users/sign_out' => 'devise/sessions#destroy' 
+    post '/user/auth/facebook/callback/after_social_connection' => 'users/after_auth#create'
  end
 
   resources :groups
