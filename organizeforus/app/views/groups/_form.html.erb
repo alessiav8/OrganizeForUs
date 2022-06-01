@@ -23,6 +23,19 @@
     <%= form.text_field :description, class:"form-control", placeholder:"Description"  %>
   </div>
 
+  <% if controller_name == 'groups' && action_name == 'new' %>
+  
+  <div class="form-row" >
+    <label for="fun">This group is for:</label>
+    </br>
+    <%= form.check_box :fun, class:"btn-check" %>
+    <%= form.label :fun, class:"btn btn-secondary"%>
+    
+    <%= form.check_box :work, class:"btn-check"%>
+    <%= form.label :work,class:"btn btn-secondary"%>
+</div>
+<%end%>
+
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">
   </br>
