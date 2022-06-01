@@ -14,11 +14,7 @@ class MembersController < ApplicationController
 
   def create
     @group=Group.find(params[:group_id])
-    if @group.work!=true
-      @member=@group.members.create(member_params_no_work)
-    else
-      @member=@group.members.create(member_work)
-    end
+    @member=@group.members.create(member_params)
     redirect_to group_url(@group)
 
   end
@@ -35,13 +31,9 @@ class MembersController < ApplicationController
   end 
 
 private
-  def member_params_no_work
+  def member_params
     params.require(:member).permit(:user_email)
   end 
-
-  def member_work
-    params.require(:member).permit(:user_email,:role,:necessary)
-  end
 
 end 
 

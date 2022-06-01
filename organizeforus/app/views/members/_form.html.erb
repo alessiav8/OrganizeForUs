@@ -5,19 +5,6 @@
       <% form.label :user_email, style: "display: block" %>
       <%= form.text_field :user_email, class:"form-control", placeholder:"Enter user email" %>
     </div>
-
-    <% if @group.work==true%>
-    <div class="field form group">
-    </br>
-    <% form.label :role, style: "display: block" %>
-    <%= form.text_field :role, class:"form-control", placeholder:"Enter role" %>
-    </div>
-    <div class="field form group">
-    </br>
-    <%= form.check_box :necessary, class:"btn-check" %>
-    <%= form.label :necessary, class:"btn btn-secondary"%>
-    </div>
-    <%end%>
    
     <div>
       </br>

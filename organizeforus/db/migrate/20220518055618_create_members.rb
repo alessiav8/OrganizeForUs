@@ -5,8 +5,6 @@ class CreateMembers < ActiveRecord::Migration[7.0]
       t.references :group, null: false, foreign_key: true
       t.string :invito, default: "not accepted"
       t.string :iscritto
-      t.string :role, null: true
-      t.string :necessary, null: true
       
       t.timestamps
     end

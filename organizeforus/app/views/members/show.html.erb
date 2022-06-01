@@ -1,7 +1,7 @@
-<h1> Member List </h1>
+<h1> List </h1>
 
 <% @group.members.each do |member| %>
-<td><li>   <%= member.user_email %> </li> </td> 
+<td>   <%= member.user_email %> </td> 
 <%if @group.user==current_user %>
 
 <td> Status:  <%= member.invito %> </td> 
@@ -10,10 +10,6 @@
                 turbo_confirm: "Are you sure?"
               } %> 
               </td>
-
-<% if @group.work==true %>
-<td> Role: <%=member.role%> </td>
-<%end %>
 </tr>
 </p></table>
 <% end %>
