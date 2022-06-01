@@ -1,9 +1,19 @@
 <h2>Edit profile <% resource_name.to_s.humanize %></h2>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), multipart: true, html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
    
-  <%= f.file_field :image %>
+  <div class="field form-group">
+    <div class="row">
+      <div class="col-sm-4">
+        <%= image_tag user_avatar(resource, 100), :size => "200x180", class: "rounded-circle" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.file_field :avatar, clas:"input form-controll"%>
+      </div>
+    </div>
+  </div>
    
   <div class="field form-group">
     <%= f.label :name, required: false %><br />
