@@ -1,8 +1,15 @@
 
   <p style="color: green"></p>
 
-<div class="jumbotron">
-  <h1 class="display-4"><%= @group.name %></h1>
+  <div class="jumbotron">
+  <div style="text-align: right">
+  <%=link_to 'Member List', show_member_url(@group) %>
+  </div>
+  <% if @group.work==true%>
+  <h1> Work Group </h1>
+  <% end %>
+
+  <h1 class="display-5"><%= @group.name %></h1>
   <p class="lead"><%= @group.description %></p>
   <hr class="my-4">
 
@@ -13,4 +20,5 @@
   <%= link_to "Edit group", edit_group_path(@group), class:"btn btn-secondary" %> 
   <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
   <br><br>
-  <%=link_to 'Member List', show_member_url(@group) %>
+   
+  <%= link_to "Set organizzation", groups_path, class:"btn btn-secondary" %>  
