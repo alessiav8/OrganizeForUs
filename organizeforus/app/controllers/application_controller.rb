@@ -5,9 +5,9 @@ class ApplicationController < ActionController::Base
 
     protected
 
-        def configure_permitted_parameters
-            devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :surname, :username, :birthday, :provider, :uid, :avatar])  #Permette di inserire nell'user il nome, il cognome, il nickname e la data di nascita
-            devise_parameter_sanitizer.permit(:account_update, keys: [:name, :surname, :username, :birthday, :avatar]) #Permette di aggiornare e dunque visualizzare i suddetti attributi aggiuntivi
+        def configure_permitted_parameters  
+            devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :surname, :username, :birthday, :provider, :uid])  #Permette di inserire nell'user il nome, il cognome, il nickname e la data di nascita
+            devise_parameter_sanitizer.permit(:account_update, keys: [:name, :surname, :username, :birthday]) #Permette di aggiornare e dunque visualizzare i suddetti attributi aggiuntivi
         end
     
 end

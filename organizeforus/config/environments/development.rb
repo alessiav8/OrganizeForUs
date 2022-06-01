@@ -71,6 +71,4 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   #ho aggiunto questa riga per il devise
 
-
-  config.active_storage.variant_processor = :mini_magick
 end

@@ -1,5 +1,3 @@
-require 'open-uri'
-
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 =begin    
     def facebook
@@ -15,35 +13,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
 =end
     def facebook
-
-
         auth = request.env["omniauth.auth"]
+        session["devise.facebook_data"] = request.env["omniauth.auth"]
         @user = User.find_by(provider: auth.provider, uid: auth.uid)
         if @user.present?
             sign_in_and_redirect @user, :event => :authentication
             set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
         else
-            session["devise.facebook_data"] = request.env["omniauth.auth"]
-
-            @user = User.from_omniauth(request.env["omniauth.auth"])
-            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.png'
-            file = URI.open(auth.info.image)
-            blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-            @user.avatar.attach(blob)
-            session[:blob_id] = blob.id
-            
-
-
-
-=begin
-                url = URI.parse(auth[:info][:picture])
-                imagename = File.basename(url.path)
-                image = URI.open
-                @user.avatar.attach(io: image, filename: filename)
-=end
-            
+            @user = User.new("name"=>auth.info.name.split(" ")[0], "surname"=>auth.info.name.split(" ")[1], 
+                             "email"=>auth.info.email, 
+                             "provider"=>auth.provider, "uid"=>auth.uid)
             render 'devise/registrations/after_social_connection'
-            
         end
     end
 

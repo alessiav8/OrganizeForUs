@@ -58,12 +58,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [:email, :username]
+  config.case_insensitive_keys = [:email]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [:email, :name, :surname, :username]
+  config.strip_whitespace_keys = [:email]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -312,7 +312,7 @@ Devise.setup do |config|
   config.navigational_formats = ['/', :html, :turbo_stream]
   #questa riga aggiunta per sign out (NON PIù NECESSARIA PER SIGN_OUT)
 
-  config.omniauth :facebook, Rails.application.credentials.dig(:facebook, :facebook_client_id), Rails.application.credentials.dig(:facebook, :facebook_client_secret), scope: 'public_profile,email,user_birthday', info_fields: 'email, first_name, last_name, picture, birthday', :secure_image_url => true, :image_size => 'large'
+  config.omniauth :facebook, '749402576225773', '74ac752a6c339c17b00d43e5886b6ce0', scope: 'public_profile,email', info_fields: 'email,first_name,last_name,gender,birthday,location,picture'
 
   #OmniAuth.config.allowed_request_methods = [:get]
 end

@@ -3,24 +3,6 @@
 <%= form_for(@user, url: user_auth_facebook_callback_after_social_connection_path(@user)) do |f| %>
   <%= render "devise/shared/error_messages", resource: @user %>
 
-
-  <div class="field form-group">
-    <div class="row">
-      <div class="col-sm-4">
-        <%= image_tag user_avatar(@user, 50), class: "rounded-circle" %>
-      </div>
-
-      <div class="field form-group">
-        <%= f.file_field :avatar, direct_upload: true, class:"input form-control"%>
-  
-        <% if resource.avatar.attached? && resource.valid? %>
-          <%= f.label :remove_image %>
-          <%= f.check_box :remove_image, default: 0%>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
   <div class="field form-group">
     <%= f.label :name %><br />
     <%= f.text_field :name,  class:"input form-control" %>
@@ -58,6 +40,14 @@
   <div class="field form-group">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.text_field :provider, class:"form-control", type: :hidden %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.text_field :uid, class:"form-control", type: :hidden %>
   </div>
   <br/>
 
