@@ -12,20 +12,21 @@
   </thead>
   <tbody>
     <% @groups.each do |group|%>
-    <% if group.user == current_user || Member.where(group: group, user_email: current_user.email)!=nil %> <!--rende visibili i gruppi solo all' utente organizzatore-->
-      <tr>
-        <td><%= group.name %>
-        </td>
-        <td><%= group.description %>
-        </td>
-        <td><%= link_to 'Show group', group %>
-        </td>
-        <td><%= link_to 'Edit group',  edit_group_path(group)%>
-        </td>
-        <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      </tr>
-    <%end%>
+      <% if group.user == current_user || Member.where(group: group, user_email: current_user.email)!=nil %> <!--rende visibili i gruppi solo all' utente organizzatore-->
+        <tr>
+          <td><%= group.name %>
+          </td>
+          <td><%= group.description %>
+          </td>
+          <td><%= link_to 'Show group', group %>
+          </td>
+          <td><%= link_to 'Edit group',  edit_group_path(group)%>
+          </td>
+          <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <%end%>
+    <% end %>
   </tbody>
 </table>
 <br>
