@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
   get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
 
+
+
+    
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

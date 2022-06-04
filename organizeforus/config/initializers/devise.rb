@@ -315,4 +315,6 @@ Devise.setup do |config|
   config.omniauth :facebook, Rails.application.credentials.dig(:facebook, :facebook_client_id), Rails.application.credentials.dig(:facebook, :facebook_client_secret), scope: 'public_profile,email,user_birthday', info_fields: 'email, first_name, last_name, picture, birthday', :secure_image_url => true, :image_size => 'large'
 
   #OmniAuth.config.allowed_request_methods = [:get]
+
+  config.omniauth :google_oauth2, 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', {}
 end

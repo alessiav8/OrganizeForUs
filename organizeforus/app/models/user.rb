@@ -3,8 +3,11 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, :omniauth_providers => [:facebook]
+         :omniauthable, omniauth_providers: %i[facebook google_oauth2]
          
+
+
+        
   #statement che associa un user a più gruppi          
   has_many :groups
   has_one_attached :avatar, dependent: :purge_later
@@ -62,7 +65,16 @@ class User < ApplicationRecord
   end
 
  
-
+  def self.from_omniauth(access_token)
+      data = access_token.info
+      user = User.where(email: data['email']).first
+      unless user
+      user = User.create( email: data['email'],
+      password: Devise.friendly_token[0,20]
+      )
+      end
+      user
+    end
 =begin
 def auth_avatar_attach(auth, url)
   return unless !auth.info.picture.present?
