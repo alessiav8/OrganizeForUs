@@ -94,3 +94,8 @@ gem 'omniauth-rails_csrf_protection'
 
 #Per debuging
 gem 'byebug'
+
+#Per validazione dei blob di ActiveStorage
+gem 'activestorage-validator'
+
+gem "jquery-rails"
