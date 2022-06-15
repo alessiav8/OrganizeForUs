@@ -16,8 +16,13 @@ Rails.application.routes.draw do
     resources :members , only: [:new,:edit,:create]
   end 
 
+  resources :groups do
+    resources :roles, only: [:create]
+  end 
+
   get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
   get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
+  get '/groups/:group_id/roles/:id', to: 'roles#destroy', as: 'destroy_group_role'
 
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

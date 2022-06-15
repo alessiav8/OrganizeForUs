@@ -4,10 +4,14 @@
 
 <br>
 
+
+<h5>Add new role:</h5>
+<%= render 'roles/form' %>
 <div>
   <%= link_to "Show group", @group, class:"btn btn-secondary" %> 
   <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
 </div>
 <div>
 <%= link_to "New Member", new_group_member_path(@group) %>
+
 </div>
