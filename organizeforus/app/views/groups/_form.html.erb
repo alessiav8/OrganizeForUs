@@ -2,7 +2,6 @@
   <% if group.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(group.errors.count, "error") %> prohibited this group from being saved:</h2>
-
       <ul>
         <% group.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -22,20 +21,46 @@
     <% form.label :description, style: "display: block" %>
     <%= form.text_field :description, class:"form-control", placeholder:"Description"  %>
   </div>
+ </br>
+<!--inizio prove-->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script type="text/javascript">
+    function showFunHide(checked) {
+      if (checked==true) {
+        $('#hiddenFunFields').fadeIn();
+      }
+      else {
+        $('#hiddenFunFields').fadeOut();
+      }
+      };
+</script>
+<script type="text/javascript">
+    function showWorkHide(checked) {
+      if (checked==true) {
+        $('#hiddenWorkFields').fadeIn();
+      }
+      else {
+        $('#hiddenWorkFields').fadeOut();
+      }
+      };
+</script>
+<!--fine prove-->
 
   <% if controller_name == 'groups' && action_name == 'new' %>
+    <div class="form-row" >
+      <label for="fun">This group is for:</label>
+      <%= form.check_box :fun, class:"btn-check", onchange:"showFunHide(this.checked)", name:"funchecked"%>
+      <%= form.label :fun, class:"btn btn-secondary"%>
+          <div id="hiddenFunFields", style='display:none'>fun</div>
+          
+      <%= form.check_box :work, class:"btn-check", onchange:"showWorkHide(this.checked)", name:"workchecked"%>
+      <%= form.label :work,class:"btn btn-secondary"%>
+        <div id="hiddenWorkFields", style='display:none'>work</div>
   
-  <div class="form-row" >
-    <label for="fun">This group is for:</label>
-    </br>
-    <%= form.check_box :fun, class:"btn-check" %>
-    <%= form.label :fun, class:"btn btn-secondary"%>
-    
-    <%= form.check_box :work, class:"btn-check"%>
-    <%= form.label :work,class:"btn btn-secondary"%>
-</div>
-<%end%>
-
+    </div>
+  <%end%>
+  
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">
   </br>
