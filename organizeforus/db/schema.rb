@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_24_094801) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_15_085010) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -62,6 +62,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_24_094801) do
     t.index ["group_id"], name: "index_members_on_group_id"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string "tag"
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_roles_on_group_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -88,4 +96,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_24_094801) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "members", "groups"
+  add_foreign_key "roles", "groups"
 end
