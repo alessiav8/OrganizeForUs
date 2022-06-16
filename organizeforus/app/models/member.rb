@@ -13,4 +13,13 @@ class Member < ApplicationRecord
   end
 
 
+  scope :list_member, ->(group) {
+    arr=Array.new
+    where(group_id: group).each do |member| 
+      arr << member.user_email
+    end
+    return arr
+  }
+
+
 end

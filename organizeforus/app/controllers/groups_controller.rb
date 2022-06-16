@@ -28,6 +28,17 @@ class GroupsController < ApplicationController
   def edit
   end
 
+  def edit_driver
+    @group=Group.find(params[:id])
+    @member = @group.members.find_by(user_email: member_update_params[:driver])
+    @group.members.update(:all, driver: nil)
+    @member.update(driver: 'driver')
+    respond_to do |format|
+        format.html { redirect_to group_url(@group), notice: "the new designeted driver is: "+ member_update_params[:driver] }  
+    end
+  end 
+
+
   # POST /groups or /groups.json
   def create
     #@group = Group.new(group_params)
@@ -74,6 +85,7 @@ class GroupsController < ApplicationController
     @group= current_user.groups.find_by(id: params[:id])
     redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
   end
+ 
 
 
   private
@@ -87,7 +99,11 @@ class GroupsController < ApplicationController
       params.require(:group).permit(:name, :description, :user_id, :fun, :work)
     end
 
+    def member_update_params
+      params.require(:group).permit(:driver)
+    end 
     def inside 
       @group=Group.find(params[:id])
     end
+
 end

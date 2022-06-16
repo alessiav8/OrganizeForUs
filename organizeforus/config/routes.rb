@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   end 
 
   get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
+  put 'groups/:id/edit_driver', controller: 'groups', action: :edit_driver, as: 'edit_driver'
+
   get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
   get '/groups/:group_id/roles/:id', to: 'roles#destroy', as: 'destroy_group_role'
 

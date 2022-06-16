@@ -10,7 +10,7 @@ class MembersController < ApplicationController
     @group=Group.find(params[:group_id])
   end
 
-  
+ 
 
   def create
     @group=Group.find(params[:group_id])
@@ -37,6 +37,10 @@ class MembersController < ApplicationController
 private
   def member_params_no_work
     params.require(:member).permit(:user_email)
+  end 
+
+  def member_update_params
+    params.require(:member).permit(:driver)
   end 
 
   def member_work

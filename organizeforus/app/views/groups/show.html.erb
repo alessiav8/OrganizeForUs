@@ -11,10 +11,10 @@
 
   <h1 class="display-5"><%= @group.name %></h1>
   <p class="lead"><%= @group.description %></p>
-  <hr class="my-4">
+  <hr class="my-4"> </hr>
 
   <% if @group.work==true && @group.user==current_user%>
-  <div class="container;">
+  <div class="container">
     <h5> Roles </h5>
       <div class="row row-cols-auto">
         <% @group.roles.each do |role| %>
@@ -27,6 +27,15 @@
           </div> 
         <% end %>
       </div> </div>
+   <% else %>
+    <% if @group.has_driver? %>
+       <div class="row">
+       <div class="col-3">
+        <h6> Designeted Driver </h6> </div>
+        <div class="col">
+         <%= @group.driver %> </div>
+       </div>
+    <% end %> 
 
       <br>
   <% end %>

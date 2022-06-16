@@ -9,4 +9,11 @@ class Role < ApplicationRecord
     end
     return arr
   }
+
+  before_destroy :update_resources
+
+  def update_resources
+    puts "Modify all the people with this role please"
+    Member.where(role: self.tag).update(role: nil)
+  end 
 end
