@@ -288,8 +288,8 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
-  omniauth (~> 2.0)
   jquery-rails
+  omniauth (~> 2.0)
   omniauth-facebook
   omniauth-google-oauth2
   omniauth-rails_csrf_protection

@@ -65,7 +65,7 @@ class User < ApplicationRecord
     url_helpers.rails_representation_url(image.variant(resize_to_fill: size).processed, only_path: true)
   end
 
- 
+=begin
   def self.from_omniauth(access_token)
       data = access_token.info
       user = User.where(email: data['email']).first
@@ -76,7 +76,7 @@ class User < ApplicationRecord
       end
       user
     end
-=begin
+
 def auth_avatar_attach(auth, url)
   return unless !auth.info.picture.present?
   imagename = File.basename(url.path)
