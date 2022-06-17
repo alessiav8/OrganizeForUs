@@ -43,11 +43,15 @@ class GroupsController < ApplicationController
   def create
     #@group = Group.new(group_params)
     @group=current_user.groups.build(group_params)
-    work_or_fun=params[:fun]
+    if group_params[:fun]=='1' 
+      work_or_fun="Fun" 
+    else 
+      work_or_fun="Work"
+    end 
     
     respond_to do |format|
       if @group.save 
-        format.html { redirect_to group_url(@group), notice: "Group was successfully created." }
+        format.html { redirect_to group_url(@group), notice: work_or_fun+"Group was successfully updated."}
         format.json { render :show, status: :created, location: @group }
          
       else

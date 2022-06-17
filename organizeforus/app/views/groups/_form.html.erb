@@ -29,8 +29,6 @@
     function showFunHide(checked) {
       if (checked==true) {
         $('#hiddenFunFields').fadeIn();
-        $('#hiddenWorkFields').fadeOut();
-
       }
       else {
         $('#hiddenFunFields').fadeOut();
@@ -41,8 +39,6 @@
     function showWorkHide(checked) {
       if (checked==true) {
         $('#hiddenWorkFields').fadeIn();
-        $('#hiddenFunFields').fadeOut();
-
       }
       else {
         $('#hiddenWorkFields').fadeOut();
@@ -55,14 +51,23 @@
 
   <% if controller_name == 'groups' && action_name == 'new' %>
     <div class="form-row" >
-      <label for="fun">This group is for:</label>
-      <%= form.check_box :fun, class:"btn-check", onclick:"showFunHide(this.checked)", name:"funchecked"%>
-      <%= form.label :fun, class:"btn btn-secondary"%>
+      <label for="fun">This group is for: </label>
+
+          <%= form.check_box :fun, class:"btn-check" , onchange:"showFunHide(this.checked)"%>
+          <%= form.label :fun, class:"btn btn-secondary"%>
           <div id="hiddenFunFields", style='display:none'>fun</div>
-          
-      <%= form.check_box :work, class:"btn-check", onclick:"showWorkHide(this.checked)", name:"workchecked"%>
+
+          <%= form.check_box :work, class:"btn-check", onchange:"showWorkHide(this.checked)"%>
+          <%= form.label :work,class:"btn btn-secondary"%>
+          <div id="hiddenWorkFields", style='display:none'>work</div>
+
+      <!-- Non so perche i nomi non gli piacciono, funziona tutto ma se vengono inseriti quelli la checkbox non passa più alcun parametro di fun e work alla form -->
+      <!--%= form.check_box :fun, class:"btn-check", onchange:"showFunHide(this.checked)", name:"funchecked"%>
+      <%= form.label :fun, class:"btn btn-secondary"%>
+      <div id="hiddenFunFields", style='display:none'>fun</div-->
+      <!--%= form.check_box :work, class:"btn-check", onchange:"showWorkHide(this.checked)", name:"workchecked"%>
       <%= form.label :work,class:"btn btn-secondary"%>
-        <div id="hiddenWorkFields", style='display:none'>work</div>
+        <div id="hiddenWorkFields", style='display:none'>work</div-->
   
     </div>
   <%end%>
