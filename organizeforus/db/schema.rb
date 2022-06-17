@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_085010) do
     t.string "user_email", null: false
     t.integer "group_id", null: false
     t.string "invito", default: "not confirmed"
-    t.string "driver"
+    t.string "driver", default: "f"
     t.string "iscritto"
     t.string "role"
     t.string "necessary"

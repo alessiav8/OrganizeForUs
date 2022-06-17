@@ -17,11 +17,13 @@ class Group < ApplicationRecord
     Member.where(group_id: self.id).count!=0
   end
   def has_driver?
-    Member.where(group_id: self.id).where.not(driver: nil).take!=nil
+    Member.where(group_id: self.id).where.not(driver: "f").count!=0
   end
 
   def driver
-    Member.where(group_id: self.id).where.not(driver: nil).take.user_email
+    if has_driver?
+        Member.where(group_id: self.id).where(driver: "t").take.user_email
+    end
   end
     
 end

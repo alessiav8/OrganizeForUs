@@ -31,8 +31,8 @@ class GroupsController < ApplicationController
   def edit_driver
     @group=Group.find(params[:id])
     @member = @group.members.find_by(user_email: member_update_params[:driver])
-    @group.members.update(:all, driver: nil)
-    @member.update(driver: 'driver')
+    @group.members.update(:all, driver: "f")
+    @member.update(driver: "t")
     respond_to do |format|
         format.html { redirect_to group_url(@group), notice: "the new designeted driver is: "+ member_update_params[:driver] }  
     end
