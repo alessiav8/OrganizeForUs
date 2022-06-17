@@ -29,6 +29,7 @@
     function showFunHide(checked) {
       if (checked==true) {
         $('#hiddenFunFields').fadeIn();
+         $('#hiddenWorkFields').fadeOut();
       }
       else {
         $('#hiddenFunFields').fadeOut();
@@ -39,6 +40,8 @@
     function showWorkHide(checked) {
       if (checked==true) {
         $('#hiddenWorkFields').fadeIn();
+         $('#hiddenFunFields').fadeOut();
+       
       }
       else {
         $('#hiddenWorkFields').fadeOut();
@@ -53,11 +56,11 @@
     <div class="form-row" >
       <label for="fun">This group is for: </label>
 
-          <%= form.check_box :fun, class:"btn-check" , onchange:"showFunHide(this.checked)"%>
+          <%= form.check_box :fun, class:"btn-check" , onclick:"showFunHide(this.checked)"%>
           <%= form.label :fun, class:"btn btn-secondary"%>
           <div id="hiddenFunFields", style='display:none'>fun</div>
 
-          <%= form.check_box :work, class:"btn-check", onchange:"showWorkHide(this.checked)"%>
+          <%= form.check_box :work, class:"btn-check", onclick:"showWorkHide(this.checked)"%>
           <%= form.label :work,class:"btn btn-secondary"%>
           <div id="hiddenWorkFields", style='display:none'>work</div>
 
