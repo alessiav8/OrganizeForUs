@@ -40,8 +40,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             session["devise.facebook_data"] = request.env["omniauth.auth"]
 
             @user = User.from_omniauth(request.env["omniauth.auth"])
-            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.png'
             file = URI.open(auth.info.image)
+            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
             blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
             @user.avatar.attach(blob)
             session[:blob_id] = blob.id
