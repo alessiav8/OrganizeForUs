@@ -11,11 +11,36 @@
 
   <h1 class="display-5"><%= @group.name %></h1>
   <p class="lead"><%= @group.description %></p>
-  <hr class="my-4">
+  <hr class="my-4"> </hr>
 
-   
+  <% if @group.work==true && @group.user==current_user%>
+  <div class="container">
+    <h5> Roles </h5>
+      <div class="row row-cols-auto">
+        <% @group.roles.each do |role| %>
+          <div class="col align-self-start">
+              <%= role.tag %> <br>
+              <%= link_to "Destroy", [:destroy, role.group, role], data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              } %>
+          </div> 
+        <% end %>
+      </div> </div>
+   <% else %>
+    <% if @group.has_driver? %>
+       <div class="row">
+       <div class="col-3">
+        <h6> Designeted Driver </h6> </div>
+        <div class="col">
+         <%= @group.driver %> </div>
+       </div>
+    <% end %> 
 
-  <h4>SOTTO QUESTA RIGA METTIAMO I PARTECIPANTI ECC.</h4>
+      <br>
+  <% end %>
+
+
 
   <%= link_to "Edit group", edit_group_path(@group), class:"btn btn-secondary" %> 
   <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>

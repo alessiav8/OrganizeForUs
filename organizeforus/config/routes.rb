@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => "users/registrations" }
 
   #Definita la route di sign_out:
   devise_scope :user do  
@@ -16,8 +16,15 @@ Rails.application.routes.draw do
     resources :members , only: [:new,:edit,:create]
   end 
 
+  resources :groups do
+    resources :roles, only: [:create]
+  end 
+
   get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
+  put 'groups/:id/edit_driver', controller: 'groups', action: :edit_driver, as: 'edit_driver'
+
   get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
+  get '/groups/:group_id/roles/:id', to: 'roles#destroy', as: 'destroy_group_role'
 
 
 

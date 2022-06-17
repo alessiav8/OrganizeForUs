@@ -98,3 +98,7 @@ gem 'byebug'
 #Per Autenticazione tramite google:
 gem  'omniauth-google-oauth2'
 gem 'omniauth', '~>2.0'
+#Per validazione dei blob di ActiveStorage
+gem 'activestorage-validator'
+
+gem "jquery-rails"

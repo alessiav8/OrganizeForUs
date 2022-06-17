@@ -18,6 +18,7 @@ class User < ApplicationRecord
   validates :surname, presence: true
   validates :username, presence: true, uniqueness: true
   validates :birthday, presence: true
+  validates :avatar, blob: { content_type: %r{^image/}, size_range: 0..5.megabytes }
 
 
   # Active Storage

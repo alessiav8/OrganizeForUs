@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: %i[ show edit update destroy ]
+  before_action :set_group, only: [ :show, :edit ,:update ,:destroy ]
   before_action :authenticate_user!, expect: [:index, :show]
   before_action :correct_user, only: [:edit, :update, :destroy]
 
@@ -28,15 +28,30 @@ class GroupsController < ApplicationController
   def edit
   end
 
+  def edit_driver
+    @group=Group.find(params[:id])
+    @member = @group.members.find_by(user_email: member_update_params[:driver])
+    @group.members.update(:all, driver: "f")
+    @member.update(driver: "t")
+    respond_to do |format|
+        format.html { redirect_to group_url(@group), notice: "the new designeted driver is: "+ member_update_params[:driver] }  
+    end
+  end 
+
+
   # POST /groups or /groups.json
   def create
     #@group = Group.new(group_params)
     @group=current_user.groups.build(group_params)
-    work_or_fun=params[:fun]
+    if group_params[:fun]=='1' 
+      work_or_fun="Fun" 
+    else 
+      work_or_fun="Work"
+    end 
     
     respond_to do |format|
       if @group.save 
-        format.html { redirect_to group_url(@group), notice: "Group was successfully created." }
+        format.html { redirect_to group_url(@group), notice: work_or_fun+"Group was successfully updated."}
         format.json { render :show, status: :created, location: @group }
          
       else
@@ -74,6 +89,7 @@ class GroupsController < ApplicationController
     @group= current_user.groups.find_by(id: params[:id])
     redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
   end
+ 
 
 
   private
@@ -87,7 +103,11 @@ class GroupsController < ApplicationController
       params.require(:group).permit(:name, :description, :user_id, :fun, :work)
     end
 
+    def member_update_params
+      params.require(:group).permit(:driver)
+    end 
     def inside 
       @group=Group.find(params[:id])
     end
+
 end

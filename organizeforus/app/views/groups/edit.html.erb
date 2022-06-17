@@ -1,13 +1,40 @@
 <h1>Edit group</h1>
 
 <%= render "form", group: @group %>
-
 <br>
 
+<% if @group.work==true%>
+  <h5>Add new role:</h5>
+  <%= render 'roles/form' %>
+<% else %>
+  <h6>Designeted Driver</h6>
+
+  <% if @group.has_member? %>
+
+    <%= form_with url: edit_driver_url,model: @group, method: :put do |form| %>
+      <div container>
+      <div class="row">
+        <div class="col-2">
+        <% form.label :driver, style: "display: block" %>
+        <%= form.select :driver, Member.list_member(@group) %>
+        </div>
+        <div class="col">
+        <%= form.submit "Choose", class:"btn btn-secondary btn-sm" %>
+         <br><br>
+        </div> 
+      </div></div>
+
+    <% end %>
+  <% else %>
+     <p> Insert member before choose a designated driver </p> <br>
+  <% end %>
+<%end%>
+
 <div>
-  <%= link_to "Show group", @group, class:"btn btn-secondary" %> 
-  <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
+<%= link_to "Show group", @group, class:"btn btn-secondary" %> 
+<%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
 </div>
-<div>
+
+<div class="row" style="text-align: center">
 <%= link_to "New Member", new_group_member_path(@group) %>
 </div>
