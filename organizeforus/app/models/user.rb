@@ -10,6 +10,7 @@ class User < ApplicationRecord
         
   #statement che associa un user a più gruppi          
   has_many :groups
+  has_many :partecipations
   has_one_attached :avatar, dependent: :purge_later
 
 

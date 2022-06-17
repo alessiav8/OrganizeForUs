@@ -1,0 +1,15 @@
+<%= form_with  model: @partecipation do |form| %>
+    
+    <div class="field form group">
+      </br>
+      <% form.label :user_id, style: "display: block" %>
+      <%= form.text_field :user_id, class:"form-control", placeholder:"Enter user email" %>
+      <% form.label :group_id, style: "display: block" %>
+      <%= form.text_field :group_id, class:"form-control",value: @group.id, type: "hidden" %>
+    </div>
+    <div>
+      </br>
+      <%= form.submit class:'btn btn-secondary'%>
+    </div>
+<% end %>
+  

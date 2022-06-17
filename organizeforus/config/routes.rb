@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     resources :members , only: [:new,:edit,:create]
   end 
 
+ resources :partecipations , only:[:new,:create,:destroy]
+
   resources :groups do
     resources :roles, only: [:create]
   end 
@@ -26,6 +28,9 @@ Rails.application.routes.draw do
   get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
   get '/groups/:group_id/roles/:id', to: 'roles#destroy', as: 'destroy_group_role'
 
+  get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
+  get '/groups/:group_id/partecipations/show', to: 'partecipations#show', as: 'show_p'
+  get 'partecipations/:id/destroy', to: 'partecipations#destroy', as: 'destroy_partecipation'
 
 
     

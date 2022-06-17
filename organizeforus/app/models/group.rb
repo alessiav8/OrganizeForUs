@@ -3,6 +3,7 @@ class Group < ApplicationRecord
     belongs_to :user
     has_many :members
     has_many :roles
+    has_many :partecipations
 
     scope :list_member, ->(group) {
     arr=Array.new
@@ -11,6 +12,9 @@ class Group < ApplicationRecord
       arr << member.name
     end
     return arr
+  }
+  scope :list_members, ->(group) {
+    Partecipation.where(group_id: group)
   }
 
   def has_member?
@@ -25,5 +29,8 @@ class Group < ApplicationRecord
         Member.where(group_id: self.id).where(driver: "t").take.user_email
     end
   end
+
+  validates :name, presence: true
+  validates :description, presence: true
     
 end
