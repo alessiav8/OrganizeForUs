@@ -1,0 +1,26 @@
+
+  <p style="color: green"></p>
+
+  <div class="jumbotron">
+  <div style="text-align: right">
+  <%=link_to 'Member List', show_p_url(@group) %>
+  </div>
+
+  <h1 class="display-5"><%= @group.name %></h1>
+  <p class="lead"><%= @group.description %></p>
+  <hr class="my-4"> </hr>
+    <% if @group.has_driver? %>
+       <div class="row">
+       <div class="col-3">
+        <h6> Designeted Driver </h6> </div>
+        <div class="col">
+         <%= @group.driver %> </div>
+       </div>
+    <% end %> 
+    <br>
+
+  <%= link_to "Edit group", edit_group_path(@group), class:"btn btn-secondary" %> 
+  <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
+  <br><br>
+   
+  <%= link_to "Set organizzation", groups_path, class:"btn btn-secondary" %>  

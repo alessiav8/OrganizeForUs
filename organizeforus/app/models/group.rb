@@ -5,7 +5,28 @@ class Group < ApplicationRecord
     has_many :roles
     has_many :partecipations
 
-    scope :list_member, ->(group) {
+    before_destroy :remove_partecipation, if: :has_partecipation?
+
+
+  scope :list_members, ->(group) {
+    Partecipation.where(group_id: group)
+  }
+
+  scope :role_list, -> (group){
+
+  }
+
+  def has_partecipation?
+    Partecipation.where(group_id: self.id).count!=0
+  end
+  #prima di eliminare un gruppo mi assicuro di aver eliminato ogni partecipazione per non violare la foreign key di partecipations
+  def remove_partecipation
+    Partecipation.where(group_id: self.id).destroy_all
+  end
+
+
+  #da cancellare
+  scope :list_member, ->(group) {
     arr=Array.new
     arr << 'Select Driver'
     Member.where(group_id: group).each do |member| 
@@ -13,10 +34,6 @@ class Group < ApplicationRecord
     end
     return arr
   }
-  scope :list_members, ->(group) {
-    Partecipation.where(group_id: group)
-  }
-
   def has_member?
     Member.where(group_id: self.id).count!=0
   end
@@ -29,6 +46,8 @@ class Group < ApplicationRecord
         Member.where(group_id: self.id).where(driver: "t").take.user_email
     end
   end
+  #
+
 
   validates :name, presence: true
   validates :description, presence: true

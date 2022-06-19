@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
   get '/groups/:group_id/partecipations/show', to: 'partecipations#show', as: 'show_p'
   get 'partecipations/:id/destroy', to: 'partecipations#destroy', as: 'destroy_partecipation'
+  get 'partecipations/new_role', to: 'partecipations#new_role', as: 'new_role'
 
 
     

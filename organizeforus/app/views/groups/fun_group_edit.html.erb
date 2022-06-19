@@ -3,10 +3,7 @@
 <%= render "form", group: @group %>
 <br>
 
-<% if @group.work==true%>
-  <h5>Add new role:</h5>
-  <%= render 'roles/form' %>
-<% else %>
+
   <h6>Designeted Driver</h6>
 
   <% if @group.has_member? %>
@@ -27,8 +24,7 @@
     <% end %>
   <% else %>
      <p> Insert member before choose a designated driver </p> <br>
-  <% end %>
-<%end%>
+  <%end %>
 
 <div>
 <%= link_to "Show group", @group, class:"btn btn-secondary" %> 

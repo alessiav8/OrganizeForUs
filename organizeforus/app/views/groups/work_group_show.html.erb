@@ -5,15 +5,14 @@
   <div style="text-align: right">
   <%=link_to 'Member List', show_p_url(@group) %>
   </div>
-  <% if @group.work==true%>
-    <h1> Work Group </h1>
-  <% end %>
+
+  <h1> Work Group </h1>
 
   <h1 class="display-5"><%= @group.name %></h1>
   <p class="lead"><%= @group.description %></p>
   <hr class="my-4"> </hr>
 
-  <% if @group.work==true && @group.user==current_user%>
+  <% if @group.user==current_user%>
   <div class="container">
     <h5> Roles </h5>
       <div class="row row-cols-auto">
@@ -27,15 +26,6 @@
           </div> 
         <% end %>
       </div> </div>
-   <% else %>
-    <% if @group.has_driver? %>
-       <div class="row">
-       <div class="col-3">
-        <h6> Designeted Driver </h6> </div>
-        <div class="col">
-         <%= @group.driver %> </div>
-       </div>
-    <% end %> 
 
       <br>
   <% end %>

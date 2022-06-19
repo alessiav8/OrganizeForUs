@@ -8,10 +8,19 @@ class GroupsController < ApplicationController
   # GET /groups or /groups.json
   def index
     @groups = Group.all
+
   end
+
 
   # GET /groups/1 or /groups/1.json
   def show
+    @group=Group.find(params[:id])
+    if @group.work
+      render "work_group_show"
+    else
+      render "fun_group_show"
+    end 
+
   end
 
   def show_work
@@ -26,6 +35,13 @@ class GroupsController < ApplicationController
 
   # GET /groups/1/edit
   def edit
+    @group=Group.find(params[:id])
+    @partecipations = Partecipation.all
+    if @group.work
+      render "work_group_edit"
+    else
+      render "fun_group_edit"
+    end 
   end
 
   def edit_driver
