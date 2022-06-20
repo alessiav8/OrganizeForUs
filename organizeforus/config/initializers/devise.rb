@@ -316,5 +316,5 @@ Devise.setup do |config|
 
   #OmniAuth.config.allowed_request_methods = [:get]
 
-  config.omniauth :google_oauth2, 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', {}
+  config.omniauth :google_oauth2, '304187077726-5sschkps49r21ljqe2fc1tqhb83u09rk.apps.googleusercontent.com', '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', {}
 end

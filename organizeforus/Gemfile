@@ -102,3 +102,4 @@ gem 'omniauth', '~>2.0'
 gem 'activestorage-validator'
 
 gem "jquery-rails"
+gem 'google-api-client', require: 'google/apis/calendar_v3'

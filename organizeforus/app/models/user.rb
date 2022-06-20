@@ -39,7 +39,7 @@ class User < ApplicationRecord
       user.name = auth[:info][:first_name]
       user.surname = auth[:info][:last_name]
       user.email = auth.info.email
-      user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
+    # user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
     end
   end
 

@@ -2,18 +2,33 @@ require 'open-uri'
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
-  
+
         def google_oauth2
-            @user = User.from_omniauth(request.env['omniauth.auth'])
-            if @user.persisted?
+            @user = User.find_by(provider: request.env["omniauth.auth"].provider, uid: request.env["omniauth.auth"].uid)
+            # @user = User.from_omniauth(request.env['omniauth.auth'])
+            #byebug
+            if @user.present?
+                sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
-                sign_in_and_redirect @user, event: :authentication
             else
-                session['devise.google_data'] = request.env['omniauth.auth'].except('extra') 
-                redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
-            end
+                @user = User.from_omniauth(request.env["omniauth.auth"])
+                session['devise.google_data'] = request.env['omniauth.auth']
+                session['devise.google_data'].extra.id_token = nil;
+                
+  
+                render 'devise/registrations/after_social_connection'
         end
-     
+    end
+
+
+=begin    def google_oauth2
+        auth = request.env["omniauth.auth"]
+       @user = User.from_omniauth(request.env["omniauth.auth"])
+       session["devise.facebook_data"] = request.env["omniauth.auth"]    
+        redirect_to after_sign_in_path_for(user)
+      end
+    end
+=end   
 
 =begin    
     def facebook
@@ -44,20 +59,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
             blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
             @user.avatar.attach(blob)
-            session[:blob_id] = blob.id
-            
-
-
-
-=begin
-                url = URI.parse(auth[:info][:picture])
-                imagename = File.basename(url.path)
-                image = URI.open
-                @user.avatar.attach(io: image, filename: filename)
-=end
-            
+            session[:blob_id] = blob.id            
             render 'devise/registrations/after_social_connection'
-            
         end
     end
 
