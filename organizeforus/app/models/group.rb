@@ -13,7 +13,13 @@ class Group < ApplicationRecord
   }
 
   scope :role_list, -> (group){
-
+    array=Array.new
+    if group.has_partecipation?
+      Partecipation.where(group_id: group).each do |part|
+        array << part.role
+      end
+    end 
+    return array
   }
 
   def has_partecipation?
@@ -23,6 +29,16 @@ class Group < ApplicationRecord
   def remove_partecipation
     Partecipation.where(group_id: self.id).destroy_all
   end
+
+  def has_designeted_driver?
+    Partecipation.where(group_id: self.id, role: 'Driver').count!=0
+  end
+  def delect_driver
+    if self.has_designeted_driver?
+      Partecipation.where(group_id:self.id, role: 'Driver').update(role: ' ')
+    end
+  end
+
 
 
   #da cancellare
@@ -42,8 +58,8 @@ class Group < ApplicationRecord
   end
 
   def driver
-    if has_driver?
-        Member.where(group_id: self.id).where(driver: "t").take.user_email
+    if has_designeted_driver?
+      User.find(Partecipation.where(group_id: self.id, role: 'Driver').take.user_id).email
     end
   end
   #

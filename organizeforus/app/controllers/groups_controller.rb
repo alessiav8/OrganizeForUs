@@ -36,7 +36,7 @@ class GroupsController < ApplicationController
   # GET /groups/1/edit
   def edit
     @group=Group.find(params[:id])
-    @partecipations = Partecipation.all
+    @partecipations=Partecipation.all
     if @group.work
       render "work_group_edit"
     else
@@ -44,6 +44,8 @@ class GroupsController < ApplicationController
     end 
   end
 
+
+#forse da togliere
   def edit_driver
     @group=Group.find(params[:id])
     @member = @group.members.find_by(user_email: member_update_params[:driver])
@@ -67,7 +69,7 @@ class GroupsController < ApplicationController
     
     respond_to do |format|
       if @group.save 
-        format.html { redirect_to group_url(@group), notice: work_or_fun+"Group was successfully updated."}
+        format.html { redirect_to new_partecipations_url(@group), notice:"Group was successfully updated."}
         format.json { render :show, status: :created, location: @group }
          
       else

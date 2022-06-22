@@ -58,20 +58,15 @@
 
           <%= form.check_box :fun, class:"btn-check" , onclick:"showFunHide(this.checked)"%>
           <%= form.label :fun, class:"btn btn-secondary"%>
-          <div id="hiddenFunFields", style='display:none'>fun</div>
+          <div id="hiddenFunFields", style='display:none'>
+      
+          </div>
 
           <%= form.check_box :work, class:"btn-check", onclick:"showWorkHide(this.checked)"%>
           <%= form.label :work,class:"btn btn-secondary"%>
-          <div id="hiddenWorkFields", style='display:none'>work</div>
-
-      <!-- Non so perche i nomi non gli piacciono, funziona tutto ma se vengono inseriti quelli la checkbox non passa più alcun parametro di fun e work alla form -->
-      <!--%= form.check_box :fun, class:"btn-check", onchange:"showFunHide(this.checked)", name:"funchecked"%>
-      <%= form.label :fun, class:"btn btn-secondary"%>
-      <div id="hiddenFunFields", style='display:none'>fun</div-->
-      <!--%= form.check_box :work, class:"btn-check", onchange:"showWorkHide(this.checked)", name:"workchecked"%>
-      <%= form.label :work,class:"btn btn-secondary"%>
-        <div id="hiddenWorkFields", style='display:none'>work</div-->
-  
+          <div id="hiddenWorkFields", style='display:none'>
+          
+          </div>
     </div>
   <%end%>
   

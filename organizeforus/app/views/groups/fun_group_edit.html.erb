@@ -6,14 +6,14 @@
 
   <h6>Designeted Driver</h6>
 
-  <% if @group.has_member? %>
+  <% if @group.has_partecipation? %>
 
-    <%= form_with url: edit_driver_url,model: @group, method: :put do |form| %>
+    <%= form_with url: edit_driver_url, model: @partecipations, method: :put do |form| %>
       <div container>
       <div class="row">
         <div class="col-2">
-        <% form.label :driver, style: "display: block" %>
-        <%= form.select :driver, Member.list_member(@group) %>
+        <% form.label :role, style: "display: block" %>
+        <%= form.select :role, Partecipation.list_member(@group) %>
         </div>
         <div class="col">
         <%= form.submit "Choose", class:"btn btn-secondary btn-sm" %>

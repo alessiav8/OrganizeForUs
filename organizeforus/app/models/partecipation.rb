@@ -3,6 +3,14 @@ class Partecipation < ApplicationRecord
     belongs_to :group
 
     @list_role = Array.new
+
+    scope :list_member, ->(group){
+        arr=Array.new
+        where(group_id: group).each do |member| 
+          arr << User.find(member.user_id).email
+        end
+        return arr
+    }
 =begin
         if @list_role.include?(role)
             true
@@ -23,6 +31,7 @@ class Partecipation < ApplicationRecord
         end 
     end
 =end
+
 
 
 end

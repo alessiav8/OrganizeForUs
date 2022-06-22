@@ -1,19 +1,24 @@
 <h1> Member List </h1>
 <% @group.partecipations.each do |member| %>
-<td><li>   <%= member.user.email %> </li> </td> 
+
+<div class="row"> <div class="col">
+<li> <%= member.user.email %> </li> </div>
+
+<% if @group.work==true %>
+<div class="col"> Role: <%=member.role%> </div>
+<% else %>
+<div class="col"> Designated Driver </div>
+<%end %>
 
 <%if @group.user==current_user %>
-<td>  <%= link_to "Delete", [:destroy, member] , data: {
+<div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               } %> 
-              </td>
+              </div>
 
-<% if @group.work==true %>
-<td> Role: <%=member.role%> </td>
-<%end %>
-</tr>
-</p></table>
+
+</div>
 <% end %>
 
 <% end %><br><br>

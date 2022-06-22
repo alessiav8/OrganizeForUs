@@ -2,10 +2,37 @@
     
     <div class="field form group">
       </br>
+      <div class="row"> 
+      <div class="col-6">
       <% form.label :user_id, style: "display: block" %>
       <%= form.text_field :user_id, class:"form-control", placeholder:"Enter user email" %>
+      </div>
+
+      <% if @group.work==true %>
+      <div class="col-4">
+      <% form.label :role, style: "display: block" %>
+      <%= form.text_field :role, class:"form-control", list:'item', placeholder:"Enter Role" %>
+      <datalist id='item'>
+      <% Group.role_list(@group).each do |r| %>
+      <option> <%=r%> </option>
+      <%end %>
+      </datalist>      </div>
+
+
+      <%else %>
+      <div class="col">
+      <% form.label :role, class:"form-check-label" %> 
+      <%= form.check_box :role, class:"form-check-input" %> Designated Driver</div>
+      <%end%>
+
+      </div>
+      <% if @group.id==nil %>
+      <% value =Group.last.id+1%>
+      <% else %>
+      <% value=@group.id %> 
+      <% end %>
       <% form.label :group_id, style: "display: block" %>
-      <%= form.text_field :group_id, class:"form-control",value: @group.id, type: "hidden" %>
+      <%= form.text_field :group_id, class:"form-control",value: value, type: "hidden" %>
     </div>
     <div>
       </br>

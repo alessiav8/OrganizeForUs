@@ -66,6 +66,14 @@ class User < ApplicationRecord
     url_helpers.rails_representation_url(image.variant(resize_to_fill: size).processed, only_path: true)
   end
 
+  def check_subscription(group)
+    if Partecipation.where(group_id: group).select(:user_id).where(user_id: self.id).empty?
+      return false
+    else 
+      return true
+    end
+end
+
 =begin
   def self.from_omniauth(access_token)
       data = access_token.info
