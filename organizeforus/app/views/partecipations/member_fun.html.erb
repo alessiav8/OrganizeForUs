@@ -1,6 +1,6 @@
-<!--TEMPLATE PER LA FASE DI CREAZIONE-->
 
-<h1> Starting adding members </h1>
+<!-- QUESTI FILE HTML SONO PER QUANDO IL GRUPPO è GIA STATO CREATO-->
+<h1> FUN </h1>
 <br>
 <%= render "partecipations/form"%>
 <br>
@@ -24,6 +24,6 @@
   <% end %>
 <br>
   <div style="text-align: right">
-  <%= link_to "End", groups_path(@group), onclick:@group.set_created, class:"btn btn-secondary" %>
+  <%= link_to "Back", edit_group_path(@group), onclick:@group.set_created, class:"btn btn-secondary" %>
   </div>
   <br>

@@ -16,13 +16,17 @@
   <div class="container">
     <h5> Roles </h5>
       <div class="row row-cols-auto">
-        <% @group.roles.each do |role| %>
+        <% Group.role_list(@group).each do |role| %>
           <div class="col align-self-start">
-              <%= role.tag %> <br>
-              <%= link_to "Destroy", [:destroy, role.group, role], data: {
-                turbo_method: :delete,
-                turbo_confirm: "Are you sure?"
-              } %>
+          <% if role!= 'No Role'%>
+          <div class="row">
+           <div class="col">
+               <%= role %></div> 
+              <div class="col">
+               <!--button onclick="<% @group.delete_role(role) %>" > Delete </button--> 
+               </div>
+               </div>
+               <%end%>
           </div> 
         <% end %>
       </div> </div>

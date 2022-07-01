@@ -1,0 +1,26 @@
+<%= render "partecipations/form"%>
+<br>
+<% Group.list_members(@group).each do |part| %>
+<div class="row">
+<div class="col-3" >
+
+<li> <%= User.find(part.user_id).email %> </div>
+
+<div class="col"> 
+<%= part.role %>
+
+</div>
+<div class="col"> 
+<%= link_to "Delete", [:destroy, part] , data: {
+  turbo_method: :delete,
+  turbo_confirm: "Are you sure?"
+} %>  </div>
+
+</li> 
+</div>
+  <% end %>
+<br>
+  <div style="text-align: right">
+  <%= link_to "Back",edit_group_path(@group),class:"btn btn-secondary" %>
+  </div>
+  <br>

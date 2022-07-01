@@ -39,6 +39,21 @@ class Group < ApplicationRecord
     end
   end
 
+  def delete_role(role)
+   if has_partecipation?
+    Partecipation.where(group_id:self.id, role: role).update(role: "No Role")
+   end 
+  end
+
+  def created?
+    self.created=="t"
+  end
+
+  def set_created
+    Group.where(id: self.id).update(created: "t")
+  end
+
+
 
 
   #da cancellare

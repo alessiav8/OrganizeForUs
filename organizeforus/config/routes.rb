@@ -22,11 +22,8 @@ Rails.application.routes.draw do
     resources :roles, only: [:create]
   end 
 
-  get '/groups/:group_id/members', to: 'members#show', as: 'show_member'
-  put 'groups/:id/partecipations/edit_driver', controller: 'partecipations', action: :edit_driver, as: 'edit_driver'
+  put 'groups/:id/partecipations/edit_driver', to: 'partecipations#edit_driver', as: 'edit_driver'
 
-  get '/groups/:group_id/members/:id', to: 'members#destroy', as: 'destroy_group_member'
-  get '/groups/:group_id/roles/:id', to: 'roles#destroy', as: 'destroy_group_role'
 
   get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
   get '/groups/:group_id/partecipations/show', to: 'partecipations#show', as: 'show_p'

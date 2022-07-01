@@ -7,11 +7,19 @@ class PartecipationsController < ApplicationController
     @partecipations=Partecipation.all
     @group=Group.find(params[:group_id])
     if @group.fun
-      render "new_fun"
+      if @group.created?
+        render "member_fun"
+      else
+        render "new_fun"
+      end
     else
-      render "new_work"
-    end
+      if @group.created?
+        render "member_work"
+      else
+        render "new_work"
+      end
   end
+end
 
   def create
     @user=partecipation_params[:user_id]
