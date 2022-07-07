@@ -23,11 +23,16 @@ Rails.application.routes.draw do
   end 
 
   put 'groups/:id/partecipations/edit_driver', to: 'partecipations#edit_driver', as: 'edit_driver'
-
-
   get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
+  get '/groups/:id/set_created', to: 'groups#set_created', as: 'set_created'
+
+  get '/groups/:group_id/partecipations/:role/delete_role', to: 'partecipations#delete_role', as: 'delete_role'
+
   get '/groups/:group_id/partecipations/show', to: 'partecipations#show', as: 'show_p'
-  
+  put '/groups/:group_id/partecipations/:member_id/update_role', to: 'partecipations#update_role', as: 'update_role'
+
+  get '/groups/:group_id/partecipations/:member_id/update', to: 'partecipations#update', as: 'update'
+
   get 'partecipations/:id/destroy', to: 'partecipations#destroy', as: 'destroy_partecipation'
   get 'partecipations/new_role', to: 'partecipations#new_role', as: 'new_role'
   #get '/auth/:provider/callback' => 'sessions#omniauth'

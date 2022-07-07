@@ -1,0 +1,63 @@
+<!-- PAGINA DOVE MODIFICARE IL RUOLO DI UN PARTECIPANTE-->
+
+<html>
+<head> </head>
+<body>
+<h1> Member List </h1>
+<% @group.partecipations.each do |member| %>
+<!-- non mi riconosce uguali i due id perche uno è della partecipazione lascio cosi che tanto la mail è univoca-->
+
+<%if member.user.email==@member.email %>
+<div class="row"> 
+    <div class="col">
+        <li> <%= member.user.email %> </li> 
+    </div>
+    <div class="col" id="col_role"> 
+        Role to change: <%=member.role%> 
+    </div>
+
+    <div class="col">
+        <%= form_with url: update_role_url, model: @partecipations, method: :put do |form| %>
+            <% form.label :role, style: "display: block" %>
+            <%= form.text_field :role, class:"form-control", list:'item', placeholder:"Enter Role" %>
+                <datalist id='item'>
+                <% Group.role_list(@group).each do |r| %>
+                <option> <%=r%> </option>
+                <%end %>
+            </datalist>     
+        </div>
+        <div class="col">
+            <%= form.submit class:'btn btn-secondary'%>
+    </div>
+    <%end%>
+
+<% else %>
+
+
+
+<div class="row"> <div class="col">
+<li> <%= member.user.email %> </li> </div>
+
+<div class="col" id="col_role"> Role: <%=member.role%> </div>
+
+
+<%if @group.user==current_user %>
+<div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              } %> 
+              </div>
+<div class="col">
+
+<%= link_to "Update" ,update_role_path(@group,member) %>
+</div>
+       
+</div>
+<% end %>
+
+<% end %><br><br>
+<%= link_to "Back", groups_path(@group)%>
+<%end%>
+
+</body>
+</html>

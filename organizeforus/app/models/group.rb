@@ -49,9 +49,6 @@ class Group < ApplicationRecord
     self.created=="t"
   end
 
-  def set_created
-    Group.where(id: self.id).update(created: "t")
-  end
 
 
 

@@ -82,9 +82,10 @@ end
       end 
 
     else 
+      PostMailer.with(creator: current_user.name, user: @user, group: @g.name).post_created.deliver_later
       respond_to do |format|
           session[:return_to] ||= request.referer 
-          format.html { redirect_to session.delete(:return_to) , notice: 'Not already sybscribe' }  
+          format.html { redirect_to session.delete(:return_to) , notice: 'Not already sybscribe, Invite sent!' }  
       end 
     end 
 
@@ -92,6 +93,12 @@ end
 
   def show
     @group=Group.find(params[:group_id])
+    if @group.fun
+        render "show_fun"
+    else
+        render "show_work"
+    end
+
   end
 
   def destroy
@@ -126,6 +133,35 @@ end
       end
     end
   end
+
+  def delete_role
+    @group=Group.find(params[:group_id])
+    @role=params[:role]
+    Partecipation.where(role: @role).update(role: "No Role")
+    respond_to do |format|
+      session[:return_to] ||= request.referer 
+      format.html { redirect_to session.delete(:return_to), notice: "Role: "+@role+" was deleted, the member who had that role now are general member, please update their position if you need " }
+      format.json { head :no_content }
+    end
+  end
+
+  def update_role
+    @group=Group.find(params[:group_id])
+    @member=User.find(params[:member_id])
+    @role=params[:role]
+    if @role != nil
+       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role])
+    end
+
+  end
+
+  def update
+    @group=Group.find(params[:group_id])
+    @member=User.find(params[:member_id])
+    render "update_role"
+  end
+
+
 
 private
 

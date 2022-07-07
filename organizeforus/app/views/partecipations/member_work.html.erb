@@ -8,13 +8,14 @@
 
 <div class="col"> 
 <%= part.role %>
-
 </div>
+
 <div class="col"> 
 <%= link_to "Delete", [:destroy, part] , data: {
   turbo_method: :delete,
   turbo_confirm: "Are you sure?"
-} %>  </div>
+} %> 
+ </div>
 
 </li> 
 </div>

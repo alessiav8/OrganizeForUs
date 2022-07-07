@@ -23,14 +23,13 @@
            <div class="col">
                <%= role %></div> 
               <div class="col">
-               <!--button onclick="<% @group.delete_role(role) %>" > Delete </button--> 
-               </div>
+              <%=link_to 'Delete', delete_role_path(@group,role)%>
+              </div>
                </div>
                <%end%>
           </div> 
         <% end %>
       </div> </div>
-
       <br>
   <% end %>
 
@@ -41,3 +40,9 @@
   <br><br>
    
   <%= link_to "Set organizzation", groups_path, class:"btn btn-secondary" %>  
+  <script type="text/javascript">
+  let d=document.getElementById("delete");
+  function func(){
+    d.hyde=true;
+ }
+</script>

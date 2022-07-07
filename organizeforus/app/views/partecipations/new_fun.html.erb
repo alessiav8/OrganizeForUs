@@ -1,5 +1,12 @@
 <!--TEMPLATE PER LA FASE DI CREAZIONE-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>New_fun</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
+</head>
+<body>
 <h1> Starting adding members </h1>
 <br>
 <%= render "partecipations/form"%>
@@ -23,7 +30,10 @@
 </div>
   <% end %>
 <br>
+
   <div style="text-align: right">
-  <%= link_to "End", groups_path(@group), onclick:@group.set_created, class:"btn btn-secondary" %>
+  <%= link_to "End", set_created_url(@group) , class:"btn btn-secondary" %>
   </div>
   <br>
+  </body>
+</html>

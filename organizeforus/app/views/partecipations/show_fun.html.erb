@@ -1,0 +1,22 @@
+<h1> Member List </h1>
+<% @group.partecipations.each do |member| %>
+
+<div class="row"> <div class="col">
+<li> <%= member.user.email %> </li> </div>
+
+
+<div class="col"> Designated Driver </div>
+
+<%if @group.user==current_user %>
+<div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              } %> 
+              </div>
+              
+
+</div>
+<% end %>
+
+<% end %><br><br>
+<%= link_to "Back", groups_path(@group)%>

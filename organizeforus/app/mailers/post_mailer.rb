@@ -7,7 +7,13 @@ class PostMailer < ApplicationMailer
   #
   def post_created
     @greeting = "Hi"
+    @user= params[:user]
+    @creator= params[:creator]
+    @group= params[:group]
 
-    mail to: "to@example.org"
+    mail(
+      to: @user ,
+      subject: @creator + "invite you to join the Organize for us Family"
+    )
   end
 end
