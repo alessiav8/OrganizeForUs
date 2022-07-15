@@ -1,9 +1,13 @@
+<html>
+<head>
+</head>
+<body>
+<%= stylesheet_link_tag "application" %> 
 
   <p style="color: green"></p>
 
   <div class="jumbotron">
   <div style="text-align: right">
-  <%=link_to 'Member List', show_p_url(@group) %>
   </div>
 
   <h1> Work Group </h1>
@@ -12,8 +16,8 @@
   <p class="lead"><%= @group.description %></p>
   <hr class="my-4"> </hr>
 
-  <% if @group.user==current_user%>
-  <div class="container">
+  <div class="row"> 
+  <div class="container" style="width: 50%">
     <h5> Roles </h5>
       <div class="row row-cols-auto">
         <% Group.role_list(@group).each do |role| %>
@@ -21,17 +25,53 @@
           <% if role!= 'No Role'%>
           <div class="row">
            <div class="col">
-               <%= role %></div> 
-              <div class="col">
+
+           <li style="color: Group.getColor(@group.id,role)" >             
+           <%= role %>
+           </li>
+
+           </div> 
+           <% if @group.user==current_user%>
+              <div class="col-5">
               <%=link_to 'Delete', delete_role_path(@group,role)%>
               </div>
+           <% end %>
                </div>
                <%end%>
           </div> 
         <% end %>
       </div> </div>
       <br>
-  <% end %>
+
+      <div class="container" style="width: 50%">
+        <h5> Members </h5>
+        <%  i=0 %>
+        <% if i<3 %>
+        <% @group.partecipations.each do |member| %>
+
+          <div class="row"> 
+          <% if @group.accepted?(member.user.id) %> 
+            <div class="col-4">
+              <li style="color: <%=member.role_color%>" >  
+                <span > <%= member.user.email %> </span> 
+              </li> 
+            </div>
+
+            <% i=i+1%>
+            <% end %>
+          </div>
+          <%end%>
+          <% end %>
+          <div class="row-2;"> 
+              <%= link_to "Show More",show_p_url(@group) %>
+          </div>
+
+      </div>
+  </div>
+  </div>
+  <br><br>
+  
+  
 
 
 
@@ -40,9 +80,5 @@
   <br><br>
    
   <%= link_to "Set organizzation", groups_path, class:"btn btn-secondary" %>  
-  <script type="text/javascript">
-  let d=document.getElementById("delete");
-  function func(){
-    d.hyde=true;
- }
-</script>
+  <body>
+</html>

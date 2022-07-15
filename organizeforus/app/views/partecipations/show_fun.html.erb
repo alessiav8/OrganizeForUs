@@ -4,8 +4,21 @@
 <div class="row"> <div class="col">
 <li> <%= member.user.email %> </li> </div>
 
+<!-- QUESTA PAGINA è MOSTRARE I MEMBRI DI UN GRUPPO TIPO FUN -->
 
+<% if  @group.driver == member.user.email %>
 <div class="col"> Designated Driver </div>
+<% else%>
+<div class="col">   </div>
+<%end%>
+
+<div class="col">
+<% if @group.accepted?(member.user.id)%>
+Status: "Member"
+<%else %>
+Status: "Pending"
+<% end %>
+</div>
 
 <%if @group.user==current_user %>
 <div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
@@ -19,4 +32,13 @@
 <% end %>
 
 <% end %><br><br>
-<%= link_to "Back", groups_path(@group)%>
+
+<!-- Righe per indietro o aggiunta -->
+    <div class="row">
+      <div class="col-1" ,style="text-align: right">
+      <%= link_to "Back", @group %>
+      </div>
+      <div class="col">
+      <%= link_to "New Member", new_partecipations_url(@group) %>
+      </div>
+    </div>

@@ -2,13 +2,35 @@
 <head> </head>
 <body>
 <h1> Member List </h1>
+<br>
+<!-- QUESTA PAGINA è MOSTRARE I MEMBRI DI UN GRUPPO TIPO WORK -->
+
 <% @group.partecipations.each do |member| %>
+  <%= stylesheet_link_tag "application" %> 
 
-<div class="row"> <div class="col">
-<li> <%= member.user.email %> </li> </div>
+<div class="row"> 
 
-<div class="col" id="col_role"> Role: <%=member.role%> </div>
+  <div class="col-3">
+    <li style="color: <%=member.role_color%>" >  
+        <span> <%= member.user.email %> </span> 
+    </li> 
+  </div>
+  <div class="col-3" id="col_role"> 
+    Role: <%=member.role%> 
+  </div>
 
+
+<!--div class="col">
+<img class="btn btn-sm ; rounded-circle", style="background-color:<%=member.role_color%>; width:0.05%; height:70%; cli">
+</div-->
+
+<div class="col">
+<% if @group.accepted?(member.user.id)%>
+Status: "Member"
+<%else %>
+Status: "Pending"
+<% end %>
+</div>
 
 <%if @group.user==current_user %>
 <div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
@@ -25,6 +47,13 @@
 <% end %>
 
 <% end %><br><br>
-<%= link_to "Back", groups_path(@group)%>
-</body>
+<!-- Righe per indietro o aggiunta -->
+    <div class="row">
+      <div class="col-1" ,style="text-align: right">
+      <%= link_to "Back", @group %>
+      </div>
+      <div class="col">
+      <%= link_to "New Member", new_partecipations_url(@group) %>
+      </div>
+    </div></body>
 </html>

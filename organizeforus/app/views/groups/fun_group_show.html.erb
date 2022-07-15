@@ -3,21 +3,50 @@
 
   <div class="jumbotron">
   <div style="text-align: right">
-  <%=link_to 'Member List', show_p_url(@group) %>
   </div>
 
   <h1 class="display-5"><%= @group.name %></h1>
   <p class="lead"><%= @group.description %></p>
+  
   <hr class="my-4"> </hr>
-    <% if @group.has_designeted_driver? %>
-       <div class="row">
-       <div class="col-3">
-        <h6> Designated Driver </h6> </div>
-        <div class="col">
-         <%= @group.driver %> </div>
-       </div>
-    <% end %> 
+
+  <div class="row" style="width: 100%">
+
+      <% if @group.has_designeted_driver? %>
+        <div class="row" style="width: 50%">
+        <div class="col-4">
+          <h5> Designated Driver </h5> </div>
+          <div class="col">
+          <%= @group.driver %> </div>
+        </div>
+      <% end %> 
+
+    <div class="container" style="width: 50%">
+        <h5> Members </h5>
+        <%  i=0 %>
+        <% if i<3 %>
+        <% @group.partecipations.each do |member| %>
+
+          <div class="row"> 
+            <div class="col-4">
+            <% if @group.accepted?(member.user.id) %> 
+              <li style="color: <%=member.role_color%>" > 
+                <span > <%= member.user.email %> </span> 
+              </li> 
+              <% i=i+1%>
+              <% end %>
+            </div>
+          </div>
+          <%end%>
+          <% end %>
+          <div class="row-2;"> 
+              <%= link_to "Show More",show_p_url(@group) %>
+          </div>
+      </div>
+</div>
+</div>
     <br>
+
 
   <%= link_to "Edit group", edit_group_path(@group), class:"btn btn-secondary" %> 
   <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>

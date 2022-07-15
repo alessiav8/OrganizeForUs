@@ -26,6 +26,12 @@ end
     @id=User.find_by(email: @user)
     @group=partecipation_params[:group_id]
     @g=Group.find(@group)
+    @color= partecipation_params[:role_color]
+    @role= partecipation_params[:role]
+    if @role == "" || @role == " " || @role== nil
+      @role="No Role"
+    end
+
    
     session[:return_to] ||= request.referer 
 
@@ -33,20 +39,20 @@ end
       if Partecipation.where(group_id: @group).where(user_id: @id.id).empty? #se non è già membro
         
         if @g.work==true
-          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: partecipation_params[:role])
+          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color)
           respond_to do |format|
             if @partecipation.save
               format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
               format.json { render :@part.json }
             else
-              format.html { render :index }
+              format.html { render html: "Something gone wrong"+ @partecipation.errors}
               format.json { render json: @partecipation.errors, status: :unprocessable_entity }
             end
           end
 
         else #fun group
           
-          if partecipation_params[:role]=='1'
+          if @role=='1' #E DD
             @g.delect_driver
             @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'Driver')
             respond_to do |format|
@@ -54,19 +60,19 @@ end
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
                 format.json { render :@part.json }
               else
-                format.html { render :index }
+                format.html { render html: "Something gone wrong"+ @partecipation.errors}
                 format.json { render json: @partecipation.errors, status: :unprocessable_entity }
               end
             end
 
-          else
-            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: ' ')
+          else # non è DD
+            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'No Role')
             respond_to do |format|
               if @partecipation.save
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added'  }
                 format.json { render :@part.json }
               else
-                format.html { render :index }
+                format.html { render html: "Something gone wrong"+ @partecipation.errors}
                 format.json { render json: @partecipation.errors, status: :unprocessable_entity }
               end
             end
@@ -82,11 +88,11 @@ end
       end 
 
     else 
-      PostMailer.with(creator: current_user.name, user: @user, group: @g.name).post_created.deliver_later
+      GroupMailer.with(group: @g,user: @user, creator: current_user).join_comunity.deliver_later
       respond_to do |format|
-          session[:return_to] ||= request.referer 
-          format.html { redirect_to session.delete(:return_to) , notice: 'Not already sybscribe, Invite sent!' }  
-      end 
+        format.html { redirect_to session.delete(:return_to), notice: 'Sent invite' }
+        format.json { render :@part.json }
+       end       
     end 
 
   end
@@ -148,9 +154,19 @@ end
   def update_role
     @group=Group.find(params[:group_id])
     @member=User.find(params[:member_id])
+    @color=params[:role_color]
     @role=params[:role]
-    if @role != nil
-       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role])
+    if @role != nil && @role != ""
+       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role], role_color: @color)
+       respond_to do |format|
+        format.html { redirect_to show_p_url(@group), notice: "Role updated" }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to show_p_url(@group), notice: "Empty role" }
+        format.json { head :no_content }
+      end
     end
 
   end
@@ -166,7 +182,7 @@ end
 private
 
   def partecipation_params
-    params.require(:partecipation).permit(:user_id,:group_id,:role)
+    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color)
   end
 
   def role_params

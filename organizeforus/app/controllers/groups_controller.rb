@@ -61,15 +61,13 @@ class GroupsController < ApplicationController
   # POST /groups or /groups.json
   def create
     #@group = Group.new(group_params)
-    @group=current_user.groups.build(group_params)
-    if group_params[:fun]=='1' 
-      work_or_fun="Fun" 
-    else 
-      work_or_fun="Work"
-    end 
-    
+    @group=current_user.groups.build(group_params)  
     respond_to do |format|
-      if @group.save 
+      if @group.work && @group.fun
+        format.html { redirect_to groups_url,status: :unprocessable_entity, notice: "Impossible to create a group that is for fun end at the same time for work!" }
+        format.json { render :show, location: @group, status: :unprocessable_entity }
+
+      elsif @group.save 
         format.html { redirect_to new_partecipations_url(@group)}
         format.json { render :show, status: :created, location: @group }
          
@@ -118,6 +116,7 @@ class GroupsController < ApplicationController
     @group=Group.find(params[:id])
     var=@group.update(created:"t")
     if var #se il gruppo viene correttamente modificato
+      GroupMailer.with(group: @group, user: current_user).group_created.deliver_later
       respond_to do |format|
         format.html { redirect_to @group, notice: "Group was successfully created." }
         format.json { head :no_content }

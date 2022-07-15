@@ -65,9 +65,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_180611) do
   end
 
   create_table "partecipations", force: :cascade do |t|
-    t.string "role"
+    t.string "role", default: "No Role"
     t.integer "user_id"
     t.integer "group_id"
+    t.string "role_color", default: "#000000"
+    t.boolean "accepted", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_partecipations_on_group_id"
