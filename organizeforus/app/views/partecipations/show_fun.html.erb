@@ -1,7 +1,17 @@
 <h1> Member List </h1>
+
+<div class="row">
+<div class="col-3"> Email </div>
+<div class="col-3"> Role </div>
+<div class="col"> Status </div>
+<div class="col">  </div>
+<div class="col">  </div>
+</div>
+
 <% @group.partecipations.each do |member| %>
 
-<div class="row"> <div class="col">
+<div class="row"> 
+<div class="col">
 <li> <%= member.user.email %> </li> </div>
 
 <!-- QUESTA PAGINA è MOSTRARE I MEMBRI DI UN GRUPPO TIPO FUN -->
@@ -14,9 +24,9 @@
 
 <div class="col">
 <% if @group.accepted?(member.user.id)%>
-Status: "Member"
+"Member"
 <%else %>
-Status: "Pending"
+"Pending"
 <% end %>
 </div>
 

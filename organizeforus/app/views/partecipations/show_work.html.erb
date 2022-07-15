@@ -5,6 +5,15 @@
 <br>
 <!-- QUESTA PAGINA è MOSTRARE I MEMBRI DI UN GRUPPO TIPO WORK -->
 
+<div class="row">
+<div class="col-3"> Email </div>
+<div class="col-3"> Role </div>
+<div class="col"> Status </div>
+<div class="col">  </div>
+<div class="col">  </div>
+
+</div>
+
 <% @group.partecipations.each do |member| %>
   <%= stylesheet_link_tag "application" %> 
 
@@ -16,19 +25,14 @@
     </li> 
   </div>
   <div class="col-3" id="col_role"> 
-    Role: <%=member.role%> 
+    <%=member.role%> 
   </div>
-
-
-<!--div class="col">
-<img class="btn btn-sm ; rounded-circle", style="background-color:<%=member.role_color%>; width:0.05%; height:70%; cli">
-</div-->
 
 <div class="col">
 <% if @group.accepted?(member.user.id)%>
-Status: "Member"
+ "Member"
 <%else %>
-Status: "Pending"
+ "Pending"
 <% end %>
 </div>
 
