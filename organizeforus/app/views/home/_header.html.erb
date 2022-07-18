@@ -13,26 +13,47 @@
         </li>
 
         <%if user_signed_in? %>
+        <!-- notifiche -->
+
             <li class="nav-item">
-                <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %>
+            <%=link_to "Create group", new_group_path, class:"nav-link"%>
             </li>
-            <li class="nav-item">
-                <%=link_to "Edit Profile", edit_user_registration_path(current_user), class:"nav-link"%>
-            </li>
-            <li class="nav-item">
-                <!--non fatto-->
-                <a class="nav-link" href="#">ProfileNONFATTO</a>
-            </li>
-            <li class="nav-item">
-                <%=link_to "Create group", new_group_path, class:"nav-link"%>
-            </li>
+
             <li class="nav-item">
                 <%=link_to "My Groups", groups_path, class:"nav-link"%>
             </li>
+
             <li class="nav-item">
-                <!--non fatto-->
-                <a class="nav-link" href="#">Your events</a>
+                <%= render "layouts/notifications" %>
             </li>
+
+            <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="NavBarDropDown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= current_user.name %>
+                </a>
+
+              <ul class="dropdown-menu" aria-labelledby="NavBarDropDown1">
+
+                <li class="dropdown-item">
+                  <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %> </a>
+                <li>
+
+                <li class="dropdown-item">
+                    <%=link_to "Edit Profile", edit_user_registration_path(current_user), class:"nav-link"%>
+                </li>
+
+                <li class="dropdown-item">
+                    <!--non fatto-->
+                    <a class="nav-link" href="#">ProfileNONFATTO</a>
+                </li>
+                <li class="dropdown-item">
+                    <!--non fatto-->
+                    <a class="nav-link" href="#">Your events</a>
+                </li>
+
+              </ul>
+            </li>
+
         <%else%>   
             <li class="nav-item">
                 <%=link_to "Sign Up", new_user_registration_path, class:"nav-link"%>

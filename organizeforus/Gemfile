@@ -105,3 +105,5 @@ gem 'activestorage-validator'
 
 gem "jquery-rails"
 gem 'google-api-client', require: 'google/apis/calendar_v3'
+
+gem "noticed", "~> 1.5"

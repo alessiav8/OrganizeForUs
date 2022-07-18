@@ -4,8 +4,13 @@ class Group < ApplicationRecord
     has_many :members
     has_many :roles
     has_many :partecipations
+    has_many :notifications, as: :recipient, dependent: :destroy
 
+    has_noticed_notifications model_name: 'Notification'
+
+    before_destroy :cleanup_notification
     before_destroy :remove_partecipation, if: :has_partecipation?
+
 
 
   scope :list_members, ->(group) {
@@ -68,18 +73,6 @@ class Group < ApplicationRecord
     Partecipation.where(user_id: user,group_id: self.id).take.accepted==true
   end
   
-
-
-
-  #begin da cancellare
-  #scope :list_member, ->(group) {
-  ## arr=Array.new
-    #arr << 'Select Driver'
-    #Member.where(group_id: group).each do |member| 
-     # arr << member.name
- #   end
-  #  return arr
-  #}
   def has_member?
     Member.where(group_id: self.id).count!=0
   end
@@ -115,5 +108,12 @@ class Group < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
+
+  private 
+
+  def cleanup_notification
+    notifications_as_group.destroy_all
+  end
+
     
 end

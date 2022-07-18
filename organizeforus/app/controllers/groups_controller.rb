@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!, expect: [:index, :show]
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :delete_incomplete, only: [:index]
+  
 
 
   #se l'user non è autenticato non può fare nulla se non le cose specificate nella index e nella show
@@ -94,7 +95,6 @@ class GroupsController < ApplicationController
   # DELETE /groups/1 or /groups/1.json
   def destroy
     @group.destroy
-
     respond_to do |format|
       format.html { redirect_to groups_url, notice: "Group was successfully destroyed." }
       format.json { head :no_content }
@@ -105,8 +105,6 @@ class GroupsController < ApplicationController
     @group=Group.find(params[:id])
   end
 
-
-
   def correct_user
     @group= current_user.groups.find_by(id: params[:id])
     redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
@@ -116,6 +114,9 @@ class GroupsController < ApplicationController
     @group=Group.find(params[:id])
     var=@group.update(created:"t")
     if var #se il gruppo viene correttamente modificato
+      #da spostare
+      GroupNotification.with(group: @group).deliver_later(@group.user) # creazione notifiche
+
       GroupMailer.with(group: @group, user: current_user).group_created.deliver_later
       respond_to do |format|
         format.html { redirect_to @group, notice: "Group was successfully created." }
@@ -132,7 +133,7 @@ class GroupsController < ApplicationController
 
 
   def delete_incomplete
-    Group.where(created: "f").destroy_all
+    Group.where(created: "f",user_id: current_user.id).destroy_all
   end
 
   private
@@ -157,5 +158,6 @@ class GroupsController < ApplicationController
     def inside 
       @group=Group.find(params[:id])
     end
-
+    
+ 
 end
