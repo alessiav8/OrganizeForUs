@@ -15,14 +15,14 @@
       <% if @group.has_designeted_driver? %>
         <div class="row" style="width: 50%">
         <div class="col-4">
-          <h5> Designated Driver </h5> </div>
+          <h6> Designated Driver: </h6> </div>
           <div class="col">
           <%= @group.driver %> </div>
         </div>
       <% end %> 
 
     <div class="container" style="width: 50%">
-        <h5> Members </h5>
+        <h6> Members </h6>
         <%  i=0 %>
         <% if i<3 %>
         <% @group.partecipations.each do |member| %>

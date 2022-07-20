@@ -115,8 +115,6 @@ class GroupsController < ApplicationController
     var=@group.update(created:"t")
     if var #se il gruppo viene correttamente modificato
       #da spostare
-      GroupNotification.with(group: @group).deliver_later(@group.user) # creazione notifiche
-
       GroupMailer.with(group: @group, user: current_user).group_created.deliver_later
       respond_to do |format|
         format.html { redirect_to @group, notice: "Group was successfully created." }

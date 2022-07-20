@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_18_135414) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_20_135811) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,6 +39,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_135414) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "answers", force: :cascade do |t|
+    t.integer "question_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
+  end
+
   create_table "groups", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -49,19 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_135414) do
     t.boolean "fun"
     t.boolean "work"
     t.index ["user_id"], name: "index_groups_on_user_id"
-  end
-
-  create_table "members", force: :cascade do |t|
-    t.string "user_email", null: false
-    t.integer "group_id", null: false
-    t.string "invito", default: "not confirmed"
-    t.string "driver", default: "f"
-    t.string "iscritto"
-    t.string "role"
-    t.string "necessary"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_members_on_group_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -88,12 +84,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_135414) do
     t.index ["user_id"], name: "index_partecipations_on_user_id"
   end
 
-  create_table "roles", force: :cascade do |t|
-    t.string "tag"
-    t.integer "group_id", null: false
+  create_table "questions", force: :cascade do |t|
+    t.string "title"
+    t.integer "survey_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_roles_on_group_id"
+    t.index ["survey_id"], name: "index_questions_on_survey_id"
+  end
+
+  create_table "surveys", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.string "score"
+    t.boolean "terminated", default: false
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_surveys_on_group_id"
+    t.index ["user_id"], name: "index_surveys_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -121,7 +130,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_135414) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "users"
   add_foreign_key "groups", "users"
-  add_foreign_key "members", "groups"
-  add_foreign_key "roles", "groups"
+  add_foreign_key "questions", "surveys"
+  add_foreign_key "surveys", "groups"
+  add_foreign_key "surveys", "users"
 end

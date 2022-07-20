@@ -19,11 +19,13 @@ class GroupNotification < Noticed::Base
   #
   def message
     @group=Group.find(params[:group][:id])
-    @user=Group.find(params[:group][:user_id])
-    "Group #{@group.name} succesfully created"
+    @user=User.find(params[:user][:id])
+    @creator=User.find(params[:creator][:id])
+    
+    "#{@group.user.name} invite you in #{@group.name} Group click here to accept"
   end
   #
   def url
-   group_path(Group.find(params[:group][:id]))
+   invite_path(Group.find(params[:group][:id]), User.find(params[:user][:id]) )
   end
 end

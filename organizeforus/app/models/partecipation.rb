@@ -2,6 +2,7 @@ class Partecipation < ApplicationRecord
     belongs_to :user
     belongs_to :group
 
+    before_destroy :cleanup_notification
     @list_role = Array.new
 
     scope :list_member, ->(group){
@@ -15,6 +16,12 @@ class Partecipation < ApplicationRecord
     validates :role, presence: true
     validates :user_id, presence: true
     
+
+  private 
+
+  def cleanup_notification
+    User.find(self.user_id).notifications.destroy_all
+  end
 
     
 

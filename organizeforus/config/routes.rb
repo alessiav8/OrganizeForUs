@@ -33,9 +33,19 @@ Rails.application.routes.draw do
 
   get '/groups/:group_id/partecipations/:member_id/update', to: 'partecipations#update', as: 'update'
 
+  get '/groups/:group_id/partecipations/:member_id/invite', to: 'partecipations#invite', as: 'invite'
+
+
+  get 'partecipations/:id/accept', to: 'partecipations#accept', as: 'accept'
+  get 'partecipations/:id/decline', to: 'partecipations#decline', as: 'decline'
+
+
   get 'partecipations/:id/destroy', to: 'partecipations#destroy', as: 'destroy_partecipation'
   get 'partecipations/new_role', to: 'partecipations#new_role', as: 'new_role'
   #get '/auth/:provider/callback' => 'sessions#omniauth'
+
+  get '/groups/:group_id/surveys/user_id/new', to: 'surveys#new', as: 'new_survey'
+  post '/groups/:group_id/surveys/create', to: 'surveys#create', as: 'new_surveys'
 
 
     

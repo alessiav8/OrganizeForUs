@@ -4,6 +4,7 @@ class Group < ApplicationRecord
     has_many :members
     has_many :roles
     has_many :partecipations
+    has_many :surveys
     has_many :notifications, as: :recipient, dependent: :destroy
 
     has_noticed_notifications model_name: 'Notification'
@@ -60,6 +61,12 @@ class Group < ApplicationRecord
   def is_administrator?(user)
     user==self.user
   end
+
+  def administrator
+    @administrator=User.find(self.user_id)
+    return @administrator
+  end
+
 
   def is_a_member?(user)
       if !Partecipation.where(group_id: self.id, user_id: User.where(email: user.email).take.id).empty?

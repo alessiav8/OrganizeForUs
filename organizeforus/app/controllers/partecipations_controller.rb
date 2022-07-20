@@ -37,6 +37,7 @@ end
 
     if @id!=nil # se esiste questo utente
       if Partecipation.where(group_id: @group).where(user_id: @id.id).empty? #se non è già membro
+        notify_recipent(@g,@id) #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
           @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color)
@@ -178,6 +179,35 @@ end
   end
 
 
+  def invite 
+    @group=Group.find(params[:group_id])
+    @user=User.find(params[:member_id])
+    @partecipation= Partecipation.where(group_id: @group.id, user_id: @user.id).take
+    mark_notification_as_read
+  end
+
+  def accept
+    @partecipation=Partecipation.find(params[:id])
+    @partecipation.update(accepted: true)
+    @group=Group.find(@partecipation.group_id)
+    flash.alert="Accept"
+    respond_to do |format|
+      format.html { redirect_to @group, notice: "Accepted" }
+      format.json { head :no_content }
+    end
+
+  end
+
+  def decline
+    @partecipation=Partecipation.find(params[:id])
+    @partecipation.destroy
+    respond_to do |format|
+      format.html { redirect_to groups_url, notice: "Declined" }
+      format.json { head :no_content }
+    end
+  end
+
+
 
 private
 
@@ -192,5 +222,20 @@ private
   def drive_params
     params.require(:partecipation).permit(:role)
   end
+
+  def mark_notification_as_read
+    @group=Group.find(params[:group_id])
+    if current_user
+      notifications_to_mark_as_read= @group.notifications_as_group.where(recipient: current_user)
+      notifications_to_mark_as_read.update_all(read_at: Time.zone.now)
+    end
+  end
+
+  def notify_recipent(group,user)
+    g=GroupNotification.with(group: group, user: user, creator: group.user).deliver_later(user) # creazione notifiche
+  end
+
+
+
 
 end

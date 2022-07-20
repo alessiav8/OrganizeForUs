@@ -19,14 +19,14 @@
 <% if  @group.driver == member.user.email %>
 <div class="col"> Designated Driver </div>
 <% else%>
-<div class="col">   </div>
+<div class="col">  </div>
 <%end%>
 
 <div class="col">
 <% if @group.accepted?(member.user.id)%>
-"Member"
-<%else %>
-"Pending"
+Member
+<%else%>
+Pending
 <% end %>
 </div>
 
@@ -37,8 +37,10 @@
               } %> 
               </div>
               
-
+<%else%>
+<div class="col">   </div>
 </div>
+
 <% end %>
 
 <% end %><br><br>

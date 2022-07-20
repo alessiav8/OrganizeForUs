@@ -1,0 +1,32 @@
+<html>
+<head>
+</head>
+<body>
+
+    <div class="container-sm ;align-middle" style="text-align:center; heigth:50% ;width:50%; margin-top:10%">
+        <div class="row align-item-center">
+
+        <span>Hi <b><%=@user.name%> <%=@user.surname%></b>, we want to inform you that <b> <%=@group.user.name%> <%=@group.user.surname%></b> invite you to join <br><b> <%=@group.name%> </b>group! <br>
+        if you want to accept the invitation, please click yes below. <br>
+        Good organization.
+        </span>
+        </div>
+        <br>
+        <div class="row align-item-center">
+            <div class="col"> </div>
+            <div class="col"> </div>
+            <div class="col">
+                <%=link_to  "Yes", accept_path(@partecipation.id), class:"btn btn-primary" %>         
+            </div>
+            <div class="col">
+                <%= link_to  "No", decline_path(@partecipation.id),class:"btn btn-primary"  %>         
+            </div>
+            <div class="col"> </div>
+            <div class="col"> </div>
+
+        </div> 
+    </div>
+
+
+</body>
+</html>

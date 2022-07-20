@@ -1,0 +1,65 @@
+<%= form_with model: survey ,url:new_surveys_path(@group) ,method: :post, html: { multipart: true } do |form| %>
+    <div class='field' , style='margin-left:10px'>
+
+        <div class="container">
+            <div class="row-3">
+                <div class="col">
+                    <%= form.label :title, "Title:" %>
+                </div>
+                <div class="col">
+                    <%= form.text_field :title %>
+                </div>
+            </div>
+            <div class="row-3">
+                <div class="col">
+                    <%= form.label :body, "Description:" %>
+                </div>
+                <div class="col">
+                    <%= form.text_field :body %>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class='appendable' style="margin-left:10px">
+                <%= form.fields_for :question do |builder| %>
+                    <%= render 'question_fields', f: builder %> 
+                <%end%>
+        </div>
+        <%= link_to_add_fields "Add Question", form, :questions %>   
+    </div>
+    <div class='row-3' , style='margin-left:10px'>
+        <%= form.submit "Save" %>
+    </div>
+<%end%>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type='text/javascript'>
+  // remove attachment field
+  function removeField(link) {
+    $(link).prev("input[type=hidden]").val("true");
+    tag = $(link).closest(".field")
+    tag.hide('slow');
+  }
+
+  // add attachment field
+  function addField(link, association, content) {
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_" + association, "g");
+    var html = $(content.replace(regexp, new_id)).hide();
+    var target = $(link).closest("div.field").find(".appendable").first();
+
+    var last_height = 0
+    html.appendTo(target).slideDown({
+      duration: 'slow',
+      progress: function () {
+        delta = $(this).outerHeight(true) - last_height
+        $(window).scrollTop( $(window).scrollTop() + delta );
+        last_height = $(this).outerHeight(true);
+      },
+      complete: function () {
+        $(this).find('input[type=text]').focus();
+      }});
+    }
+</script>
