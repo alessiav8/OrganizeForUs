@@ -24,11 +24,11 @@
           <% else %>
           <td> <%= Partecipation.where(group_id: group, user_id: User.where(email: current_user.email).take.id ).take.role %> </td>
           <% end %>
-          <td><%= link_to 'Show group', group %>
+          <td><%= link_to 'Show group', group, class:"btn btn-secondary btn-sm" %>
           </td>
-          <td><%= link_to 'Edit group',  edit_group_path(group)%>
+          <td><%= link_to 'Edit group',  edit_group_path(group), class:"btn btn-secondary btn-sm"%>
           </td>
-          <td><%= button_to 'Delete group', group, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><%= button_to 'Delete group', group, class:"btn btn-danger btn-sm", method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>
         </tr>
       <%end%>

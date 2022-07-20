@@ -81,7 +81,7 @@
 
 
 <%if @group.user==current_user %>
-<div class="col">  <%= link_to "Delete", [:destroy, member] , data: {
+<div class="col">  <%= link_to "Delete", [:destroy, member] ,class:"btn btn-danger btn-sm", data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               } %> 

@@ -105,7 +105,7 @@ class Group < ApplicationRecord
     end 
   end
 
-
+  
   validates :name, presence: true
   validates :description, presence: true
 

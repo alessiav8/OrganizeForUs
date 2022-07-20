@@ -21,7 +21,7 @@
     <%= part.role %>
 </div>
 <div class="col"> 
-<%= link_to "Delete", [:destroy, part] , data: {
+<%= link_to "Delete", [:destroy, part] , class:"btn btn-danger btn-sm", data: {
   turbo_method: :delete,
   turbo_confirm: "Are you sure?"
 } %>  </div>
@@ -31,7 +31,8 @@
   <% end %>
 <br>
 
-  <div style="text-align: right">
+  <div style="text-align: left">
+  <h6>are you done?</h6>
   <%= link_to "End", set_created_url(@group) , class:"btn btn-secondary" %>
   </div>
   <br>

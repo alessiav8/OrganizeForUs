@@ -1,4 +1,5 @@
 <!-- QUESTA PAGINA è PER AGGIUNGERE MEMBRI DOPO LA CREAZIONE -->
+<h2>Add a new member</h2>
 <%= render "partecipations/form"%>
 <br>
 <% Group.list_members(@group).each do |part| %>
@@ -12,11 +13,11 @@
 </div>
 
 <div class="col">
-<img class="btn btn-sm ; rounded-circle", style="background-color:<%=part.role_color%>; width:0.05%; height:70%; cli"> </button>
+<img class="btn btn-sm ; rounded-circle", style="background-color:<%=part.role_color%>; width:0.05%; height:60%; cli"> </button>
 </div>
 
 <div class="col"> 
-<%= link_to "Delete", [:destroy, part] , data: {
+<%= link_to "Delete", [:destroy, part] ,class:"btn btn-danger btn-sm", data: {
   turbo_method: :delete,
   turbo_confirm: "Are you sure?"
 } %> 
@@ -26,7 +27,7 @@
 </div>
   <% end %>
 <br>
-  <div style="text-align: right">
+  <div style="text-align: left">
   <%= link_to "Back",edit_group_path(@group),class:"btn btn-secondary" %>
   </div>
   <br>
