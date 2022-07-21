@@ -1,0 +1,16 @@
+   
+            <%= form_with model: answer, url: answer_survey_path do |form| %>
+                <div class="container" , style="width: 50%" >
+                    <%  @survey.questions.each do |question| %>
+                        <div class="row">
+                            <div class="col"> 
+                            <%= form.check_box :question_id, {},question.id,nil  %>  <%=question.title%>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <br><br>
+
+                <%= form.submit "Send" %>
+            <% end %>
+

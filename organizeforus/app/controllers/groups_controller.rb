@@ -3,6 +3,9 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!, expect: [:index, :show]
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :delete_incomplete, only: [:index]
+  before_action :surveys_terminated, only: [:show]
+
+
   
 
 
@@ -134,6 +137,27 @@ class GroupsController < ApplicationController
     Group.where(created: "f",user_id: current_user.id).destroy_all
   end
 
+  def surveys_terminated
+    @group=Group.find(params[:id])
+    @surveys=@group.surveys
+    @surveys.each { |survey|
+      totale= @group.partecipations.where('created_at < ?', survey.created_at).count
+      risposte=0
+      survey.questions.each{ |question|
+
+        risposte+=question.answers.count
+       }
+
+    if totale==risposte 
+      if survey.score==nil
+        survey.update(score: "1")
+        notify_terminated_recipent(@group,survey)
+      end
+    end
+     }
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
@@ -156,6 +180,11 @@ class GroupsController < ApplicationController
     def inside 
       @group=Group.find(params[:id])
     end
+
+    def notify_terminated_recipent(group,survey)
+      TerminatedSurveyNotification.with(survey: survey, group: group).deliver_later(group.user)
+    end
+
     
  
 end

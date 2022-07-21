@@ -1,0 +1,11 @@
+<center>
+<span> 
+Hi, welcom into <b> <%=@survey.title %> </b>
+it is about <br> <b><%=@survey.body%></b>. 
+<br> Make your choice! 
+</span>
+<br><br>
+
+<%= render 'form_answer', answer: @answer %>
+
+</center>

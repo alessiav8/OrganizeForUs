@@ -48,7 +48,10 @@ Rails.application.routes.draw do
   post '/groups/:group_id/surveys/create', to: 'surveys#create', as: 'new_surveys'
 
 
-    
+  get '/groups/:group_id/surveys/:survey_id/:user_id/invite', to: 'surveys#invite', as: 'invite_survey'
+  post '/groups/:group_id/surveys/:survey_id/:user_id/accept', to: 'surveys#answer', as: 'answer_survey'
+
+
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

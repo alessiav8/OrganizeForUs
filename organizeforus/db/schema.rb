@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_20_135811) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_21_154055) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -40,11 +40,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_20_135811) do
   end
 
   create_table "answers", force: :cascade do |t|
+    t.integer "survey_id", null: false
     t.integer "question_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["survey_id"], name: "index_answers_on_survey_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
@@ -131,6 +133,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_20_135811) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "surveys"
   add_foreign_key "answers", "users"
   add_foreign_key "groups", "users"
   add_foreign_key "questions", "surveys"

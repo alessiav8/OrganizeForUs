@@ -24,6 +24,7 @@ class GroupNotification < Noticed::Base
     
     "#{@group.user.name} invite you in #{@group.name} Group click here to accept"
   end
+
   #
   def url
    invite_path(Group.find(params[:group][:id]), User.find(params[:user][:id]) )

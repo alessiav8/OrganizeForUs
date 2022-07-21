@@ -13,8 +13,14 @@ class Partecipation < ApplicationRecord
         return arr
     }
 
+    scope :member, -> { where(:accepted => true) }
+
     validates :role, presence: true
     validates :user_id, presence: true
+
+    def partecipations_number_for_survey(time,group)
+      group.partecipations.where('created_at < ?', time).count
+    end
     
 
   private 

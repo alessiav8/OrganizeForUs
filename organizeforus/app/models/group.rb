@@ -13,10 +13,13 @@ class Group < ApplicationRecord
     before_destroy :remove_partecipation, if: :has_partecipation?
 
 
+    scope :list_members, ->(group) {
+      Partecipation.where(group_id: group)
+    }
 
-  scope :list_members, ->(group) {
-    Partecipation.where(group_id: group)
-  }
+
+
+
 
   scope :role_list, -> (group){
     array=Array.new
@@ -29,6 +32,10 @@ class Group < ApplicationRecord
     end 
     return array
   }
+
+  def list_accepted
+    self.partecipations.member
+  end
 
   def has_partecipation?
     Partecipation.where(group_id: self.id).count!=0
