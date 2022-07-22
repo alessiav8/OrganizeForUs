@@ -33,33 +33,22 @@
     <%= form.text_field :description, class:"form-control", placeholder:"Description"  %>
   </div>
  </br>
-<!--inizio prove-->
+<!--script per la checkbox-->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script type="text/javascript">
-    function showFunHide(checked) {
-      if (checked==true) {
-        $('#hiddenFunFields').fadeIn();
-         $('#hiddenWorkFields').fadeOut();
-      }
-      else {
-        $('#hiddenFunFields').fadeOut();
-      }
+    function unCheckWork(id) {
+      $('.btn-check').prop('checked',false);
+      $(id).prop('checked',true);
       };
 </script>
 <script type="text/javascript">
-    function showWorkHide(checked) {
-      if (checked==true) {
-        $('#hiddenWorkFields').fadeIn();
-         $('#hiddenFunFields').fadeOut();
-       
-      }
-      else {
-        $('#hiddenWorkFields').fadeOut();
-      }
+    function unCheckFun(id) {   
+      $('.btn-check').prop('checked',false);
+      $(id).prop('checked',true);
       };
 </script>
-<!--fine prove-->
+
 
 
 
@@ -67,17 +56,11 @@
     <div class="form-row" >
       <label for="fun">This group is for: </label>
 
-          <%= form.check_box :fun, class:"btn-check" , onclick:"showFunHide(this.checked)"%>
+          <%= form.check_box :fun,  class:"btn-check",onclick:"unCheckWork(this)"%>
           <%= form.label :fun, class:"btn btn-secondary"%>
-          <div id="hiddenFunFields", style='display:none'>
-      
-          </div>
-
-          <%= form.check_box :work, class:"btn-check", onclick:"showWorkHide(this.checked)"%>
-          <%= form.label :work,class:"btn btn-secondary"%>
-          <div id="hiddenWorkFields", style='display:none'>
           
-          </div>
+          <%= form.check_box :work,   class:"btn-check",onclick:"unCheckFun(this)"%>
+          <%= form.label :work,class:"btn btn-secondary"%>
     </div>
   <%end%>
   
