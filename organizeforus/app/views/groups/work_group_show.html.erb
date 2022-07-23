@@ -16,76 +16,100 @@
   <p class="lead"><%= @group.description %></p>
   <hr class="my-4"> </hr>
 
-<div class="row"> 
-  <div class="container" style="width: 33%">
-    <h6> Roles </h6>
-      <div class="row row-cols-auto">
-        <% Group.role_list(@group).each do |role| %>
-              <div class="col align-self-start">
-                <% if role!= 'No Role'%>
-                    <div class="row">
-                      <div class="col">
-                          <li style="color: <%=@group.getColor(@group.id,role)%>" >             
-                               <span>  <%= role %> </span>
-                          </li>
-                       </div> 
-                       <% if @group.user==current_user%>
-                          <div class="col-5">
-                          <%=link_to 'Delete', delete_role_path(@group,role), class:"btn btn-danger btn-sm"%>
-                          </div>
-                      <%end%>
-                     </div> 
-                 <% end %>
-                </div> 
-          <%end%>
-        </div>
-      </div>
-        <br>
-
-          <div class="container" style="width: 33%">
+  <div class="container" style="width:100%">
+      <div class="row">
+          <div class="col" style="width:33%">
             <h6> Members </h6>
-            <%  i=0 %>
-            <% if i<3 %>
-            <% @group.partecipations.each do |member| %>
-
-              <div class="row"> 
-                <% if @group.accepted?(member.user.id) %> 
-                  <div class="col">
-                    <li style="color: <%=member.role_color%>" >  
-                      <span > <%= member.user.email %> </span> 
-                    </li> 
-                  </div>
-                  <% i=i+1%>
-                <% end %>
-              </div>
-              <%end%>
-              <% end %>
-              <div class="row-2;"> 
-                  <%= link_to "Show More",show_p_url(@group), class:"btn btn-secondary btn-sm" %>
-              </div>
           </div>
+          <div class="col" style="width:33%">
+            <h6> Roles </h6>           
+          </div>
+          <div class="col" style="width:33%">
+            <h6> Surveys </h6>
+          </div>
+      </div>
 
-          <div class="container" style="width:33%">
-              <h6> Survey </h6>
+      
+        <div class="row" > 
+            <div class="col" style="width: 33%">
+              <%  i=0 %>
+              <% if i<3 %>
+                  <% @group.partecipations.each do |member| %>
+                    <div class="row"> 
+                      <% if @group.accepted?(member.user.id) %> 
+                        <div class="col">
+                          <li style="color: <%=member.role_color%>" >  
+                            <span > <%= member.user.email %> </span> 
+                          </li> 
+                        </div>
+                        <% i=i+1%>
+                      <% end %>
+                    </div>
+                  <%end%>
+              <% end %>
+            </div>
+
+            <div class="col" style="width: 33%">
+                <div class="row row-cols-auto">
+                  <% Group.role_list(@group).each do |role| %>
+                        <div class="col align-self-start">
+                          <% if role!= 'No Role'%>
+                              <div class="row">
+                                <div class="col">
+                                    <li style="color: <%=@group.getColor(@group.id,role)%>" >             
+                                        <span>  <%= role %> </span>
+                                    </li>
+                                </div> 
+                                <% if @group.user==current_user%>
+                                    <div class="col-5">
+                                    <%=link_to 'Delete', delete_role_path(@group,role), class:"btn btn-danger btn-sm"%>
+                                    </div>
+                                <%end%>
+                              </div> 
+                          <% end %>
+                        </div> 
+                    <%end%>
+                </div>
+              </div>
+
+          <!-- chi può vedere i sondaggi? -->
+          <div class="col" style="width:33%">
               <% if !@group.surveys.empty? %>
                 <% i = 0 %> 
-                  <% @group.surveys.active.take(3).each do |s|%>
+                  <% @group.surveys.active.take(3).each do |s| %>
                     <% if i < 3 && i <= @group.surveys.count %>
                       <%i=i+1%>
                       <div class="row">
-                        <span> <%=s.title%> </span>
+                        <%= link_to s.title , show_survey_path(s) %>
                       </div>
                     <%end%>
                   <%end%>
               <%end%>
-              <%= link_to "New", new_survey_path(@group,@group.administrator) %>
+           </div>
+
+          <div class="row"> <br> </div>
+          <div class="row">
+                    <div class="col" style="width:33%">
+                      <%= link_to "Show More",show_p_url(@group), class:"btn btn btn-sm" %>
+                    </div>
+                    <div class="col" style="width:33%">
+                    
+                    </div>
+                    
+                    <div class="col" style="width:33%">
+                      <span style="margin-left:3%" ><%= link_to "New", new_survey_path(@group,@group.administrator), class:"btn btn btn-sm" %></span>
+                    </div>
           </div>
-
-
-
+      </div>
   </div>
 
-</div>
+
+
+    <br><br>
+    <div style="text-align: right; margin-right:5%">
+            <%= link_to "Posts", posts_index_path(@group) %>
+    </div>
+
 
   <br><br>
   

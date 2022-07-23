@@ -27,6 +27,6 @@ class TerminatedSurveyNotification < Noticed::Base
   end
   #
   def url
-    Group.find(params[:group][:id])
+    show_survey_path( @survey=Survey.find(params[:survey][:id]))
   end
 end

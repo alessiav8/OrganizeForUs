@@ -51,6 +51,9 @@ Rails.application.routes.draw do
   get '/groups/:group_id/surveys/:survey_id/:user_id/invite', to: 'surveys#invite', as: 'invite_survey'
   post '/groups/:group_id/surveys/:survey_id/:user_id/accept', to: 'surveys#answer', as: 'answer_survey'
 
+  get 'surveys/:survey_id/show', to: 'surveys#show', as: 'show_survey'
+
+  get '/groups/:group_id/posts/index', to: 'posts#index', as: 'posts_index'
 
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

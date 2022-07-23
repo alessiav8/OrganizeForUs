@@ -7,7 +7,6 @@ class CreatePartecipations < ActiveRecord::Migration[7.0]
       t.string :role_color, default: "#000000"
       t.boolean :accepted, default: "false"
       t.timestamps
-      add_foreign_key :groups, :users
 
     end
   end

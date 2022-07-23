@@ -1,16 +1,17 @@
 class Group < ApplicationRecord
     #statement che associa un group all'utente che lo crea      
     belongs_to :user
-    has_many :members
-    has_many :roles
-    has_many :partecipations
-    has_many :surveys
+    has_many :partecipations, dependent: :destroy
+    has_many :surveys, dependent: :destroy
     has_many :notifications, as: :recipient, dependent: :destroy
+    has_many :posts, dependent: :destroy
 
     has_noticed_notifications model_name: 'Notification'
 
     before_destroy :cleanup_notification
     before_destroy :remove_partecipation, if: :has_partecipation?
+    before_destroy :remove_surveys
+
 
 
     scope :list_members, ->(group) {
@@ -43,6 +44,18 @@ class Group < ApplicationRecord
   #prima di eliminare un gruppo mi assicuro di aver eliminato ogni partecipazione per non violare la foreign key di partecipations
   def remove_partecipation
     Partecipation.where(group_id: self.id).destroy_all
+  end
+
+  def remove_surveys
+    if !self.surveys.empty?
+       self.surveys.each{ |s|
+        if !s.questions.empty?
+          s.questions.each{|q|
+            q.answers.destroy_all
+          }
+        end
+      }
+    end
   end
 
   def has_designeted_driver?

@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_one_attached :avatar, dependent: :purge_later
 
   has_many :notifications, as: :recipient, dependent: :destroy
+  has_many :answer, dependent: :destroy
   #Valido la presenza e l'unicità dei campi dell'utente:
   validates :name, presence: true
   validates :surname, presence: true

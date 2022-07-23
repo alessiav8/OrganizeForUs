@@ -43,6 +43,22 @@
               <%= link_to "Show More",show_p_url(@group), class:"btn btn-secondary btn-sm" %>
           </div>
       </div>
+
+      <div class="col" style="width:33%">
+      <h6> Survey </h6>
+              <% if !@group.surveys.empty? %>
+                <% i = 0 %> 
+                  <% @group.surveys.active.take(3).each do |s| %>
+                    <% if i < 3 && i <= @group.surveys.count %>
+                      <%i=i+1%>
+                      <div class="row">
+                        <%= link_to s.title , show_survey_path(s) %>
+                      </div>
+                    <%end%>
+                  <%end%>
+              <%end%>
+              <%= link_to "New", new_survey_path(@group,@group.administrator), class:"btn btn btn-sm" %>
+        </div>
 </div>
 </div>
     <br>

@@ -6,6 +6,12 @@ class SurveysController < ApplicationController
     @group=Group.find(params[:group_id])
 
   end
+
+  def show
+    @survey=Survey.find(params[:survey_id])
+    mark_notification_as_read
+  end
+
   def create
     @group=Group.find(params[:group_id])
     @survey=@group.surveys.build(title: survey_params[:title],body: survey_params[:body])
@@ -61,6 +67,9 @@ class SurveysController < ApplicationController
       end
   end
   end
+
+
+
 
 
   private

@@ -97,6 +97,16 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1 or /groups/1.json
   def destroy
+    if !@group.surveys.empty?
+      @group.surveys.each{ |s|
+        if !s.questions.empty?
+          s.questions.each{|q|
+            q.answers.destroy_all
+          }
+        end
+       }
+      end
+      
     @group.destroy
     respond_to do |format|
       format.html { redirect_to groups_url, notice: "Group was successfully destroyed." }
