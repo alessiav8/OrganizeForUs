@@ -104,9 +104,8 @@ class GroupsController < ApplicationController
             q.answers.destroy_all
           }
         end
-       }
-      end
-      
+      }
+    end
     @group.destroy
     respond_to do |format|
       format.html { redirect_to groups_url, notice: "Group was successfully destroyed." }

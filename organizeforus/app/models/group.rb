@@ -10,7 +10,6 @@ class Group < ApplicationRecord
 
     before_destroy :cleanup_notification
     before_destroy :remove_partecipation, if: :has_partecipation?
-    before_destroy :remove_surveys
 
 
 
