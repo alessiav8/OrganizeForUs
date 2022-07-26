@@ -1,3 +1,67 @@
-<h1>Posts</h1>
+<html>
+<head>
+</head>
+    <body>
+       <h1>Posts</h1>
+       <div class="container">
+            <div class="row">
+                <center>
+                    <button id="new_post_hidden" class="btn btn-secondary btn-sm; mb-2; mt-2" style="display: inline"> New Post </button>
+                    <div class="container ; border border-dark ; rounded" style="width: 50%; display: none" id="container_posts" >
+                        <%= render 'posts/form' %>
+                    </div>
+                </center>
+                <div class="row mb-2 mt-2" ></div>
+
+             
+                <% if @posts.empty? %>
+                    <div class="row; mt-5">
+                        <center> Not posts yet </center>
+                    </div>
+
+                <%else%>
+                    <% @posts.order(created_at: :desc).each do |post| %> <!-- ordinati in modo decrescente -->
+                        <div class="row mb-1, mt-1">
+                            <div class="container ; border border-dark ; rounded" style="width: 30%; text-align: center" id="container_post" >
+                                <div class="row" > 
+                                    <div class="col"><b> Creator: </b> <%= post.user.username %> </div>
+                                </div>
+                                <div class="row mt-2" >
+                                    <div class="col"> <b>Title: </b>  <%= link_to post.title, group_post_url(@group,post) %> </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col"> <b> Description:</b> <%= post.body %> </div>
+                                </div>
+                            </div>
 
 
+                        </div> 
+
+                    <%end%>
+                <%end%>
+
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            let button=document.getElementById("new_post_hidden");
+            button.addEventListener('click', show);
+            let container=document.getElementById("container_posts");
+           
+
+            let edit_post=document.getElementById("edit_post");
+            edit_post.addEventListener('click',edit);
+            function show(){
+                button.setAttribute("style", "display: none");
+                container.style.display="table"
+            }
+            function edit(){
+                cont.style.display="none"
+                cont_edit.style.display="table"
+
+            }
+        </script>
+
+    </body>
+</html>

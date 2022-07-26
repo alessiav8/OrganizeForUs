@@ -97,7 +97,7 @@
                     </div>
                     
                     <div class="col" style="width:33%">
-                      <span style="margin-left:3%" ><%= link_to "New", new_survey_path(@group,@group.administrator), class:"btn btn btn-sm" %></span>
+                      <span style="margin-left:3%" ><%= link_to "Show More", index_survey_url(@group), class:"btn btn btn-sm" %></span>
                     </div>
           </div>
       </div>
@@ -107,7 +107,7 @@
 
     <br><br>
     <div style="text-align: right; margin-right:5%">
-            <%= link_to "Posts", posts_index_path(@group) %>
+            <%= link_to "Posts", group_posts_url(@group) %>
     </div>
 
 

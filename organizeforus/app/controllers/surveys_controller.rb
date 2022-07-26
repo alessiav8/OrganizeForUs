@@ -1,5 +1,7 @@
 class SurveysController < ApplicationController
   def index
+    @group=Group.find(params[:group_id])
+    @surveys=@group.surveys
   end
   def new
     @survey=Survey.new
@@ -35,7 +37,7 @@ class SurveysController < ApplicationController
             notify_recipent(@survey,@group,m.user)
           }
         end
-        format.html { redirect_to @group, status: :created, notice: "Sondaggio Creato" }
+        format.html { redirect_to index_survey_url(@group), status: :created, notice: "Sondaggio Creato" }
         format.json { render :show, status: :ok, location: @group }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -67,6 +69,19 @@ class SurveysController < ApplicationController
       end
   end
   end
+
+  def destroy
+    @survey=Survey.find(params[:id]) 
+    @survey.questions.each do |question|
+      question.answers.destroy_all
+    end
+    respond_to do |format|
+      if @survey.destroy
+        format.html { redirect_to group_url(@survey.group), notice: "Survey destroyed!"} 
+      end
+    end
+  end
+
 
 
 

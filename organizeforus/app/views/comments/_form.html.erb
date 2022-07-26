@@ -1,0 +1,14 @@
+Comments
+
+<%= form_with  model:[@post, @post.comments.build] do |form| %>
+    <div class="row ; mb-2">
+        <div class="col">
+            <%= form.text_area :text, size: "30x3" %>
+        </div>
+    </div>
+    <%= form.text_field :user_id, type:"hidden", value: current_user.id%>
+
+    <div class=" mb-2">
+        <%= form.submit "Send", class:"btn btn-sm" %>
+    </div>
+<%end%>

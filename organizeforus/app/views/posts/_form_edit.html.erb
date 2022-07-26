@@ -1,0 +1,30 @@
+<%= form_with url:post_url(post), method: :put, action: :update, model: post do |form| %>
+    <br>
+    <% if action_name="new"%>
+    <div class="row ; mb-2">
+        <div class="col-1">
+            <%= form.label :title,"Title: " %></div>
+        <div class="col-2">
+            <%= form.text_field :title%>
+        </div>
+    </div>
+    <div class="row ; mb-2">
+        <div class="col-1">
+            <%= form.label :body, "Text: " %> </div>
+        <div class="col-2">
+            <%= form.text_area :body, size: "auto"%> 
+        </div>
+    </div>
+    <div class="row ; mb-2">
+        
+    </div>
+    <div class="row ; mt-3; mb-1" style="width:20%; margin-left:2%" >
+        <%= form.text_field :user_id , type:"hidden" , value:current_user.id %>
+       <%= form.submit "Update" , class: "btn btn-sm"%> 
+    </div>
+    <div class="row ; mb-2">
+    </div>
+
+    <%end%>
+
+<%end%>

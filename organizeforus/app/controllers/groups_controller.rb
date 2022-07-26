@@ -129,7 +129,7 @@ class GroupsController < ApplicationController
       #da spostare
       GroupMailer.with(group: @group, user: current_user).group_created.deliver_later
       respond_to do |format|
-        format.html { redirect_to @group, notice: "Group was successfully created." }
+        format.html { redirect_to group_url(@group), notice: "Group was successfully created." }
         format.json { head :no_content }
       end
     else #se ci sono errori nella modifica

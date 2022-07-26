@@ -3,15 +3,13 @@ class Group < ApplicationRecord
     belongs_to :user
     has_many :partecipations, dependent: :destroy
     has_many :surveys, dependent: :destroy
-    has_many :notifications, as: :recipient, dependent: :destroy
     has_many :posts, dependent: :destroy
 
+    has_many :notifications, as: :recipient, dependent: :destroy
     has_noticed_notifications model_name: 'Notification'
 
     before_destroy :cleanup_notification
     before_destroy :remove_partecipation, if: :has_partecipation?
-
-
 
     scope :list_members, ->(group) {
       Partecipation.where(group_id: group)

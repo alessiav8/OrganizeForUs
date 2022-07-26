@@ -1,0 +1,107 @@
+<html>
+<head></head>
+<body>
+    <div class="container">
+    <% if current_user==@post.user %>
+        <div style="text-align: right ">
+                <a href="<%= destroy_post_url(@group,@post) %>" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                </svg></a>
+
+
+                <button class="btn btn-sm border-0"; style="width: 6%; height:6% " , id="edit_post">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>           
+                </button>                
+        </div>
+        <%end%> 
+
+        <div class="container " style=" display: none" id="container_posts_edit" >
+            <%= render 'posts/form_edit' , post: @post %>
+        </div>
+
+        <div class="container" id="info">
+            <div class="row">
+                <h1> <%= @post.title %> </h1>
+            </div>
+            <div class="row mt-2; mb-2">
+                <h4> <%= @post.body %> </h4>
+            </div>
+    
+
+
+            <font size="1" class="mt-1"> click for download </font>
+            <div class="container ; mt-2; mb-2" , style="width:100%">
+                <div class="row">
+                    <% @post.files.order(created_at: :desc).each do |file| %>
+                        <div class="col">
+                                <div class="row"> <font size="1"> <b><%= file.blob.filename %></b>  </font></div>
+                                    <% if file.representable? %>
+                                        <%= image_tag file.representation(resize_to_limit: [100, 100]) %>
+                                    <% else %>
+                                        <%= link_to rails_blob_path(file, disposition: "attachment") do %>
+                                            <%= image_tag "placeholder.png", width: "10%", alt: "Download file" %>
+                                        <% end %>
+                                    <% end %>
+                        </div> 
+                    <%end %>
+                </div>
+            </div>
+
+        </div>
+
+
+        <hr class="my"> </hr>
+        <div class="row mt-2; mb-2">
+        <center>
+        <button id="new_comment_hidden" class="btn btn-secondary btn-sm"> New Comment </button>
+        <br>
+        <div class="container ; border border-dark ; rounded" style="width: 30%; text-align: center; display:none" id="container_comments" >
+                <%= render 'comments/form' %>
+        </div></center>
+        <div class="row mb-2 mt-2"></div>
+
+            <div class="container">
+                <% if @post.comments.empty? %>
+                    <div class="row"><center> No comments found </center></div>
+                <%else %>
+                    <% @post.comments.order(created_at: :desc).each do |comment| %>
+                        <div class="container ; border border-dark; rounded" style="width: 40%" >
+                            <div class="row"> <div class="col-2"><b> User:</b></div> <div class="col"><%=  comment.user.username %></div></div>
+                            <div class="row" >  <%= comment.text%>  </div>
+                        </div>
+
+                        <center><hr class="my" style="width:40%"> </hr></center>
+                    <%end%>
+
+                <%end%>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    let button=document.getElementById("new_comment_hidden");
+    button.addEventListener('click', show);
+    let container=document.getElementById("container_comments");
+
+    let edit_btn=document.getElementById("edit_post");
+    edit_btn.addEventListener('click', edit);
+    let cont=document.getElementById("info");
+    let cont_edit=document.getElementById("container_posts_edit");
+
+    function show(){
+        button.setAttribute("style", "display: none");
+        container.style.display="table"
+        }
+
+        function edit(){
+            cont.style.display="none"
+            cont_edit.style.display="table"
+
+        }
+    </script>
+</body>
+</html>

@@ -40,7 +40,7 @@ end
         notify_recipent(@g,@id) #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
-          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color)
+          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, necessary: partecipation_params[:necessary])
           respond_to do |format|
             if @partecipation.save
               format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
@@ -55,7 +55,7 @@ end
           
           if @role=='1' #E DD
             @g.delect_driver
-            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'Driver')
+            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'Driver', necessary: false)
             respond_to do |format|
               if @partecipation.save
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
@@ -67,7 +67,7 @@ end
             end
 
           else # non è DD
-            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'No Role')
+            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'No Role',necessary: false)
             respond_to do |format|
               if @partecipation.save
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added'  }
@@ -192,7 +192,7 @@ end
     @group=Group.find(@partecipation.group_id)
     flash.alert="Accept"
     respond_to do |format|
-      format.html { redirect_to @group, notice: "Accepted" }
+      format.html { redirect_to group_url(@group), notice: "Accepted" }
       format.json { head :no_content }
     end
 
@@ -212,7 +212,7 @@ end
 private
 
   def partecipation_params
-    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color)
+    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color,:necessary)
   end
 
   def role_params

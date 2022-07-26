@@ -21,6 +21,19 @@ class Survey < ApplicationRecord
   scope :active, -> { where(:terminated => false) }
 
 
+  def get_question_answers
+    array=Array.new
+    if !self.questions.empty?
+      self.questions.each do |question|
+        a=Array.new
+        a << question.title
+        a << question.answers.count
+        array<<a 
+      end
+    end
+    return array
+  end
+  
   private
   def cleanup_notification
     notifications_as_survey.destroy_all
@@ -34,6 +47,8 @@ class Survey < ApplicationRecord
       self.questions.destroy_all
     end
   end
+
+
 
 
 end
