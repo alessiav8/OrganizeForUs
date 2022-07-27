@@ -11,6 +11,30 @@
       <th colspan="3"></th>
     </tr>
   </thead>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script type="text/javascript">
+    function show(variabile) {
+     if(document.getElementById(variabile).style.display=='') { 
+      document.getElementById(variabile).style.display='none'; 
+    }else{ 
+      document.getElementById(variabile).style.display=''; 
+    } 
+    };
+</script>
+<script type="text/javascript">
+    $(document).on('click', function (e) {
+      if ($(e.target).closest("#box").length === 0 && $(e.target).closest("#button").length === 0 ) {
+        $("#box").hide();
+      }
+    });
+</script>
+
+
+
+
+
   <tbody>
     <% @groups.each do |group|%>
       <% if group.is_administrator?(current_user) || group.is_a_member?(current_user)%> <!--rende visibili i gruppi solo all' utente organizzatore o ai partecipanti del suddetto gruppo-->
@@ -28,8 +52,11 @@
           </td>
           <td><%= link_to 'Edit group',  edit_group_path(group), class:"btn btn-secondary btn-sm"%>
           </td>
-          <td><%= button_to 'Delete group', group, class:"btn btn-danger btn-sm", method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><button type="button" class="btn btn-danger btn-sm" id="button" onclick="show('box')">Delete group</button>
           </td>
+          <div class="alert alert-danger" role="alert" id="box" style="display:none" >Are you sure?
+          <%= button_to 'Delete group', group, class:"btn btn-danger btn-sm", method: :delete%>
+          </div>
         </tr>
       <%end%>
     <% end %>
