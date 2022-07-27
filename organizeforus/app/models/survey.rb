@@ -33,6 +33,11 @@ class Survey < ApplicationRecord
     end
     return array
   end
+
+  def is_terminated?
+    self.terminated==true
+  end
+
   
   private
   def cleanup_notification

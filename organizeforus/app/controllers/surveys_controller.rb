@@ -11,7 +11,9 @@ class SurveysController < ApplicationController
 
   def show
     @survey=Survey.find(params[:survey_id])
-    mark_notification_as_read
+    if @survey.group.is_administrator?(current_user) && @survey.is_terminated?
+      mark_notification_as_read
+    end
   end
 
   def create

@@ -153,13 +153,13 @@ class GroupsController < ApplicationController
       totale= @group.partecipations.where('created_at < ?', survey.created_at).count
       risposte=0
       survey.questions.each{ |question|
-
         risposte+=question.answers.count
        }
 
     if totale==risposte 
       if survey.score==nil
         survey.update(score: "1")
+        survey.update(terminated: true)
         notify_terminated_recipent(@group,survey)
       end
     end

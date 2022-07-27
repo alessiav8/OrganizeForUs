@@ -51,7 +51,6 @@
                     });
 
             function set_array(array){
-                alert(array);
                 var new_array=new Array();
                 for(var i=0; i < array.length; i++){
                     var s="";
@@ -62,9 +61,8 @@
                             while(array[i]!='"') {
                                 s=s+array[i];
                                 i++;
-                            }alert("fine primo ciclo while "+s);
+                            }
                             i+=1;
-                            alert("array in mezzo "+ s + array[i]);
                             var k= new Array()
                             k.push(s);
                             s="";
@@ -73,12 +71,10 @@
                                 k.push(array[i]);
                                 i+=1;
                             }
-                            alert("ultima lettera "+array[i]+" parola costruita "+s+" array "+array)
                             new_array.push(k);
                             i+=2;
                         }
                 };
-                alert(new_array);
 
                 return new_array;
             }
