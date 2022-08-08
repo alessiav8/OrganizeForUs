@@ -16,7 +16,7 @@
   <div class="field form group">
     </br>
     <% form.label :picture, style: "display: block" %> Group picture: <br>
-    <%= file_field_tag :picture %>
+    <%= form.file_field :image, multiple: false,  size: "50x4", class:"bi bi-paperclip" %>
     </div>
 
 

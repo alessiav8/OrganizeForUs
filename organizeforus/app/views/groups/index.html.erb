@@ -5,10 +5,10 @@
 <table class="table table-striped table-bordered table-hover">
   <thead class="table-dark">
     <tr>
+       <th> </th>
       <th>Name</th>
       <th>Description</th>
       <th>Role</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -35,31 +35,34 @@
 
 
 
-  <tbody>
-    <% @groups.each do |group|%>
+  <tbody >
+    <% @groups.each do |group| %>
       <% if group.is_administrator?(current_user) || group.is_a_member?(current_user)%> <!--rende visibili i gruppi solo all' utente organizzatore o ai partecipanti del suddetto gruppo-->
-        <tr>
-          <td><%= group.name %>
-          </td>
-          <td><%= group.description %>
-          </td>
-          <% if group.user==current_user %>
-          <td> Administrator </td>
-          <% else %>
-          <td> <%= Partecipation.where(group_id: group, user_id: User.where(email: current_user.email).take.id ).take.role %> </td>
-          <% end %>
-          <td><%= link_to 'Show group', group, class:"btn btn-secondary btn-sm" %>
-          </td>
-          <td><%= link_to 'Edit group',  edit_group_path(group), class:"btn btn-secondary btn-sm"%>
-          </td>
-          <td><button type="button" class="btn btn-danger btn-sm" id="button" onclick="show('box')">Delete group</button>
-          </td>
-          <div class="alert alert-danger" role="alert" id="box" style="display:none" >Are you sure?
-          <%= button_to 'Delete group', group, class:"btn btn-danger btn-sm", method: :delete%>
-          </div>
+            <td>
+            <a href= "<%=group_url(group)%>" > 
+                 <center> <%= image_tag group_image(group, 50), :size => "40x40", class: "rounded-circle" %></center>
+            </a>
+            </td>
+            <td>
+            <a href= "<%=group_url(group)%>" > <span style="color:black"><%=group.name%></span> </a>
+            </td>
+            <td>
+              <%= group.description %>
+            </td>
+            <td>
+              <% if group.is_administrator?(current_user) %>
+                  Administrator 
+              <% else %>
+                  <%= Partecipation.where(group_id: group, user_id: User.where(email: current_user.email).take.id ).take.role %> 
+
+              <% end %>
+            </td>
+           
         </tr>
+
       <%end%>
     <% end %>
+    </a>
   </tbody>
 </table>
 <br>

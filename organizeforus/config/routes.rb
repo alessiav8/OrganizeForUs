@@ -68,6 +68,9 @@ Rails.application.routes.draw do
 
 
 
+  get '/groups/:id/destroy' , to: 'groups#destroy', as: 'destroy_group'                                                
+
+
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

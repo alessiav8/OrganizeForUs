@@ -206,6 +206,9 @@ GEM
     msgpack (1.5.1)
     multi_json (1.15.0)
     multi_xml (0.6.0)
+    net-http (0.2.0)
+      net-protocol
+      uri
     net-imap (0.2.3)
       digest
       net-protocol
@@ -340,6 +343,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
+    uri (0.11.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -379,6 +383,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   letter_opener
+  net-http
   noticed (~> 1.5)
   omniauth (~> 2.0)
   omniauth-facebook
@@ -400,4 +405,4 @@ RUBY VERSION
    ruby 3.1.1p18
 
 BUNDLED WITH
-   2.3.15
+   2.3.19

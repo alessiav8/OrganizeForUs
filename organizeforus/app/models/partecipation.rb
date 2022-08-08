@@ -21,6 +21,8 @@ class Partecipation < ApplicationRecord
     def partecipations_number_for_survey(time,group)
       group.partecipations.where('created_at < ?', time).count
     end
+
+  
     
 
   private 

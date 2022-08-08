@@ -1,72 +1,148 @@
 
   <p style="color: green"></p>
 
-  <div class="jumbotron">
-  <div style="text-align: right">
-  </div>
-
-  <h1 class="display-5"><%= @group.name %></h1>
-  <p class="lead"><%= @group.description %></p>
-  
-  <hr class="my-4"> </hr>
-
-  <div class="row" style="width: 100%">
-
-      <% if @group.has_designeted_driver? %>
-        <div class="row" style="width: 50%">
-        <div class="col-4">
-          <h6> Designated Driver: </h6> </div>
-          <div class="col">
-          <%= @group.driver %> </div>
+  <div class="row" style="width:100%; text-align:right">
+     <div class="col" style="width:80%"> 
+     </div>    
+      <div class="col" > <div class="row" style=" text-align:right">
+        <div class="col">
+          <a href="<%= groups_path %>" style="color: black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
+            </svg>
+          </a>
         </div>
-      <% end %> 
-
-    <div class="container" style="width: 50%">
-        <h6> Members </h6>
-        <%  i=0 %>
-        <% if i<3 %>
-        <% @group.partecipations.each do |member| %>
-
-          <div class="row"> 
-            <div class="col-4">
-            <% if @group.accepted?(member.user.id) %> 
-              <li style="color: <%=member.role_color%>" > 
-                <span > <%= member.user.email %> </span> 
-              </li> 
-              <% i=i+1%>
-              <% end %>
-            </div>
+        <div class="col">
+          <a href="<%= edit_group_path(@group) %>" style="color: black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+          </svg>
+          </a>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-sm" id="button" onclick="show('box')"> 
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+              <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+            </svg>
+          </button>
+          <div class="alert alert-danger" role="alert" id="box" style="display:none" >Are you sure?
+            <%= button_to 'Delete group', @group, class:"btn btn-danger btn-sm", method: :delete%>
           </div>
-          <%end%>
-          <% end %>
-          <div class="row-2;"> 
-              <%= link_to "Show More",show_p_url(@group), class:"btn btn-secondary btn-sm" %>
-          </div>
+        </div>
+         </div>
       </div>
+  </div> 
 
-      <div class="col" style="width:33%">
-      <h6> Survey </h6>
-              <% if !@group.surveys.empty? %>
-                <% i = 0 %> 
-                  <% @group.surveys.active.take(3).each do |s| %>
-                    <% if i < 3 && i <= @group.surveys.count %>
-                      <%i=i+1%>
-                      <div class="row">
-                        <%= link_to s.title , show_survey_path(s) %>
-                      </div>
-                    <%end%>
-                  <%end%>
-              <%end%>
-              <span style="margin-left:3%" ><%= link_to "Show More", index_survey_url(@group), class:"btn btn btn-sm" %></span>
-              </div>
-</div>
-</div>
+    <div style="text-align: right">
+    </div>
     <br>
 
+    <div class="container" id="info_fun">
+      <div class="row">
+          <div class="col mb-2",  style="width:20%, margin-left:10px">
+            <center><%= image_tag group_image(@group, 5000), :size => "80x80", class: "rounded-circle" %></center>
+          </div>
+          <div class="col" style="width:80%">
+            <h3><%= @group.name %></h3>
+            <p class="lead"><%= @group.description %></p>
+          </div>
+          <div class="col"></div>
+        </div>
+    </div>
+    
+    <hr class="my-4"> </hr>
+  
+    <div class="container" style="width:100%">
 
-  <%= link_to "Edit group", edit_group_path(@group), class:"btn btn-secondary" %> 
-  <br><br>
-  <%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
-  <br><br>
+       <div class="row">
+          <div class="col" style="width:33%">
+              <h6> Designeted Driver </h6>
+          </div>
+          <div class="col" style="width:33%">
+              <h6> Members </h6>           
+          </div>
+          <div class="col" style="width:33%">
+              <h6> Surveys </h6>
+          </div>
+       </div>
+
+        <div class="row">
+          <div class="col" style="width:33%">
+              <% if @group.has_designeted_driver? %>
+                      <div class="col">
+                         <%= @group.driver %>
+                      </div>
+              <%else%>
+                      <div class="col">
+                      </div>
+              <% end %> 
+          </div>
+          <div class="col" style="width:33%">
+              <%  i=0 %>
+              <% if i<3 %>
+                <% @group.partecipations.each do |member| %>
+                     <div class="row"> 
+                          <div class="col">
+                             <% if @group.accepted?(member.user.id) %> 
+                                <li style="color: <%=member.role_color%>" > 
+                                  <span> <%= member.user.email %> </span> 
+                                </li> 
+                                <% i=i+1%>
+                            <% end %>
+                          </div>
+                      </div>
+                  <%end%>
+              <% end %>
+          </div>
+          <div class="col" style="width:33%">
+              <% if !@group.surveys.empty? %>
+                  <% i = 0 %> 
+                      <% @group.surveys.active.take(3).each do |s| %>
+                            <% if i < 3 && i <= @group.surveys.count %>
+                                <%i=i+1%>
+                                <div class="row">
+                                    <%= link_to s.title , show_survey_path(s) %>
+                                </div>
+                            <%end%>
+                       <%end%>
+              <%else%>
+                <div class="row">
+                    <span> No Surveys yet</span>
+                </div>
+              <%end%>
+            </div>
+            <div class="row">
+                <div class="col" style="width:33%">
+                </div>
+                <div class="col" style="width:33%">
+                    <%= link_to "Show More",show_p_url(@group), class:"btn  btn-sm" %>
+                </div>
+                <div class="col" style="width:33%">
+                    <span style="margin-left:2%"> <%= link_to "Show More", index_survey_url(@group), class:"btn  btn-sm" %></span>
+                </div>
+            </div>
+      </div>
+
+    <br>
    
   <%= link_to "Set organization", groups_path, class:"btn btn-secondary" %>  
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script type="text/javascript">
+      function show(variabile) {
+       if(document.getElementById(variabile).style.display=='') { 
+        document.getElementById(variabile).style.display='none'; 
+      }else{ 
+        document.getElementById(variabile).style.display=''; 
+      } 
+      };
+  </script>
+  <script type="text/javascript">
+      $(document).on('click', function (e) {
+        if ($(e.target).closest("#box").length === 0 && $(e.target).closest("#button").length === 0 ) {
+          $("#box").hide();
+        }
+      });
+  </script>

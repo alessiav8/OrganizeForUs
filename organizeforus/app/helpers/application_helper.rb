@@ -8,4 +8,19 @@ module ApplicationHelper
             "pikachu.png"
         end
     end
+
+    def group_image(group, size=50)
+
+        if group.image.representable?
+            group.image.representation(resize_to_limit: [size, size])
+        else
+            if group.work?
+                "L.png"
+            else
+                "S.png"
+            end
+
+        end
+    end
+
 end

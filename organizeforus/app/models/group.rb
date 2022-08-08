@@ -4,6 +4,8 @@ class Group < ApplicationRecord
     has_many :partecipations, dependent: :destroy
     has_many :surveys, dependent: :destroy
     has_many :posts, dependent: :destroy
+    has_one_attached :image, dependent: :destroy
+
 
     has_many :notifications, as: :recipient, dependent: :destroy
     has_noticed_notifications model_name: 'Notification'
@@ -128,6 +130,15 @@ class Group < ApplicationRecord
       return 0 
     end 
   end
+
+  def work?
+    if self.work==true
+      return true
+    else
+      return false
+    end
+  end
+  
 
   
   validates :name, presence: true

@@ -89,7 +89,9 @@ end
       end 
 
     else 
-      GroupMailer.with(group: @g,user: @user, creator: current_user).join_comunity.deliver_later
+      if @user!=nil && @user!=" "
+        GroupMailer.with(group: @g,user: @user, creator: current_user).join_comunity.deliver_later
+      end
       respond_to do |format|
         format.html { redirect_to session.delete(:return_to), notice: 'Sent invite' }
         format.json { render :@part.json }
@@ -205,6 +207,10 @@ end
       format.html { redirect_to groups_url, notice: "Declined" }
       format.json { head :no_content }
     end
+  end
+
+  def getRole(user,group)
+    Partecipation.where(group_id: group.id, user_id: User.where(email: user.email).take.id ).take.role
   end
 
 
