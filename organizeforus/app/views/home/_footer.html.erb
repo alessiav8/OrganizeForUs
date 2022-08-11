@@ -1,11 +1,26 @@
 <nav class="navbar fixed-bottom bg-light">
   <div class="container-fluid">
 
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <%=link_to "About Us", home_about_path, class:"nav-link"%>
-        </li>
-    </ul>
+
+<!--PROVA UNO-->
+<!-- me-auto mb-2 mb-lg-0 PER METTERE A DESTRA-->
+<button type="button" class="btn btn-outline-secondary me-auto mb-2 mb-lg-0" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">About Us</button>
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasBottomLabel">About Us</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body small">
+    robe bla bla bla
+    <div class="text-center">
+      <img src="..\..\assets\images\profiliAboutUs.png" style="width: 30%; height: 20%" >
+      <!--   C:\Users\sofia\OneDrive\Documenti\GitHub\OrganizeForUs\organizeforus\app\assets\images\profiliAboutUs.png    -->
+      <!--     ..\..\assets\images\profiliAboutUs.png         -->
+    </div>
+  </div>
+</div>
+<!--FINE PROVA UNO-->
+
 
   </div>
 </nav>
