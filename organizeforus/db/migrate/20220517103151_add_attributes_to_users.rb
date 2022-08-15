@@ -4,5 +4,6 @@ class AddAttributesToUsers < ActiveRecord::Migration[7.0]
     add_column :users, :surname, :string, required: true
     add_column :users, :username, :string, required: true
     add_column :users, :birthday, :date, required: true
+   
   end
 end

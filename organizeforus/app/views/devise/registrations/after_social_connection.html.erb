@@ -1,7 +1,7 @@
 <h2>Completing the Sign Up</h2>
 
 <%= form_for(@user, url: user_auth_facebook_callback_after_social_connection_path(@user)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: @user %>
+  <%=  render "devise/shared/error_messages", resource: @user  %>
 
 
   <div class="field form-group">
@@ -64,4 +64,5 @@
   <div class="actions">
     <%= f.submit "Complete", class: "btn btn-secondary" %>
   </div>
+  
 <% end %>

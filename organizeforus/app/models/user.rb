@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :groups
   has_many :partecipations
   has_one_attached :avatar, dependent: :purge_later
+  has_many :tasks
 
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :answer, dependent: :destroy
@@ -40,7 +41,11 @@ class User < ApplicationRecord
       user.name = auth[:info][:first_name]
       user.surname = auth[:info][:last_name]
       user.email = auth.info.email
-    # user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
+        
+      user.access_token = auth.credentials.token
+      user.expires_at = auth.credentials.expires_at
+      user.refresh_token = auth.credentials.refresh_token
+   
     end
   end
 

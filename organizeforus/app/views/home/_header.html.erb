@@ -8,7 +8,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        
+        <li class="nav-item">
+          <%=link_to "About Us", home_about_path, class:"nav-link"%>
+        </li>
 
         <%if user_signed_in? %>
         <!-- notifiche -->
@@ -44,9 +46,11 @@
                     <!--non fatto-->
                     <a class="nav-link" href="#">ProfileNONFATTO</a>
                 </li>
+                
                 <li class="dropdown-item">
-                    <!--non fatto-->
-                    <a class="nav-link" href="#">Your events</a>
+                   
+                   
+                    <%=link_to "Events" , new_task_path , class:"nav-link"%>
                 </li>
 
               </ul>

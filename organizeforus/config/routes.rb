@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   devise_scope :user do  
     get '/users/sign_out' => 'devise/sessions#destroy' 
     post '/user/auth/facebook/callback/after_social_connection' => 'users/after_auth#create'
+    
  end
-
+  resources :tasks
   resources :groups
   #get 'home/index'
   root 'home#index'
@@ -66,9 +67,6 @@ Rails.application.routes.draw do
 
   get '/groups/:group_id/posts/:id/destroy' , to: 'posts#destroy', as: 'destroy_post'                                                
 
-
-
-  get '/groups/:id/destroy' , to: 'groups#destroy', as: 'destroy_group'                                                
 
 
   

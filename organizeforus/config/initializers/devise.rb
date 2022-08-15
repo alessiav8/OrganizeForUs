@@ -316,5 +316,10 @@ Devise.setup do |config|
 
   #OmniAuth.config.allowed_request_methods = [:get]
 
-  config.omniauth :google_oauth2, '304187077726-5sschkps49r21ljqe2fc1tqhb83u09rk.apps.googleusercontent.com', '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', {}
+  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], {
+    access_type: "offline",
+    prompt: "consent",
+    select_account: true,
+    scope: 'userinfo.email, calendar'
+  }
 end
