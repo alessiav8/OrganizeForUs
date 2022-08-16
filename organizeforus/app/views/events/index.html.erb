@@ -13,17 +13,19 @@
     </div> 
 </div>
 
-<h1>Edit group</h1>
+<h3> Events </h3>
 
-<%= render "form", group: @group %>
-<br>
-<div>
+<center> 
+<%= button_to "New Event", new_group_event_url(@group), class:"btn btn-sm", method: :get%>
+</center>
 
-<%= link_to "New Member", new_partecipations_url(@group), class:"btn btn-secondary" %>
-<br><br>
-<%= link_to "Show group", @group, class:"btn btn-secondary" %> 
-<%= link_to "Back to your groups", groups_path, class:"btn btn-secondary" %>
-</div>
+<%Event.where(group_id: @group.id).each do |event| %>
+
+    <li> <%= link_to event.name, group_event_url(@group,event)%> </li>
 
 
 
+
+
+
+<%end%>

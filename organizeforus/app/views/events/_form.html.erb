@@ -1,0 +1,30 @@
+<%= form_with  url: group_events_path, method: :post , model: @event do |form| %>
+    <div class="row ; mb-2">
+        <div class="col mb-2">
+            <% form.label :name, style: "display: block" %> Name: <br>
+            <%= form.text_field :name, size: "30x3" %>
+        </div>
+    </div>
+    <%= form.text_field :user_id, type:"hidden", value: current_user.id%>
+    <%= form.text_field :group_id, type:"hidden", value: @group.id%>
+
+    <div class="col mb-2">
+        <% form.label :description, style: "display: block" %> Description: <br>
+        <%= form.text_area :description, size: "30x3" %>
+    </div>
+    <div class="col mb-2">
+        <% form.label :picture, style: "display: block" %> Modality: <br>
+        <%= form.select :type_of_presence, ["Online", "Presence"] %>
+    </div>
+    <div class="col mb-2">
+        <% form.label :houres, style: "display: block" %> Number of houres required: <br>
+        <%= form.number_field :houres %>
+    </div>
+    <div class="col mb-2">
+        <% form.label :type_of_houre, style: "display: block" %> Type of houres: <br>
+        <%= form.select :type_of_presence, ["Included in group hours","To be added"] %>
+    </div>
+    <div class=" mb-2">
+        <%= form.submit "Create", class:"btn btn-sm" %>
+    </div>
+<%end%>

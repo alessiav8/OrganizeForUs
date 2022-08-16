@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_04_174215) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_12_110653) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -58,6 +58,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_04_174215) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
+    t.string "name"
+    t.string "description"
+    t.string "type_of_presence"
+    t.string "type_of_houre"
+    t.integer "houres"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_events_on_group_id"
+    t.index ["user_id"], name: "index_events_on_user_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -175,6 +189,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_04_174215) do
   add_foreign_key "answers", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "events", "groups"
+  add_foreign_key "events", "users"
   add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
   add_foreign_key "questions", "surveys"

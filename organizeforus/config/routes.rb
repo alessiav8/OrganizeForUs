@@ -30,6 +30,10 @@ Rails.application.routes.draw do
     resources :comments
   end 
 
+  resources :groups do
+    resources :events
+  end 
+
   put 'groups/:id/partecipations/edit_driver', to: 'partecipations#edit_driver', as: 'edit_driver'
   get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
   get '/groups/:id/set_created', to: 'groups#set_created', as: 'set_created'
