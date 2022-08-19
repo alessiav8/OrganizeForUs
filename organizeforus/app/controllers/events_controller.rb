@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+    before_action :is_a_member, only: [:show]
+
 
     def index
         @group=Group.find(params[:group_id])
@@ -26,10 +28,16 @@ class EventsController < ApplicationController
 
     def show
         @event=Event.find(params[:id])
-        
+
     end
 
 
+    def is_a_member
+        @event=Event.find(params[:id])
+        if current_user==@event.user 
+            return true
+        end
+    end
 
     private
         def event_params

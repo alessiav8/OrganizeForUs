@@ -1,30 +1,63 @@
 <%= form_with  url: group_events_path, method: :post , model: @event do |form| %>
     <div class="row ; mb-2">
+    <div class="row">
+            <div class="col mb-2">
+                <% form.label :name, style: "display: block" %> Name: <br>
+                <%= form.text_field :name, size: "30x3" %>
+            </div>
         <div class="col mb-2">
-            <% form.label :name, style: "display: block" %> Name: <br>
-            <%= form.text_field :name, size: "30x3" %>
+            <% form.label :description, style: "display: block" %> Description: <br>
+            <%= form.text_area :description, size: "30x3" %>
         </div>
     </div>
+
     <%= form.text_field :user_id, type:"hidden", value: current_user.id%>
     <%= form.text_field :group_id, type:"hidden", value: @group.id%>
 
-    <div class="col mb-2">
-        <% form.label :description, style: "display: block" %> Description: <br>
-        <%= form.text_area :description, size: "30x3" %>
-    </div>
-    <div class="col mb-2">
-        <% form.label :picture, style: "display: block" %> Modality: <br>
-        <%= form.select :type_of_presence, ["Online", "Presence"] %>
-    </div>
-    <div class="col mb-2">
-        <% form.label :houres, style: "display: block" %> Number of houres required: <br>
-        <%= form.number_field :houres %>
-    </div>
+    <div class="row">
+        <div class="col mb-2">
+            <% form.label :houres, style: "display: block" %> Number of houres required: <br>
+            <%= form.number_field :houres %>
+        </div>
     <div class="col mb-2">
         <% form.label :type_of_houre, style: "display: block" %> Type of houres: <br>
         <%= form.select :type_of_presence, ["Included in group hours","To be added"] %>
     </div>
-    <div class=" mb-2">
-        <%= form.submit "Create", class:"btn btn-sm" %>
+
     </div>
+
+    <script type="text/javascript"> 
+        function hide(value){
+            alert(value);
+        }
+    </script>
+
+    <div class="row">
+
+        <div class="col mb-2">
+            <% form.label :type_of_presence, style: "display: block" %> Modality: <br>
+            <%= form.select :type_of_presence, ["Presence", "Online"] , id:"modality", onclick:"hide(this)" %>
+        </div>
+        <div class="col mb-2">
+            <% form.label :address, style: "display: block" %> Address: <br>
+            <%= form.text_field :address , id:"address"%>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-2">
+            <% form.label :city, style: "display: block" %> City: <br>
+            <%= form.text_field :city %>
+        </div>
+        <div class="col mb-2">
+            <% form.label :country, style: "display: block" %> Country: <br>
+            <%= form.text_field :country %>
+        </div>
+    </div>
+    <div class=" mt-4">
+        <%= form.submit "Create", class:"btn btn-primary btn-sm" %>
+    </div>
+
+
+
 <%end%>

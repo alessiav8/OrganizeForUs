@@ -1,9 +1,10 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [ :show, :edit ,:update ,:destroy ]
-  before_action :authenticate_user!, expect: [:index, :show]
+  before_action :authenticate_user!
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
+  before_action :member_or_admin, only: [:show]
 
 
   
@@ -120,6 +121,14 @@ class GroupsController < ApplicationController
   def correct_user
     @group= current_user.groups.find_by(id: params[:id])
     redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
+  end
+
+
+  def member_or_admin
+    @group=Group.find(params[:id])
+    @debug= ( @group.user == current_user || !Partecipation.where(group_id: @group , user_id: current_user).empty? )
+    redirect_to root_path, notice: "Not Authorized on this Group" if @debug == false
+    logger.debug @debug
   end
 
   def set_created

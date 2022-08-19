@@ -11,7 +11,7 @@ class GroupMailer < ApplicationMailer
     @user=params[:user]
     @url= "http://localhost:3000/groups/"
 
-    mail(
+    mail(  
       to: String(@user.email) ,
       subject: "Group "+@group.name+" created!",
     )

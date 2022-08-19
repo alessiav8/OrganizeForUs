@@ -6,6 +6,10 @@ class CreateGroups < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :description
       t.string :created, default: false
+      t.integer :houres
+      t.date :date_of_start
+      t.date :date_of_end
+      
       t.timestamps
     end
   end

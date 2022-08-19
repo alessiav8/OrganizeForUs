@@ -8,6 +8,9 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.string :type_of_presence
       t.string :type_of_houre
       t.integer :houres
+      t.string :address
+      t.string :city
+      t.string :country
 
       t.timestamps
     end

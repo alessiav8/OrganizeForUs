@@ -3,13 +3,19 @@
 one:
   recipient: one
   recipient_type: Recipient
-  type: 
+  type: "GroupNotification"
   params: 
+    - group: groups(:two)
+    - user: users(:one)
+    - creator: users(:one)
   read_at: 2022-07-18 15:54:14
 
 two:
   recipient: two
   recipient_type: Recipient
-  type: 
+  type: "GroupNotification"
   params: 
+    - group: groups(:two)
+    - user: users(:one)
+    - creator: users(:one)
   read_at: 2022-07-18 15:54:14
