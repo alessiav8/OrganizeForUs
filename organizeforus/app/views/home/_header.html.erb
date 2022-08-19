@@ -8,9 +8,30 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <%=link_to "About Us", home_about_path, class:"nav-link"%>
-        </li>
+        
+      
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  About us
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="exampleModalLabel">About us</h5>
+      </div>
+      <div class="modal-body">
+        <!-- QUI L'IMMAGINE -->
+        <img src="./profiliAboutUs.png" alt="pipo">
+      </div>
+    </div>
+  </div>
+</div>
+
 
         <%if user_signed_in? %>
         <!-- notifiche -->
