@@ -58,7 +58,7 @@ class GroupsController < ApplicationController
     @group.members.update(:all, driver: "f")
     @member.update(driver: "t")
     respond_to do |format|
-        format.html { redirect_to group_url(@group), notice: "the new designeted driver is: "+ member_update_params[:driver] }  
+        format.html { redirect_to group_url(@group), notice: "the new designated driver is: "+ member_update_params[:driver] }  
     end
   end 
 

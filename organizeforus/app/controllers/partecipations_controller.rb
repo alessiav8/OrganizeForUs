@@ -130,14 +130,14 @@ end
       Partecipation.where(group_id: @group.id, user_id:@user_id.id).update(role: "Driver")
       respond_to do |format|
         session[:return_to] ||= request.referer 
-        format.html { redirect_to session.delete(:return_to), notice: "Designeted Driver was modify." }
+        format.html { redirect_to session.delete(:return_to), notice: "Designated Driver was modified." }
         format.json { head :no_content }
       end
     else
       Partecipation.where(group_id: @group.id, user_id:@user_id.id).update(role: "Driver")
       respond_to do |format|
         session[:return_to] ||= request.referer 
-        format.html { redirect_to session.delete(:return_to), notice: "Designeted Driver added." }
+        format.html { redirect_to session.delete(:return_to), notice: "Designated Driver added." }
         format.json { head :no_content }
       end
     end
