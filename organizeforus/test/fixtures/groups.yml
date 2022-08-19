@@ -1,9 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyString
+  name: "Group1"
+  description: "MyString"
+  user: users(:two)
+  created: "t"
+  fun: 1
+  work: 0
 
 two:
-  name: MyString
-  description: MyString
+  name: "Group2"
+  description: "MyString"
+  user: users(:one)
+  created: "t"
+  fun: 0
+  work: 1

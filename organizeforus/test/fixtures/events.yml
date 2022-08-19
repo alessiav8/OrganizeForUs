@@ -3,7 +3,7 @@
 one:
   group: one
   user: one
-  title: MyString
+  name: MyString
   description: MyString
   type_of_presence: MyString
   type_of_houre: MyString
@@ -11,7 +11,7 @@ one:
 two:
   group: two
   user: two
-  title: MyString
+  name: MyString
   description: MyString
   type_of_presence: MyString
   type_of_houre: MyString

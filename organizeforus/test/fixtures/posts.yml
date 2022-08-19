@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
+  title: "Post1"
   body: MyString
-  user: one
-  group: one
+  user: users(:one)
+  group: groups(:two)
 
 two:
-  title: MyString
+  title: "Post2"
   body: MyString
-  user: two
-  group: two
+  user: users(:one)
+  group: groups(:two)

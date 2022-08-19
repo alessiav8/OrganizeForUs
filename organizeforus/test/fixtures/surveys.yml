@@ -3,11 +3,11 @@
 one:
   title: MyString
   body: MyText
-  group: one
-  user: one
+  group: groups(:two)
+  user: users(:one)
 
 two:
   title: MyString
   body: MyText
-  group: two
-  user: two
+  group: groups(:two)
+  user: users(:one)

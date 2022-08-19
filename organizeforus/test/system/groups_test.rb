@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class GroupsTest < ApplicationSystemTestCase
   setup do
+    sign_in users(:one)
     @group = groups(:one)
   end
 

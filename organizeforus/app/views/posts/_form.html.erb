@@ -1,6 +1,6 @@
 <%= form_with model: [ @group, @group.posts.build ] ,  multiple: true do |form| %>
     <br>
-    <% if action_name="new"%>
+    <% if action_name=="new"%>
     <div class="row ; mb-2">
         <div class="col-1">
             <%= form.label :title, "Title: " %></div>
@@ -24,7 +24,7 @@
         <%= form.text_field :user_id , type:"hidden" , value:current_user.id %>
         <%= form.submit "New Post" , class: "btn btn-sm"%>
     </div>
-    <% elsif action_name ="edit" %>
+    <% elsif action_name =="edit" %>
 efjwek
     <%end%>
 

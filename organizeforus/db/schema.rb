@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_12_110653) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -68,6 +68,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_12_110653) do
     t.string "type_of_presence"
     t.string "type_of_houre"
     t.integer "houres"
+    t.string "address"
+    t.string "city"
+    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"
@@ -78,6 +81,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_12_110653) do
     t.string "name"
     t.string "description"
     t.string "created", default: "f"
+    t.integer "houres"
+    t.date "date_of_start"
+    t.date "date_of_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
@@ -109,6 +115,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_12_110653) do
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_partecipations_on_group_id"
     t.index ["user_id"], name: "index_partecipations_on_user_id"
+  end
+
+  create_table "positions", force: :cascade do |t|
+    t.string "address"
+    t.string "city"
+    t.string "string"
+    t.string "country"
+    t.string "province"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "posts", force: :cascade do |t|
