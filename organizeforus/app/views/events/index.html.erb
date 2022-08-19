@@ -1,31 +1,45 @@
-<div class="row" style="width:100% ;text-align:right">
-      <div class="col" style="width:80%"> 
-      </div>  
+<div class="row mt-3">
+  <div class="col-lg-12 mx-lg-auto">
+    <%= link_to 'Calendar', calendar_path, class:'btn btn-primary btn-lg mb-5' %>
+    <%= link_to 'New Event', new_event_path, class:'btn btn-primary btn-lg mb-5' %>
+  </div>
+  <% @events.each do |event| %>
+    <div class="col-lg-6">
+      <div class="card rounded-0 shadow mb-5">
+        <div class="card-body">
+          <h3><%= event.title %></h3>
+          <p><span class="font-weight-bold">Start Time: </span><%= formatted_datetime(event.start_date) %></p>
+          <p><span class="font-weight-bold">End Time: </span><%= formatted_datetime(event.end_date) %></p>
 
-      <div class="col" > 
-      <div class="row" style=" text-align:right">
-          <a href="<%= group_url(@group) %>" style="color: black">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
-            </svg>
-          </a>
+          <div class="dropdown">
+            <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <%= link_to 'Show', event, class: 'dropdown-item' %>
+              <%= link_to 'Edit', edit_event_path(event), class: 'dropdown-item' %>
+              <%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'dropdown-item' %>
+              <%= link_to 'Sync With Google', sync_event_with_google_event_path(event), class: 'dropdown-item', method: :patch %>
+              <%= link_to 'Guest List', event, data: { toggle: "modal", target:"#guestModal", remote: true}, class: 'dropdown-item' %>
+            </div>
+          </div>
+        </div>
       </div>
-    </div> 
+    </div>
+  <% end %>
 </div>
 
-<h3> Events </h3>
-
-<center> 
-<%= button_to "New Event", new_group_event_url(@group), class:"btn btn-sm", method: :get%>
-</center>
-
-<%Event.where(group_id: @group.id).each do |event| %>
-
-    <li> <%= link_to event.name, group_event_url(@group,event)%> </li>
-
-
-
-
-
-
-<%end%>
+<div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="guestModalLabel">Guest List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="showGuestDetails">
+      </div>
+    </div>
+  </div>
+</div>

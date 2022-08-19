@@ -63,14 +63,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
   create_table "events", force: :cascade do |t|
     t.integer "group_id", null: false
     t.integer "user_id", null: false
-    t.string "name"
+    t.string "title"
     t.string "description"
-    t.string "type_of_presence"
-    t.string "type_of_houre"
-    t.integer "houres"
-    t.string "address"
-    t.string "city"
-    t.string "country"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string "members"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"
@@ -161,19 +158,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
     t.index ["user_id"], name: "index_surveys_on_user_id"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.string "description"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string "event"
-    t.string "members"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_tasks_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -214,5 +198,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
   add_foreign_key "questions", "surveys"
   add_foreign_key "surveys", "groups"
   add_foreign_key "surveys", "users"
-  add_foreign_key "tasks", "users"
 end

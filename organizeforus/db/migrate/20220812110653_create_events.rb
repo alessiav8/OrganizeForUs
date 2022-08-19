@@ -3,14 +3,13 @@ class CreateEvents < ActiveRecord::Migration[7.0]
     create_table :events do |t|
       t.references :group, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.string :name
+     
+      t.string :title
       t.string :description
-      t.string :type_of_presence
-      t.string :type_of_houre
-      t.integer :houres
-      t.string :address
-      t.string :city
-      t.string :country
+      t.datetime :start_date
+      t.datetime :end_date
+      t.string :members
+
 
       t.timestamps
     end

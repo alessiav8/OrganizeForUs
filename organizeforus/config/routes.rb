@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     post '/user/auth/facebook/callback/after_social_connection' => 'users/after_auth#create'
     
  end
-  resources :tasks
+  resources :events
   resources :groups
   #get 'home/index'
   root 'home#index'
