@@ -104,7 +104,7 @@ gem 'omniauth', '~>2.0'
 gem 'google-api-client', require: 'google/apis/calendar_v3'
 #Per validazione dei blob di ActiveStorage
 gem 'activestorage-validator'
-
+gem 'webpacker' 
 gem "jquery-rails"
 
 gem "noticed", "~> 1.5"
