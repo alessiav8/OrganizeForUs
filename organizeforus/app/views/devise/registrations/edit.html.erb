@@ -2,7 +2,7 @@
   <%= javascript_import_module_tag "img_preview" %>
 <% end %>
 
-<h2>Edit profile <% resource_name.to_s.humanize %></h2>
+<h1 class="display-6">Edit profile <% resource_name.to_s.humanize %></h1>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), multipart: true, html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>

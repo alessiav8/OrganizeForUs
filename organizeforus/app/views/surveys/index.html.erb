@@ -2,14 +2,14 @@
 <head></head>
 <body>
 
-<h1> Surveys List </h1>
+<h1 class="display-6">Surveys List</h1>
 
 <div class="container" id="container_not_terminated_survey">
 
     <% if @surveys.empty? %>
         <center> 
             <div class="row mb-2" > 
-                <span style="text-align: center">Not Survey yet </span>
+                <span style="text-align: center">No surveys yet </span>
             </div>
             <div class="row " style="width: 10%">
                <%= link_to "New", new_survey_path(@group,@group.administrator), class:"btn btn btn-sm border border-dark" %>
@@ -33,7 +33,7 @@
 
 <% if current_user==@group.administrator %>
     <hr class="my-4"> </hr>
-    <h3> Termineted </h3>
+    <p class="lead">Terminated</p>
     <div class="container" id="container_not_terminated_survey">
         <% @surveys.where(terminated: true, user_id: current_user.id).each do |survey| %>
             <div class="row">
