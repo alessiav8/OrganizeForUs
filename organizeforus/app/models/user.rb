@@ -41,11 +41,22 @@ class User < ApplicationRecord
       user.name = auth[:info][:first_name]
       user.surname = auth[:info][:last_name]
       user.email = auth.info.email
-        
       user.access_token = auth.credentials.token
       user.expires_at = auth.credentials.expires_at
       user.refresh_token = auth.credentials.refresh_token
-   
+
+      if (auth.provider === "facebook")
+        user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
+      elsif (auth.provider === "github")
+        user.name = auth[:info][:name]
+        user.username = auth[:info][:nickname]
+      elsif (auth.provider === "google_oauth2")
+        resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+        json = JSON.parse(resp.body, symbolize_names: true)
+        date = json[:birthdays][0][:date]
+        user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
+        #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+      end
     end
   end
 
@@ -78,51 +89,6 @@ class User < ApplicationRecord
     else 
       return true
     end
-end
-
-=begin
-  def self.from_omniauth(access_token)
-      data = access_token.info
-      user = User.where(email: data['email']).first
-      unless user
-      user = User.create( email: data['email'],
-      password: Devise.friendly_token[0,20]
-      )
-      end
-      user
-    end
-
-def auth_avatar_attach(auth, url)
-  return unless !auth.info.picture.present?
-  imagename = File.basename(url.path)
-  image = URI.open
-  this.avatar.attach(io: image, filename: filename)
-end
-
-
- 
-    
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
-        user.email = data["email"] if user.email.blank?
-      end
-    end
   end
-=end
 
-
-def self.from_omniauth(access_token)
-  data = access_token.info
-  user = User.where(email: data['email']).first
-
-  # Se non esiste l'account si può creare
-  unless user
-     user = User.create(name: data['name'],
-     email: data['email'],
-     password: Devise.friendly_token[0,20]
-       )
-  end
-  user
-end
 end

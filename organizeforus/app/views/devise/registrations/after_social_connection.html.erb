@@ -1,17 +1,37 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "img_preview" %>
+<% end %>
+
+<%if user_signed_in? %>
+  <%= redirect_to root_path %>
+<%end%>
+
+<script>
+  if(!!window.performance && window.performance.navigation.type === 2){  
+  
+  
+  console.log('Reloading');
+  
+  
+  window.location.reload();
+}</script>
+
 <h2>Completing the Sign Up</h2>
 
-<%= form_for(@user, url: user_auth_facebook_callback_after_social_connection_path(@user)) do |f| %>
+<%= form_for(@user, url: user_after_social_connection_path(@user)) do |f| %>
   <%=  render "devise/shared/error_messages", resource: @user  %>
 
 
   <div class="field form-group">
     <div class="row">
-      <div class="col-sm-4">
-        <%= image_tag user_avatar(@user, 50), class: "rounded-circle" %>
+      <div class="col-sm-8">
+        <%= image_tag user_avatar(@user, 200), class: "rounded-circle", :size => "200x180" %>
+        <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
+        <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %> 
       </div>
 
       <div class="field form-group">
-        <%= f.file_field :avatar, direct_upload: true, class:"input form-control"%>
+        <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes }, class:"input form-controll" %>
   
         <% if resource.avatar.attached? && resource.valid? %>
           <%= f.label :remove_image %>

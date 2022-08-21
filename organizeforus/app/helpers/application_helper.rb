@@ -5,7 +5,7 @@ module ApplicationHelper
         if user.avatar.representable?
             user.avatar.representation(resize_to_limit: [size, size])
         else
-            "pikachu.png"
+            "Default_Profile_Avatar.png"
         end
     end
 

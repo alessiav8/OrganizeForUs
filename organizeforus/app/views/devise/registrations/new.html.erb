@@ -1,3 +1,20 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "img_preview" %>
+<% end %>
+
+<%if user_signed_in? %>
+  <%= redirect_to root_path %>
+<%end%>
+
+<script>
+  if(!!window.performance && window.performance.navigation.type === 2){  
+  
+  
+  console.log('Reloading');
+  
+  
+  window.location.reload();
+}</script>
 <h2>Sign up</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>

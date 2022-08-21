@@ -1,14 +1,14 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "@hotwired/turbo-rails"
+//import "@hotwired/turbo-rails"
+
 import "controllers"
-import jquery from "jquery"
-import "jquery_ujs"
+import * as jq from 'jquery'
+import * as Preview from "./img_preview.js"
+window.Preview = Preview
 
-window.$ = window.jQuery = jquery
-
-require("@rails/ujs").start()
+/*require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
-require("channels")
+require("channels")*/
 
-console.log('Hello from application.js')
+window.importmapScriptsLoaded = true

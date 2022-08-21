@@ -44,23 +44,19 @@
             </li>
 
             <li class="nav-item">
-                <%=link_to "My Groups", groups_path, class:"nav-link"%>
-            </li>
-
-            <li class="nav-item">
                 <%= render "layouts/notifications" %>
             </li>
 
             <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="NavBarDropDown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                  <%= current_user.name %>
+                  <%= image_tag user_avatar(current_user, 30), :size => "30x30", class: "rounded-circle" %>
                 </a>
 
               <ul class="dropdown-menu" aria-labelledby="NavBarDropDown1" style="text-align: right">
 
                 <li class="dropdown-item">
-                  <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %> </a>
-                <li>
+                  <%=link_to "My Groups", groups_path, class:"nav-link"%>
+                </li>
 
                 <li class="dropdown-item">
                     <%=link_to "Edit Profile", edit_user_registration_path(current_user), class:"nav-link"%>
@@ -76,6 +72,10 @@
                    
                     <%=link_to "Events" , events_path , class:"nav-link"%>
                 </li>
+
+                <li class="dropdown-item">
+                    <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %> </a>
+                <li>
 
               </ul>
             </li>

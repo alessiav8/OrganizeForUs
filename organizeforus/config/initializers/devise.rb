@@ -271,7 +271,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :github, 'Iv1.3e2f38c752f3594c', 'e11b7325e3b07954a875357872137b99b6bee236', scope: 'user,public_repo'
+  #config.omniauth :github, 'Iv1.3e2f38c752f3594c', 'e11b7325e3b07954a875357872137b99b6bee236', scope: 'user,public_repo'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -314,12 +314,23 @@ Devise.setup do |config|
 
   config.omniauth :facebook, Rails.application.credentials.dig(:facebook, :facebook_client_id), Rails.application.credentials.dig(:facebook, :facebook_client_secret), scope: 'public_profile,email,user_birthday', info_fields: 'email, first_name, last_name, picture, birthday', :secure_image_url => true, :image_size => 'large'
 
-  #OmniAuth.config.allowed_request_methods = [:get]
+  OmniAuth.config.allowed_request_methods = [:get]
 
   config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], {
     access_type: "offline",
     prompt: "consent",
     select_account: true,
-    scope: 'userinfo.email, calendar'
+    scope: 'userinfo.email, userinfo.profile, user.birthday.read, calendar'
   }
+
+  config.omniauth :github, Rails.application.credentials.dig(:github, :github_client_id), Rails.application.credentials.dig(:github, :github_client_secret), scope: 'user:email, public_repo'
+  # , { 
+  #   loginPath: "/auth/github",
+  #   access_type: "offline",
+  #   prompt: "consent",
+  #   select_account: true,
+  #   callbackPath: "http://localhost:3000/user/auth/github/callback/"
+  # }
+
+  #OmniAuth.config.allowed_request_methods = [:get]
 end

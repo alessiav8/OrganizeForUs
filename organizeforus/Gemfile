@@ -115,3 +115,4 @@ gem "coffee", "~> 0.0.5"
 
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 
+gem "httparty"
