@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
     
  end
+ 
   resources :events
   resources :groups
   #get 'home/index'

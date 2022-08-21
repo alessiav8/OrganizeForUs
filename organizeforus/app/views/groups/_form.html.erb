@@ -13,12 +13,24 @@
   
 
   <!--da vedere come fare-->
-  <div class="field form group">
-    </br>
-    <% form.label :picture, style: "display: block" %> Group picture: <br>
-    <%= form.file_field :image, multiple: false,  size: "50x4", class:"bi bi-paperclip" %>
+  <div class="row">
+  <div class="col">
+
+    <div class="field form group">
+      </br>
+      <% form.label :picture, style: "display: block" %> Group picture: <br>
+      <%= form.file_field :image, multiple: false,  size: "50x4", class:"bi bi-paperclip" %>
+    </div>
+  </div>
+      
+    <div class="col mt-3">
+    <div class="field form group">
+    <% form.label :color, style: "display: block" %> Color:  <br>
+      <%= form.color_field :color , class:"bi bi-paperclip" %>
+      </div>
     </div>
 
+</div>
 
   
   <div class="field form group">
@@ -40,12 +52,18 @@
     function unCheckWork(id) {
       $('.btn-check').prop('checked',false);
       $(id).prop('checked',true);
+      let t=document.getElementById("max_hours");
+
+      t.setAttribute("style","visibility: hidden")
+
       };
 </script>
 <script type="text/javascript">
     function unCheckFun(id) {   
       $('.btn-check').prop('checked',false);
       $(id).prop('checked',true);
+      let t=document.getElementById("max_hours");
+      t.setAttribute("style","visibility:true")
       };
 </script>
 
@@ -61,8 +79,31 @@
           
           <%= form.check_box :work,   class:"btn-check",onclick:"unCheckFun(this)"%>
           <%= form.label :work,class:"btn btn-secondary"%>
+
+          
     </div>
+    <div class="row">
+            <div class="col">
+              <% form.label :date_of_start, style: "display: block" %> Date started: <br>
+              <%= form.date_field :date_of_start%>
+            </div>
+
+          <div class="col">
+            <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
+            <%= form.date_field :date_of_end%>
+          </div>
+          <div class="col">
+          <% form.label :hours, style: "display: block" %> Number of hours: <br>
+          <%= form.number_field :hours%>
+          </div>
+       </div>
+       <div class="mt-3" id="max_hours" style="visibility: hidden">
+              <% form.label :max_hours_in_a_day, style: "display: block" %> Max hours in a day: <br>
+              <%= form.number_field :max_hours_in_a_day%>
+        </div>
   <%end%>
+
+
   
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">

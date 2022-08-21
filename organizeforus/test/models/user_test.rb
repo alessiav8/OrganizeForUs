@@ -9,8 +9,4 @@ class UserTest < ActiveSupport::TestCase
     @user=users(:one)
   end
 
-
-  test "shoud enter into profile" do
-    get
-  end
 end

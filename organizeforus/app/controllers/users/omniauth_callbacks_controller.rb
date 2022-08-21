@@ -112,7 +112,14 @@ end
           flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Github'
           sign_in_and_redirect @user, event: :authentication
         else
-          session['devise.github_data'] = request.env['omniauth.auth'].except('extra') # Removing extra as it can overflow some session stores
-          redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
+          auth = request.env["omniauth.auth"]
+                @user = User.from_omniauth(auth)
+                @user.access_token = auth.credentials.token
+                @user.expires_at = auth.credentials.expires_at
+                @user.refresh_token = auth.credentials.refresh_token
+                session['devise.github_data'] = auth
+                session['devise.github_data'].extra.id_token = nil;
+              
+                render 'devise/registrations/after_social_connection'
         end
 =end
