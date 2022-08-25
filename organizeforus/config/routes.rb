@@ -10,6 +10,7 @@ Rails.application.routes.draw do
  
   resources :events
   resources :groups
+  resources :users
   #get 'home/index'
   root 'home#index'
   get 'home/about'

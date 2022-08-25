@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :partecipations
   has_one_attached :avatar, dependent: :purge_later
   has_many :events
+  has_many :posts
 
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :answer, dependent: :destroy
