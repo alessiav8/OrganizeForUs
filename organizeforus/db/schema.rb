@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -89,6 +89,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
     t.boolean "fun"
     t.boolean "work"
     t.index ["user_id"], name: "index_groups_on_user_id"
+  end
+
+  create_table "identities", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "provider"
+    t.string "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid"
+    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -177,8 +187,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_17_113428) do
     t.string "surname"
     t.string "username"
     t.date "birthday"
-    t.string "provider"
-    t.string "uid"
     t.string "access_token"
     t.integer "expires_at"
     t.string "refresh_token"
