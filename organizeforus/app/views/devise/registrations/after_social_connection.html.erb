@@ -31,12 +31,12 @@
       </div>
 
       <div class="field form-group">
-        <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes }, class:"input form-controll" %>
+        <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes } %>
   
-        <% if resource.avatar.attached? && resource.valid? %>
-          <%= f.label :remove_image %>
-          <%= f.check_box :remove_image, default: 0%>
-        <% end %>
+        <!--% if resource.avatar.attached? && resource.valid? %-->
+          <!--%= f.label :remove_image %-->
+          <!--%= f.check_box :remove_image, default: 0%-->
+        <!--% end %-->
       </div>
     </div>
   </div>

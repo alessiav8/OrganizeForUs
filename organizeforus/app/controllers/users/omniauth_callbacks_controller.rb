@@ -2,75 +2,138 @@ require 'open-uri'
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     before_action :set_cache_headers
-    
+
+    # def google_oauth2
+    #     @user = User.find_by(provider: request.env["omniauth.auth"].provider, uid: request.env["omniauth.auth"].uid)
+    #     if @user.present?
+    #         sign_in_and_redirect @user, :event => :authentication
+    #         flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
+    #     else
+
+    #         auth = request.env["omniauth.auth"]
+    #         @user = User.from_omniauth(auth)
+    #         file = URI.open(auth.info.image)
+    #         filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_gglimage.'+file.content_type.split("/")[1]
+    #         blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+    #         @user.avatar.attach(blob)
+    #         session[:blob_id] = blob.id
+    #         @user.access_token = auth.credentials.token
+    #         @user.expires_at = auth.credentials.expires_at
+    #         @user.refresh_token = auth.credentials.refresh_token
+    #         session['devise.google_data'] = auth
+    #         session['devise.google_data'].extra = nil;
+            
+            
+            
+
+    #         render 'devise/registrations/after_social_connection'
+    #     end
+    # end
+
     def google_oauth2
-        @user = User.find_by(provider: request.env["omniauth.auth"].provider, uid: request.env["omniauth.auth"].uid)
-        if @user.present?
-            sign_in_and_redirect @user, :event => :authentication
-            flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
+        auth = request.env["omniauth.auth"]
+        if user_signed_in?
+            @user = User.find_by(id: current_user.id)
+            if @user.identities.where(provider: "google_oauth2").empty?
+                @user.update( access_token: auth.credentials.token, expires_at: auth.credentials.expires_at, refresh_token: auth.credentials.refresh_token )
+                @user.identities.create(provider: auth.provider, uid: auth.uid)
+                flash[:notice] = "Google account successfully linked!"
+                redirect_to profile_path
+            else
+                redirect_to root_path
+            end
         else
+            authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
+            if authentication.present?
+                @user = authentication.user
+                sign_in_and_redirect @user, :event => :authentication
+                flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
+            else
 
-            auth = request.env["omniauth.auth"]
-            @user = User.from_omniauth(auth)
-            file = URI.open(auth.info.image)
-            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_gglimage.'+file.content_type.split("/")[1]
-            blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-            @user.avatar.attach(blob)
-            session[:blob_id] = blob.id
-            @user.access_token = auth.credentials.token
-            @user.expires_at = auth.credentials.expires_at
-            @user.refresh_token = auth.credentials.refresh_token
-            session['devise.google_data'] = auth
-            session['devise.google_data'].extra = nil;
-            
-            
-            
+                @user = User.from_omniauth(auth)
+                file = URI.open(auth.info.image)
+                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_gglimage.'+file.content_type.split("/")[1]
+                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                @user.avatar.attach(blob)
+                session[:blob_id] = blob.id
+                @user.access_token = auth.credentials.token
+                @user.expires_at = auth.credentials.expires_at
+                @user.refresh_token = auth.credentials.refresh_token
+                session['devise.google_data'] = auth
+                session['devise.google_data'].extra = nil;
+                
+                
+                
 
-            render 'devise/registrations/after_social_connection'
+                render 'devise/registrations/after_social_connection'
+            end
         end
     end
-
 
     def facebook
 
         auth = request.env["omniauth.auth"]
-        @user = User.find_by(provider: auth.provider, uid: auth.uid)
-        if @user.present?
-            sign_in_and_redirect @user, :event => :authentication
-            flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Facebook'
+        if user_signed_in?
+            @user = User.find_by(id: current_user.id)
+            if @user.identities.where(provider: "facebook").empty?
+                @user.identities.create(provider: auth.provider, uid: auth.uid)
+                flash[:notice] = "Facebook account successfully linked!"
+                redirect_to profile_path
+            else
+                redirect_to root_path
+            end
         else
-            session["devise.facebook_data"] = request.env["omniauth.auth"]
+            authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
+            if authentication.present?
+                @user = authentication.user
+                sign_in_and_redirect @user, :event => :authentication
+                flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Facebook'
+            else
+                session["devise.facebook_data"] = request.env["omniauth.auth"]
 
-            @user = User.from_omniauth(request.env["omniauth.auth"])
-            file = URI.open(auth.info.image)
-            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
-            blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-            @user.avatar.attach(blob)
-            session[:blob_id] = blob.id    
-            render 'devise/registrations/after_social_connection'
+                @user = User.from_omniauth(request.env["omniauth.auth"])
+                file = URI.open(auth.info.image)
+                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
+                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                @user.avatar.attach(blob)
+                session[:blob_id] = blob.id    
+                render 'devise/registrations/after_social_connection'
+            end
         end
     end
 
     def github
 
         auth = request.env["omniauth.auth"]
-        @user = User.find_by(provider: auth.provider, uid: auth.uid)
-        if @user.present?
-            sign_in_and_redirect @user, :event => :authentication
-            flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Github'
+        if user_signed_in?
+            @user = User.find_by(id: current_user.id)
+            if @user.identities.where(provider: "github").empty?
+                @user.identities.create(provider: auth.provider, uid: auth.uid)
+                flash[:notice] = "Github account successfully linked!"
+                redirect_to profile_path
+            else
+                redirect_to root_path
+            end
         else
-            session['devise.github_data'] = auth
-            @user = User.from_omniauth(auth)
-            file = URI.open(auth.info.image)
-            filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghlimage.'+file.content_type.split("/")[1]
-            blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-            @user.avatar.attach(blob)
-            session[:blob_id] = blob.id
-            @user.access_token = auth.credentials.token
-            @user.expires_at = auth.credentials.expires_at
-            session['devise.github_data'] = auth
-            session['devise.github_data'].extra = nil;
-            render 'devise/registrations/after_social_connection'
+            authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
+            if authentication.present?
+                @user = authentication.user
+                sign_in_and_redirect @user, :event => :authentication
+                flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Github'
+            else
+                session['devise.github_data'] = auth
+                @user = User.from_omniauth(auth)
+                file = URI.open(auth.info.image)
+                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghlimage.'+file.content_type.split("/")[1]
+                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                @user.avatar.attach(blob)
+                session[:blob_id] = blob.id
+                @user.access_token = auth.credentials.token
+                @user.expires_at = auth.credentials.expires_at
+                session['devise.github_data'] = auth
+                session['devise.github_data'].extra = nil;
+                render 'devise/registrations/after_social_connection'
+            end
         end
     end
 

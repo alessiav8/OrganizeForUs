@@ -4,16 +4,18 @@ Rails.application.routes.draw do
   devise_scope :user do  
     get '/users/sign_out' => 'devise/sessions#destroy' 
     post '/user/after_social_connection' => 'users/after_auth#create'
+    get '/user/:id/:provider/unlink_account' => "users/after_auth#unlink_account", as: "unlink_account"
+  end
 
-    
- end
+  get '/profile' => "users#profile"
  
   resources :events
   resources :groups
-  resources :users
+
   #get 'home/index'
   root 'home#index'
   get 'home/about'
+ 
   
   resources :groups do
     resources :members , only: [:new,:edit,:create]
