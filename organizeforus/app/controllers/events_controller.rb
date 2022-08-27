@@ -8,7 +8,9 @@ class EventsController < ApplicationController
     def index
         @event_list =  get_all_events(current_user)
         @events = current_user.events
+        @try = search_slots(Event.first.group , '2022-08-25' , '2022-08-25' , '08:00:00' , '17:00:00' , 1)
     end
+    def event_calendar; end
 
     def new
   
@@ -25,7 +27,7 @@ class EventsController < ApplicationController
     
       client.insert_event('primary', event)
       flash[:notice] = 'Event was successfully added.'
-      event.save!
+      @event.save!
       redirect_to events_path
     end
 
@@ -71,6 +73,8 @@ class EventsController < ApplicationController
         )
       end
 
+  
+  
 
     
   def event_params

@@ -29,6 +29,8 @@
     <%= form.datetime_select :start_date %>
   </div>
 
+  
+
   <div class="field">
     <%= form.label :end_date %>
     <%= form.datetime_select :end_date %>
@@ -40,6 +42,10 @@
     <%= form.label :members %>
     <%= form.text_field :members %>
   </div>
+  
+    <%= form.text_field :user_id,type:'hidden', value:current_user.id %>
+    <%= form.text_field :group_id,type:'hidden',value:"1" %>
+
 
   <div class="actions">
     <%= form.submit %>

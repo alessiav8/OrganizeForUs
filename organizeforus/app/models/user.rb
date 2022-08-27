@@ -53,8 +53,8 @@ class User < ApplicationRecord
       elsif (auth.provider === "google_oauth2")
         resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
         json = JSON.parse(resp.body, symbolize_names: true)
-        date = json[:birthdays][0][:date]
-        user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
+        #date = json[:birthdays][0][:date]
+       # user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
         #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
       end
     end
@@ -65,6 +65,37 @@ class User < ApplicationRecord
   def purge_avatar
     unless avatar.nil?
     avatar.purge
+    end
+  end
+
+
+  def update_token 
+    client = Google::Apis::CalendarV3::CalendarService.new
+    return unless (current_user.present? && current_user.access_token.present? && current_user.refresh_token.present?)
+    
+    secrets = Google::APIClient::ClientSecrets.new({
+      "web" => {
+        "access_token" => current_user.access_token,
+        "refresh_token" => current_user.refresh_token,
+        "client_id" => ENV["GOOGLE_CLIENT_ID"],
+        "client_secret" => ENV["GOOGLE_CLIENT_SECRET"]
+      }
+    })
+    begin
+      client.authorization = secrets.to_authorization
+      client.authorization.grant_type = "refresh_token"
+
+      if !current_user.present?
+        client.authorization.refresh!
+        current_user.update_attributes(
+          access_token: client.authorization.access_token,
+          refresh_token: client.authorization.refresh_token,
+          expires_at: client.authorization.expires_at.to_i
+        )
+      end
+    rescue => e
+      flash[:error] = 'Your token has been expired. Please login again with google.'
+      redirect_to :back
     end
   end
 
@@ -90,5 +121,11 @@ class User < ApplicationRecord
       return true
     end
   end
+
+  
+  def expired?
+    expires_at < Time.current.to_i
+  end
+
 
 end
