@@ -16,20 +16,20 @@
         </div>
         </div> 
     </div>
-       <h1 class="display-6">Posts</h1>
+       <h1 class="display-6" id="scrittaPost">Posts</h1>
 
        <div class="container">
             <div class="row">
                 <center>
                     <button id="new_post_hidden" class="btn btn-secondary btn-sm; mb-2; mt-2" style="display: inline"> New Post </button>
-                    <div class="container ; border border-dark ; rounded" style="width: 50%; display: none" id="container_posts" >
+                    <div class="container ; border border-dark ; rounded" style="width: 30%; display: none" id="container_posts" >
                         <%= render 'posts/form' %>
                     </div>
                 </center>
                 <div class="row mb-2 mt-2" ></div>
 
              
-                <% if @posts.empty? %>
+                <% if @group.posts.empty? %>
                     <div class="row; mt-5">
                         <center> No post yet </center>
                     </div>
@@ -60,22 +60,17 @@
 
 
         <script type="text/javascript">
+        window.onload = (event) => {
             let button=document.getElementById("new_post_hidden");
-            button.addEventListener('click', show);
             let container=document.getElementById("container_posts");
-           
 
-            let edit_post=document.getElementById("edit_post");
-            edit_post.addEventListener('click',edit);
+            button.addEventListener('click', show);
+           
             function show(){
                 button.setAttribute("style", "display: none");
                 container.style.display="table"
             }
-            function edit(){
-                cont.style.display="none"
-                cont_edit.style.display="table"
-
-            }
+        }
         </script>
 
     </body>

@@ -8,7 +8,10 @@ class Event < ApplicationRecord
   #h_g=self.group.houres
 
 
-  validate :title
+  validates :title, presence: true
+  validates :description, presence: true
+  #validates :houres, numericality: { greater_than: 0 }
+  #validates :houres, numericality: {less_than: h_g}, if: :houre_on_group
 
 
 

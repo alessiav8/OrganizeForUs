@@ -82,24 +82,26 @@
 
           
     </div>
-    <div class="row">
+    <div class="form-row">
             <div class="col">
               <% form.label :date_of_start, style: "display: block" %> Date started: <br>
-              <%= form.date_field :date_of_start%>
+              <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control", value: '2022-08-10' %>
             </div>
 
           <div class="col">
             <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
-            <%= form.date_field :date_of_end%>
+            <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control ", value: '2022-08-11'%>
           </div>
           <div class="col">
-          <% form.label :hours, style: "display: block" %> Number of hours: <br>
-          <%= form.number_field :hours%>
+            <div class="field form group">
+              <% form.label :hours, style: "display: block" %> Number of hours: <br>
+              <%= form.number_field :hours,id: "Hours", value: "8"%>
+            </div>
           </div>
        </div>
        <div class="mt-3" id="max_hours" style="visibility: hidden">
               <% form.label :max_hours_in_a_day, style: "display: block" %> Max hours in a day: <br>
-              <%= form.number_field :max_hours_in_a_day%>
+              <%= form.number_field :max_hours_in_a_day ,id:"Max"%>
         </div>
   <%end%>
 
@@ -113,7 +115,11 @@
  
   <div>
     </br>
+    <% if controller_name == 'groups' && action_name == 'new' %>
     <%= form.submit "Continue",class:'btn btn-secondary'%>
+    <% else %>
+    <%= form.submit "Update",class:'btn btn-secondary'%>
+    <%end%>
   </div>
 <% end %>
 

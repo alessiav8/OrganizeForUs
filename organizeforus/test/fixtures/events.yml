@@ -1,17 +1,2 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  group: one
-  user: one
-  name: MyString
-  description: MyString
-  type_of_presence: MyString
-  type_of_houre: MyString
-
-two:
-  group: two
-  user: two
-  name: MyString
-  description: MyString
-  type_of_presence: MyString
-  type_of_houre: MyString

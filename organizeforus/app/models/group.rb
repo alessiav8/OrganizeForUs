@@ -143,6 +143,22 @@ class Group < ApplicationRecord
   
   validates :name, presence: true
   validates :description, presence: true
+  validates :date_of_start, presence: true
+  validates :date_of_end, presence: true, comparison: { greater_than: :date_of_start}
+  validates :hours, presence: true
+
+
+
+
+  def is_a_work_group
+    if self.work == true
+      return true
+    end 
+  end
+
+
+
+
 
   private 
 

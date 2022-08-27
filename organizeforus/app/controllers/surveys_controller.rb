@@ -39,7 +39,7 @@ class SurveysController < ApplicationController
             notify_recipent(@survey,@group,m.user)
           }
         end
-        format.html { redirect_to index_survey_url(@group), status: :created, notice: "Sondaggio Creato" }
+        format.html { redirect_to index_survey_path(@group), status: :created, notice: "Survey created" }
         format.json { render :show, status: :ok, location: @group }
       else
         format.html { render :new, status: :unprocessable_entity }

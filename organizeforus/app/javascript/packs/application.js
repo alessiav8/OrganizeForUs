@@ -31,3 +31,4 @@ document.addEventListener('turbolinks:load', function() {
   });
   calendar.render();
 });
+import "controllers"
