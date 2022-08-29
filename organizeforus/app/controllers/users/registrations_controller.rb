@@ -19,4 +19,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "#{1.year.ago}"
     end
+
+
 end

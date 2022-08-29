@@ -15,5 +15,6 @@ class Post < ApplicationRecord
     notifications_as_post.destroy_all
   end
 
-  
+  validates :title, presence: true
+  validates :body, length: { minimum: 2 }
 end

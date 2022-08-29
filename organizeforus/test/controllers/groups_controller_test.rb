@@ -30,11 +30,10 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
   test "should show group" do
     sign_in users(:one)
     get group_url(@group)
-    assert_response :redirect
+    assert_response :success
   end
 
   test "should not show group" do
-    sign_out users(:one)
     sign_in users(:two)
     get group_url(@group)
     assert_redirected_to root_path
@@ -42,21 +41,23 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get edit" do
     get edit_group_url(@group)
-    assert_response :redirect
+    assert_response :success
   end
 
   test "should update group" do
-    patch group_url(@group), params: { group: { description: @group.description, name: @group.name } }
-    get group_url(@group)
+    group = groups(:two)    
+
+    patch group_url(group), params: {group: { name: "updated" } }
+    group.reload
+    assert_equal "updated", group.name
+
   end
 
 
-
   test "should destroy group" do
-    sign_out users(:two)
-    sign_in users(:one)
+    group=groups(:two)
     assert_difference("Group.count", -1) do
-      delete group_url(@group)
+      delete group_url(group)
     end
     get groups_url
   end

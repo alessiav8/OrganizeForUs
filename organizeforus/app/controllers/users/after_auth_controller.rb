@@ -5,8 +5,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
     def create
        if( session["devise.facebook_data"].present?)
             @user = User.new(user_params)
-            @user.provider = session["devise.facebook_data"]["provider"]
-            @user.uid = session["devise.facebook_data"]["uid"]
+            #@user.provider = session["devise.facebook_data"]["provider"]
+            #@user.uid = session["devise.facebook_data"]["uid"]
             file = user_params[:avatar]
             if (!file.nil?)
                 filename = filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_Upimage.'+(file.content_type.split("/")[1])
@@ -20,6 +20,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             end
             if @user.save
                 session[:blob_id] = nil
+                @user.identities.create(provider: session["devise.facebook_data"]["provider"], uid: session["devise.facebook_data"]["uid"])
                 sign_in_and_redirect @user, :event => :authentication
                 set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
                 
@@ -31,8 +32,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                      
             @user = User.new(user_params)
 
-            @user.provider = session["devise.google_data"]["provider"]
-            @user.uid = session["devise.google_data"]["uid"]
+            #@user.provider = session["devise.google_data"]["provider"]
+            #@user.uid = session["devise.google_data"]["uid"]
         
             @user.access_token = session["devise.google_data"]["credentials"]["token"]
             @user.expires_at = session["devise.google_data"]["credentials"]["expires_at"]
@@ -52,6 +53,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
 
             if @user.save
                 session[:blob_id] = nil
+                @user.identities.create(provider: session["devise.google_data"]["provider"], uid: session["devise.google_data"]["uid"])
                 sign_in_and_redirect @user, :event => :authentication
                 set_flash_message(:notice, :success, :kind => "Google") if is_navigational_format?
             else
@@ -61,8 +63,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                      
             @user = User.new(user_params)
 
-            @user.provider = session["devise.github_data"]["provider"]
-            @user.uid = session["devise.github_data"]["uid"]
+            #@user.provider = session["devise.github_data"]["provider"]
+            #@user.uid = session["devise.github_data"]["uid"]
         
             @user.access_token = session["devise.github_data"]["credentials"]["token"]
             @user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
@@ -81,6 +83,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
 
             if @user.save
                 session[:blob_id] = nil
+                @user.identities.create(provider: session["devise.github_data"]["provider"], uid: session["devise.github_data"]["uid"])
                 sign_in_and_redirect @user, :event => :authentication
                 set_flash_message(:notice, :success, :kind => "Github") if is_navigational_format?
             else
@@ -91,6 +94,31 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             redirect_to root_path
         end
 
+    end
+
+    def unlink_account
+        if user_signed_in?
+            if current_user.id === eval(params[:id])
+                @user = User.find_by(id: params[:id])
+                auth = @user.identities.where(provider: params[:provider])
+                if auth
+                    auth.first.destroy
+                    if params[:provider] == "google_oauth2"
+                        @user.update(access_token: nil, expires_at: nil, refresh_token: nil)
+                        flash[:notice] = "Google account successfully unlinked!"
+                    elsif params[:provider] == "facebook"
+                        flash[:notice] = "Facebook account successfully unlinked!"
+                    elsif params[:provider] == "github"
+                        flash[:notice] = "Github account successfully unlinked!"
+                    end
+                    redirect_to profile_path
+                end
+            else
+                redirect_to root_path
+            end
+        else
+            redirect_to new_user_registration_path
+        end
     end
 
     def failure

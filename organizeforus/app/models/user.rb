@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -6,13 +7,14 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: %i[facebook google_oauth2 github]
          
 
-
+  has_many :identities, dependent: :destroy
         
   #statement che associa un user a più gruppi          
   has_many :groups
   has_many :partecipations
   has_one_attached :avatar, dependent: :purge_later
   has_many :events
+  has_many :posts
 
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :answer, dependent: :destroy
@@ -22,6 +24,8 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true
   validates :birthday, presence: true
   validates :avatar, blob: { content_type: %r{^image/}, size_range: 0..5.megabytes }
+
+  scope :get_provider_account , -> (user_id,auth_provider_id) { Identity.where("user_id = ? and authentication_provider_id = ? ",user_id,auth_provider_id) }
 
 
   # Active Storage
@@ -37,13 +41,12 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_initialize do |user|
+    iden = Identity.where(provider: auth.provider, uid: auth.uid).first
+    if iden.nil?
+      user = User.new()
       user.name = auth[:info][:first_name]
       user.surname = auth[:info][:last_name]
       user.email = auth.info.email
-      user.access_token = auth.credentials.token
-      user.expires_at = auth.credentials.expires_at
-      user.refresh_token = auth.credentials.refresh_token
 
       if (auth.provider === "facebook")
         user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
@@ -51,13 +54,19 @@ class User < ApplicationRecord
         user.name = auth[:info][:name]
         user.username = auth[:info][:nickname]
       elsif (auth.provider === "google_oauth2")
+        user.access_token = auth.credentials.token
+        user.expires_at = auth.credentials.expires_at
+        user.refresh_token = auth.credentials.refresh_token
         resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
         json = JSON.parse(resp.body, symbolize_names: true)
         #date = json[:birthdays][0][:date]
        # user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
         #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
       end
+    else
+      user = iden.user
     end
+    user
   end
 
   private 
@@ -127,5 +136,12 @@ class User < ApplicationRecord
     expires_at < Time.current.to_i
   end
 
+
+  def for_display
+    {
+    email: email,
+    id: id,
+    }
+  end
 
 end

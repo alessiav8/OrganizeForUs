@@ -21,6 +21,7 @@ class GroupNotification < Noticed::Base
     @group=Group.find(params[:group][:id])
     @user=User.find(params[:user][:id])
     @creator=User.find(params[:creator][:id])
+    @role= params[:role]
     
     "#{@group.user.name} invite you in #{@group.name} Group click here to accept"
   end

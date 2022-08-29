@@ -1,6 +1,9 @@
 <div class="row" style="width:100% ;text-align:right">
       <div class="col" style="width:80%"> 
       </div>  
+      <% if @group.errors.any? %>
+      <%= @group.errors.full_messages %>
+    <% end %>
 
       <div class="col" > 
       <div class="row" style=" text-align:right">
@@ -26,7 +29,7 @@
     <%= form_with url: edit_driver_url, model: @partecipations, method: :put do |form| %>
       <div container>
       <div class="row">
-        <div class="col-2">
+        <div class="col-3">
         <% form.label :role, style: "display: block" %>
         <%= form.select :role, Partecipation.list_member(@group) %>
         </div>

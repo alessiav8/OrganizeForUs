@@ -36,6 +36,10 @@
     <%= form.datetime_select :end_date %>
   </div>
 
+
+  <%= form.text_field :user_id, type:"hidden", value: 1%>
+  <%= form.text_field :group_id, type:"hidden", value: 1%>
+
  
 
   <div class="field">
@@ -48,6 +52,6 @@
 
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Create" %>
   </div>
 <% end %>

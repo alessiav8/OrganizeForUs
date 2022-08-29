@@ -67,6 +67,14 @@ gem "image_processing", "~> 1.2"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
+  gem 'cucumber-rails-training-wheels'
+
+  gem 'rspec-rails', ">= 3.9.0"
+  gem 'faker'
+  gem 'factory_bot_rails'
+
 end
 
 group :development do
@@ -80,11 +88,13 @@ group :development do
   # gem "spring"
 end
 
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  
 end
 
 #Per generare le form di Sign Up ed Edit Profile
@@ -116,3 +126,5 @@ gem "coffee", "~> 0.0.5"
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 
 gem "httparty"
+gem 'rails-controller-testing'
+
