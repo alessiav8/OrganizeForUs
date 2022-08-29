@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 
   put 'groups/:id/partecipations/edit_driver', to: 'partecipations#edit_driver', as: 'edit_driver'
   get '/groups/:group_id/partecipations', to: 'partecipations#new', as: 'new_partecipations'
+  post '/groups/:group_id/partecipations', to: 'partecipations#create', as: 'partecipation_create'
+
   get '/groups/:id/set_created', to: 'groups#set_created', as: 'set_created'
 
   get '/groups/:group_id/partecipations/:role/delete_role', to: 'partecipations#delete_role', as: 'delete_role'
@@ -63,19 +65,18 @@ Rails.application.routes.draw do
   get '/groups/:group_id/surveys/user_id/new', to: 'surveys#new', as: 'new_survey'
   post '/groups/:group_id/surveys/create', to: 'surveys#create', as: 'new_surveys'
   get '/groups/:group_id/surveys/index', to: 'surveys#index', as: 'index_survey'
-  get 'surveys/:id/destroy', to: 'surveys#destroy', as: 'destroy_survey'
-
-
+  get '/groups/:group_id/surveys/:id/destroy', to: 'surveys#destroy', as: 'destroy_survey'
 
   get '/groups/:group_id/surveys/:survey_id/:user_id/invite', to: 'surveys#invite', as: 'invite_survey'
   post '/groups/:group_id/surveys/:survey_id/:user_id/accept', to: 'surveys#answer', as: 'answer_survey'
 
-  get 'surveys/:survey_id/show', to: 'surveys#show', as: 'show_survey'
+  get '/groups/:group_id/surveys/:survey_id/show', to: 'surveys#show', as: 'show_survey'
 
 
   get '/groups/:group_id/posts/:id/destroy' , to: 'posts#destroy', as: 'destroy_post'                                                
 
 
+  put '/groups/:group_id/posts/:id/update' , to: 'posts#update', as: 'update_post'                                                
 
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -13,6 +13,7 @@ class Group < ApplicationRecord
     before_destroy :cleanup_notification
     before_destroy :remove_partecipation, if: :has_partecipation?
 
+
     scope :list_members, ->(group) {
       Partecipation.where(group_id: group)
     }
@@ -78,7 +79,13 @@ class Group < ApplicationRecord
 
 
   def is_administrator?(user)
-    user==self.user
+    if user==self.user 
+      true
+    elsif !Partecipation.find_by(group_id: self,user_id: user).nil?
+      Partecipation.find_by(group_id: self,user_id: user).necessary
+    else
+      false
+    end
   end
 
   def administrator
@@ -92,7 +99,8 @@ class Group < ApplicationRecord
         if self.accepted?(user.id)
           return true
         end
-    end 
+    end
+    return false 
   end
 
   def accepted?(user)
@@ -141,11 +149,13 @@ class Group < ApplicationRecord
   
 
   
-  validates :name, presence: true
+  validates :name, length: { minimum: 2 }
   validates :description, presence: true
   validates :date_of_start, presence: true
-  validates :date_of_end, presence: true, comparison: { greater_than: :date_of_start}
+  validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
   validates :hours, presence: true
+
+  
 
 
 

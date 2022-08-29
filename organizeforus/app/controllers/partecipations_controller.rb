@@ -1,4 +1,6 @@
 class PartecipationsController < ApplicationController
+  before_action :is_authorized? , only: [:new, :create]
+  before_action :correct_user?, only: [:new,:create,:show,:update]
   def index
   end
 
@@ -37,7 +39,7 @@ end
 
     if @id!=nil # se esiste questo utente
       if Partecipation.where(group_id: @group).where(user_id: @id.id).empty? #se non è già membro
-        notify_recipent(@g,@id) #invia notifica per accettare o meno l'invito al gruppo
+        notify_recipent(@g,@id,@role) #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
           @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, necessary: partecipation_params[:necessary])
@@ -159,8 +161,9 @@ end
     @member=User.find(params[:member_id])
     @color=params[:role_color]
     @role=params[:role]
+    @admin=params[:necessary]
     if @role != nil && @role != ""
-       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role], role_color: @color)
+       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role], role_color: @color, necessary: @admin)
        respond_to do |format|
         format.html { redirect_to show_p_url(@group), notice: "Role updated" }
         format.json { head :no_content }
@@ -213,6 +216,37 @@ end
     Partecipation.where(group_id: group.id, user_id: User.where(email: user.email).take.id ).take.role
   end
 
+=begin
+  def correct_user 
+    if current_user==
+      true
+    end
+  end
+=end
+
+def is_authorized? 
+   @group=Group.find(params[:group_id])
+   if @group.user != current_user
+    if !Partecipation.find_by(group_id:@group, user_id: current_user).nil?
+      if Partecipation.find_by(group_id:@group, user_id: current_user).necessary == false
+        redirect_to group_url(@group), notice: "Not Authorized to create Partecipation on this Group"
+      end
+    else 
+      redirect_to group_url(@group), notice: "Not Authorized to create Partecipation on this Group"
+    end
+   end
+end
+
+def correct_user? 
+  @group=Group.find(params[:group_id])
+  if @group.user != current_user
+   if Partecipation.find_by(group_id:@group, user_id: current_user).nil?
+       redirect_to root_path, notice: "Not Authorized on this Group"
+   end
+  end
+end
+
+
 
 
 private
@@ -237,8 +271,8 @@ private
     end
   end
 
-  def notify_recipent(group,user)
-    g=GroupNotification.with(group: group, user: user, creator: group.user).deliver_later(user) # creazione notifiche
+  def notify_recipent(group,user,role)
+    g=GroupNotification.with(group: group, user: user, creator: group.user,role: role).deliver_later(user) # creazione notifiche
   end
 
 

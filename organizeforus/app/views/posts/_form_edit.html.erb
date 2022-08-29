@@ -1,4 +1,4 @@
-<%= form_with url:post_url(post), method: :put, action: :update, model: post do |form| %>
+<%= form_with url:group_post_url(post.group,post), method: :put, action: :update, model: post do |form| %>
     <br>
     <% if action_name="new"%>
     <div class="row ; mb-2">

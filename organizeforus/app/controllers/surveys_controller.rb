@@ -1,4 +1,8 @@
 class SurveysController < ApplicationController
+
+  before_action :is_autorized?, only: [:create, :new, :destroy]
+  before_action :correct_user?, only: [:index, :show]
+
   def index
     @group=Group.find(params[:group_id])
     @surveys=@group.surveys
@@ -39,10 +43,10 @@ class SurveysController < ApplicationController
             notify_recipent(@survey,@group,m.user)
           }
         end
-        format.html { redirect_to index_survey_path(@group), status: :created, notice: "Survey created" }
+        format.html { redirect_to index_survey_path(@group), notice: "Survey created" }
         format.json { render :show, status: :ok, location: @group }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { redirect_to index_survey_path(@group), notice: "Survey not created, wrong attributes passed"}
         format.json { render json: @survey.errors, status: :unprocessable_entity }
       end
     end
@@ -80,11 +84,40 @@ class SurveysController < ApplicationController
     respond_to do |format|
       if @survey.destroy
         format.html { redirect_to group_url(@survey.group), notice: "Survey destroyed!"} 
+        format.json { head :no_content }
+      else
+        format.html { redirect_to group_url(@survey.group), notice: "Survey not destroyed!"} 
+        format.json { head :no_content }
       end
+
     end
   end
 
+  def is_autorized?
+    if params[:group_id].nil?
+      @survey=Survey.find(params[:id]) 
+      group=@survey.group
+      if !group.is_administrator?(current_user)
+        redirect_to group_url(@group), notice: "Not Authorized to Create Survey"
+      end
 
+    else
+      @group=Group.find(params[:group_id])
+      if !@group.is_administrator?(current_user)
+        redirect_to group_url(@group), notice: "Not Authorized to Create Survey"
+      end
+    end
+
+  end
+
+  def correct_user? 
+    @group=Group.find(params[:group_id])
+    if @group.user != current_user
+      if Partecipation.find_by(group_id:@group, user_id: current_user).nil?
+          redirect_to root_path, notice: "Not Authorized on this Group"
+      end
+    end
+ end
 
 
 

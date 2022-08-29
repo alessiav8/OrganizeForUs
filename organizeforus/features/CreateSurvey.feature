@@ -12,7 +12,7 @@ Scenario: Create survey succesfully
     And I fill in "Body" with "Survey Description"
     And I fill in "Option" with "yes"
     And I press "Save"
-    Then I should see "You are being redirected."
+    Then I should see "Survey created"
 
 
 

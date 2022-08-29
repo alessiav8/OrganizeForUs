@@ -1,7 +1,8 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [ :show, :edit ,:update ,:destroy ]
   before_action :authenticate_user!
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update]
+  before_action :only_real_admin, only:[:destroy]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
   before_action :member_or_admin, only: [:show]
@@ -69,7 +70,7 @@ class GroupsController < ApplicationController
     @group=current_user.groups.build(group_params)  
     respond_to do |format|
       if @group.work && @group.fun
-        format.html { redirect_to groups_url,status: :unprocessable_entity, notice: "Impossible to create a group that is for fun end at the same time for work!" }
+        format.html { redirect_to groups_url, notice: "Impossible to create a group that is for fun end at the same time for work!" }
         format.json { render :show, location: @group, status: :unprocessable_entity }
 
       elsif @group.save 
@@ -86,18 +87,20 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1 or /groups/1.json
   def update
     respond_to do |format|
-      if @group.update(group_params)
+      @group=Group.find(params[:id])
+      if @group.update(name: group_params[:name],description: group_params[:description])
         format.html { redirect_to group_url(@group), notice: "Group was successfully updated." }
         format.json { render :show, status: :ok, location: @group }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
+        format.html { redirect_to edit_group_path(@group), notice: "Group was not successfully updated."}
+        format.json { render :edit , status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /groups/1 or /groups/1.json
   def destroy
+    @group=Group.find(params[:id])
     if !@group.surveys.empty?
       @group.surveys.each{ |s|
         if !s.questions.empty?
@@ -119,8 +122,23 @@ class GroupsController < ApplicationController
   end
 
   def correct_user
-    @group= current_user.groups.find_by(id: params[:id])
-    redirect_to root_path, notice: "Not Authorized to Edit this Group" if @group.nil?
+    @group = current_user.groups.find_by(id: params[:id])
+      if @group.nil? 
+        if !Partecipation.find_by(group_id: params[:id], user_id: current_user.id).nil?
+          if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).necessary == false
+            redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+          end
+        else 
+          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+        end
+      end
+  end
+
+  def only_real_admin
+    @group = current_user.groups.find_by(id: params[:id])
+      if @group.nil? 
+          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+      end
   end
 
 
@@ -174,13 +192,14 @@ class GroupsController < ApplicationController
     end
      }
   end
+  def set_group
+    @group = Group.find(params[:id])
+  end
 
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_group
-      @group = Group.find(params[:id])
-    end
+
 
     # Only allow a list of trusted parameters through.
     def group_params

@@ -36,7 +36,3 @@ Scenario: Not succesfully creation
     Then I should see "error prohibited this group from being saved"
 
 
-
-
-
-

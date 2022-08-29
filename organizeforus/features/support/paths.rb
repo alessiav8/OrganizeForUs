@@ -39,6 +39,16 @@ module NavigationHelpers
     when /^Survey creation path/
       new_survey_path(Group.find(10),Group.find(10).user)
 
+    when /^Edit group page/
+      edit_group_path(Group.find(10))
+    
+    when /^the Group homepage/
+      group_path(Group.find(10))
+
+     
+    when /^the Group2 homepage/
+      group_path(Group.find(9))
+    
 
     when /^Google provider authentication/
       'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?access_type=offline&client_id=304187077726-5sschkps49r21ljqe2fc1tqhb83u09rk.apps.googleusercontent.com&prompt=consent&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fusers%2Fauth%2Fgoogle_oauth2%2Fcallback&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuser.birthday.read%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&state=71a0e94a792893420b7e5c8dd8870937648247fbfefbaf89&flowName=GeneralOAuthFlow'

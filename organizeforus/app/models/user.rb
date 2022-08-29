@@ -100,4 +100,11 @@ class User < ApplicationRecord
     end
   end
 
+  def for_display
+    {
+    email: email,
+    id: id,
+    }
+  end
+
 end

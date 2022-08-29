@@ -52,6 +52,12 @@ end
 When /^(?:|I )press "([^"]*)"$/ do |button|
   click_button(button)
 end
+When /^(?:|he )press "([^"]*)"$/ do |button|
+  click_button(button)
+end
+When /^(?:|he )follow "([^"]*)"$/ do |link|
+   click_link(link)
+end
 
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
@@ -103,6 +109,13 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
+  if page.respond_to? :should
+    page.should have_content(text)
+  else
+    assert page.has_content?(text)
+  end
+end
+Then /^(?:|he )should see "([^"]*)"$/ do |text|
   if page.respond_to? :should
     page.should have_content(text)
   else
@@ -347,4 +360,45 @@ end
 And('I press New') do 
   group=Group.find(10)
   visit new_survey_path(group,group.user)
+end
+
+And('I press Google') do
+  post user_google_oauth2_omniauth_authorize_path
+end
+
+Given('There is another user') do
+  User.create(id: 13, name: "al", surname:"v", birthday: "2000-06-07", username: "ok", email: "alex@gm.com", password: "ciaociao")
+end
+
+When('I try to logged the another user in') do
+  visit new_user_session_path
+  fill_in "Email", with: "alex@gm.com"
+  fill_in "Password", with: "ciaociao"
+  click_on "Log in"
+end
+
+
+Then /^(?:|he )should be on (.+)$/ do |page_name|
+  current_path = URI.parse(current_url).path
+  if current_path.respond_to? :should
+    current_path.should == path_to(page_name)
+  else
+    assert_equal path_to(page_name), current_path
+  end
+end
+
+And('he is a member of a group') do 
+  user=User.create(id: 45, name: "ale", surname:"v", birthday: "2000-06-06", username: "alexok", email: "al@gm.com", password: "ciaociao")
+  group=Group.create(id: 10, name: "GroupoWork", description: "Descrizione Gruppo" , work: true, fun: false, created: "t", user_id: 45, date_of_start: "2022-08-21", date_of_end: "2022-08-25", hours: 10)
+  part= Partecipation.create(group_id: group.id, user_id: 13, accepted: true, necessary: false)
+
+end 
+And('he move into the group') do 
+  visit group_url(Group.find(10))
+end
+
+Then('I press DestroyGroupWork') do
+    find()
+    Group.find(10).destroy
+    visit root_path
 end

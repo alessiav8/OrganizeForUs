@@ -104,7 +104,7 @@
                             <% if i < 3 && i <= @group.surveys.count %>
                                 <%i=i+1%>
                                 <div class="row">
-                                    <%= link_to s.title , show_survey_path(s) %>
+                                    <%= link_to s.title , show_survey_path(@group,s) %>
                                 </div>
                             <%end%>
                        <%end%>

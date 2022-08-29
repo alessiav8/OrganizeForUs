@@ -14,9 +14,7 @@
     <div class="col">
         <li> <%= member.user.email %> </li> 
     </div>
-    <div class="col" id="col_role"> 
-        Role to change: <%=member.role%> 
-    </div>
+
 
     <script type="text/javascript">
           function color_check(){
@@ -52,7 +50,7 @@
     <div class="col">
         <%= form_with url: update_role_url, model: @partecipations, method: :put do |form| %>
             <% form.label :role, style: "display: block" %>
-            <%= form.text_field :role, class:"form-control", list:'item', placeholder:"Enter Role" %>
+            <%= form.text_field :role, class:"form-control", list:'item',value: member.role %>
                 <datalist id='item'>
             <% Group.role_list(@group).each do |r| %>
                 <option data-value="0">Please choose a role</option>
@@ -63,6 +61,11 @@
                 <div class="col-1">
                 <% form.label :role_color, style: "display: block" %> 
                 <%= form.color_field :role_color, id:"color_box", class:"form-control, btn-sm, rounded-6", style:"rounded" %>
+                </div>
+
+                <div class="col-2">
+                <% form.label :necessary, style: "display: block" %> Make admin:
+                <%= form.check_box :necessary, class:"form-control,rounded-6", checked: member.necessary %>
                 </div>
           
 
