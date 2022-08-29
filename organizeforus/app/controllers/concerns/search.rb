@@ -67,6 +67,17 @@ module Search
         busiest_member
     end
 
+
+
+    def organize_for_us(group , dataI , dataF , hI , hF , duration)
+      slots = search_slots(group , dataI , dataF , hI , hF , duration)
+      merged_slots = merge_slots(slots , hI , hF , duration)
+
+    end
+
+
+
+
 #      def search_time_slot(group,TimeMax , TimeMin) 
 #     
 #       members_list = group.users
@@ -150,51 +161,57 @@ module Search
       end
     end
   slots
-  merge_slots(slots , hI , hF , duration)
    end
 
    def merge_slots(slots,  hI , hF , duration)
     res = []
     r = []
-    if slots.empty? && flag == 1
+    if slots.empty? && @flag == 1
       #Nessuno ha tempo libero
       Nil
-    elsif slots.empty? && flag == 0
+    elsif slots.empty? && @flag == 0
       #Nessuno ha eventi
       []
     end
+    slots.first.second.each do |slot| r << slot end
+
     slots.keys.each do |user|
-      slots.values_at(user).first.each do |slot| 
-      r << slot
+            slots.values_at(user).first.each do |slot| 
+            r << slot
+            end
+      while r.length() > 1
+            r = r.sort_by{|slot| slot.first}
+            aa = numerify_datetime(r.first.first.hour , r.first.first.minute)
+            bb = numerify_datetime(r.first.second.hour , r.first.second.minute)
+            cc = numerify_datetime(r.second.first.hour , r.second.first.minute)
+            dd = numerify_datetime(r.second.second.hour , r.second.second.minute)
+            
+            if(cc < bb && dd <= bb)
+              res << [r.second.first,r.second.second]
+              r.delete([r.second.first,r.second.second])
+            
+            elsif(dd>bb && cc>=bb)
+              r.delete(r.first)
+              
+            elsif(bb>cc && bb<=dd) 
+              res << [r.second.first,r.first.second]
+              r.delete([r.first.first,r.first.second])
+              
+            end
       end
-    end
-    len = r.length()
-    while len > 1
-      r = r.sort_by{|slot| slot.first}
-      aa = numerify_datetime(r.first.first.hour , r.first.first.minute)
-      bb = numerify_datetime(r.first.second.hour , r.first.second.minute)
-      cc = numerify_datetime(r.second.first.hour , r.second.first.minute)
-      dd = numerify_datetime(r.second.second.hour , r.second.second.minute)
-      if(cc < bb && dd < bb)
-        res << [r.second.first,r.second.second]
-        r.delete([r.second.first,r.second.second])
-        len-=1
-      elsif(dd>bb && cc>bb)
-        r.delete(r.first)
-        len-=1
-      elsif(bb>cc && bb<dd)
-        res << [r.second.first,r.first.second]
-        r.delete([r.first.first,r.first.second])
-        len-= 1
+      if slots.keys.last != user
+        r = []
+        res.each do |e| r << e end
+        res = [] 
       end
-     logger.debug aa 
-     logger.debug bb 
-     logger.debug cc 
-     logger.debug dd 
-    end
+  end
     res = res.uniq
+
+    
+
+
+
     res
-    byebug
     end
     
 end
