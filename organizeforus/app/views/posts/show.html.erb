@@ -30,16 +30,10 @@
         </div>
 
         <div class="container" id="info">
-            <div class="row">
-                <h1> <%= @post.title %> </h1>
-            </div>
-            <div class="row mt-2; mb-2">
-                <h4> <%= @post.body %> </h4>
-            </div>
-    
+            <h1 class="display-6"><%= @post.title %></h1>
+            <p class="lead"><%= @post.body %></p>
+        </div>
 
-
-            <font size="1" class="mt-1"> click for download </font>
             <div class="container ; mt-2; mb-2" , style="width:100%">
                 <div class="row">
                     <% @post.files.order(created_at: :desc).each do |file| %>
@@ -66,7 +60,7 @@
         <button id="new_comment_hidden" class="btn btn-secondary btn-sm"> New Comment </button>
         <br>
         <div class="container ; border border-dark ; rounded" style="width: 30%; text-align: center; display:none" id="container_comments" >
-                <%= render 'comments/form' %>
+        <%= render 'comments/form' %>
         </div></center>
         <div class="row mb-2 mt-2"></div>
 
@@ -76,11 +70,10 @@
                 <%else %>
                     <% @post.comments.order(created_at: :desc).each do |comment| %>
                         <div class="container ; border border-dark; rounded" style="width: 40%" >
-                            <div class="row"> <div class="col-2"><b> User:</b></div> <div class="col"><%=  comment.user.username %></div></div>
                             <div class="row" >  <%= comment.text%>  </div>
+                            <div class="row">Comment by:<div class="col"><%= comment.user.username %></div>
                         </div>
 
-                        <center><hr class="my" style="width:40%"> </hr></center>
                     <%end%>
 
                 <%end%>

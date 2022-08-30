@@ -38,7 +38,7 @@
     </div>
     <br>
 
-  <h1 class="display-6">Fun group</h1>
+  <h1 class="display-6"><%= @group.name %></h1>
 
     <div class="container" id="info_fun">
       <div class="row">
@@ -46,8 +46,8 @@
             <%= image_tag group_image(@group, 5000), :size => "80x80", class: "rounded-circle" %>
           </div>
           <div class="col" style="width:80%">
-            <h3><%= @group.name %></h3>
-            <p class="lead"><%= @group.description %></p>
+            <p class="display-6"><%= @group.description %></p>
+            <p class="lead">Fun group</p>
           </div>
           <div class="col"></div>
         </div>
@@ -55,78 +55,83 @@
     
     <hr class="my-4"> </hr>
   
-    <div class="container" style="width:100%">
-
-       <div class="row">
-          <div class="col" style="width:33%">
-              <h6> Designated Driver </h6>
-          </div>
-          <div class="col" style="width:33%">
-              <h6> Members </h6>           
-          </div>
-          <div class="col" style="width:33%">
-              <h6> Surveys </h6>
-          </div>
-       </div>
-
-        <div class="row">
-          <div class="col" style="width:33%">
-              <% if @group.has_designeted_driver? %>
-                      <div class="col">
-                         <%= @group.driver %>
-                      </div>
-              <%else%>
-                      <div class="col">
-                      </div>
-              <% end %> 
-          </div>
-          <div class="col" style="width:33%">
-              <%  i=0 %>
-              <% if i<3 %>
-                <% @group.partecipations.each do |member| %>
-                     <div class="row"> 
-                          <div class="col">
-                             <% if @group.accepted?(member.user.id) %> 
-                                <li style="color: <%=member.role_color%>" > 
-                                  <span> <%= member.user.email %> </span> 
-                                </li> 
-                                <% i=i+1%>
-                            <% end %>
-                          </div>
-                      </div>
-                  <%end%>
-              <% end %>
-          </div>
-          <div class="col" style="width:33%">
-              <% if !@group.surveys.empty? %>
-                  <% i = 0 %> 
-                      <% @group.surveys.active.take(3).each do |s| %>
-                            <% if i < 3 && i <= @group.surveys.count %>
-                                <%i=i+1%>
-                                <div class="row">
-                                    <%= link_to s.title , show_survey_path(@group,s) %>
-                                </div>
-                            <%end%>
-                       <%end%>
-              <%else%>
-                <div class="row">
-                    <span> No Surveys yet</span>
+  <!--INIZIO ACCORDION-->
+  <div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Members
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+            <%  i=0 %>
+            <% if i<3 %>
+              <% @group.partecipations.each do |member| %>
+                <div class="row"> 
+                  <div class="col">
+                    <% if @group.accepted?(member.user.id) %> 
+                      <li style="color: <%=member.role_color%>" > 
+                      <span> <%= member.user.email %> </span> 
+                      </li> 
+                      <% i=i+1%>
+                    <% end %>
+                  </div>
                 </div>
               <%end%>
-            </div>
-            <div class="row">
-                <div class="col" style="width:33%">
-                </div>
-                <div class="col" style="width:33%">
-                    <%= link_to "Show More",show_p_url(@group), class:"btn  btn-sm" %>
-                </div>
-                <div class="col" style="width:33%">
-                    <span style="margin-left:2%"> <%= link_to "Show More", index_survey_url(@group), class:"btn  btn-sm" %></span>
-                </div>
-            </div>
+            <% end %>
+            <span><%= link_to "Show More",show_p_url(@group), class:"btn  btn-sm" %></span>
       </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Designated driver
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+            <% if @group.has_designeted_driver? %>
+              <%= @group.driver %>
+            <%else%>
+              No designated driver choosen yet
+            <% end %> 
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+       Surveys
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+            <% if !@group.surveys.empty? %>
+              <% i = 0 %> 
+              <% @group.surveys.active.take(3).each do |s| %>
+              <% if i < 3 && i <= @group.surveys.count %>
+                <%i=i+1%>
+                <div class="row">
+                <%= link_to s.title , show_survey_path(@group,s) %>
+                </div>
+              <%end%>
+              <%end%>
+            <%else%>
+              No surveys yet
+            <%end%>
+          </br>
+          <span><%= link_to "Show More", index_survey_url(@group), class:"btn  btn-sm" %></span>
+      </div>
+    </div>
+  </div>
+</div>
+  <!--FINE ACCORDION-->
 
-    <br>
+
+
+  <br>
    
   <%= link_to "Set organization", groups_path, class:"btn btn-secondary" %>  
   

@@ -9,17 +9,10 @@
     <% if @surveys.empty? %>
         <center> 
             <div class="row mb-2" > 
-                <span style="text-align: center">No surveys yet </span>
-            </div>
-            <div class="row " style="width: 10%">
-               <%= link_to "New", new_survey_path(@group,@group.administrator), class:"btn btn btn-sm border border-dark" %>
+                <span style="text-align: center">No surveys yet</span>
             </div>
         </center> 
-    <%else %>
-    <center>
-        <div class="row mb-3" style="width: 10%">
-            <%= link_to "New", new_survey_path(@group,@group.administrator) , class:"btn btn btn-sm border border-dark" %>
-        </div>
+    <%else %>        
     </center>
         <% @surveys.where(terminated: false).each do |survey| %>
             <div class="row">
@@ -33,7 +26,6 @@
 
 <% if current_user==@group.administrator %>
     <hr class="my-4"> </hr>
-    <p class="lead">Terminated</p>
     <div class="container" id="container_not_terminated_survey">
         <% @surveys.where(terminated: true, user_id: current_user.id).each do |survey| %>
             <div class="row">
@@ -42,6 +34,10 @@
         <%end%>
     </div>
 <%end%>
+<center>
+<div class="row mb-3" style="width: 10%">
+    <%= link_to "New", new_survey_path(@group,@group.administrator) , class:"btn btn btn-sm border border-dark" %>
+</div>
 
 </body>
 
