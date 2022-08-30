@@ -1,6 +1,7 @@
 class PartecipationsController < ApplicationController
   before_action :is_authorized? , only: [:new, :create]
   before_action :correct_user?, only: [:new,:create,:show,:update]
+  before_action :check_admin, only: [:show]
   def index
   end
 
@@ -39,7 +40,9 @@ end
 
     if @id!=nil # se esiste questo utente
       if Partecipation.where(group_id: @group).where(user_id: @id.id).empty? #se non è già membro
-        notify_recipent(@g,@id,@role) #invia notifica per accettare o meno l'invito al gruppo
+        if @g.created=="t" 
+          notify_recipent(@g,@id,@role) 
+        end #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
           @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, necessary: partecipation_params[:necessary])
@@ -162,11 +165,17 @@ end
     @color=params[:role_color]
     @role=params[:role]
     @admin=params[:necessary]
+    @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id)
     if @role != nil && @role != ""
-       @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id).update(role: params[:role], role_color: @color, necessary: @admin)
+      if @role==@part.role && ( @part.necessary==true && @admin=="0")
+        @part.update(role: "No Role", role_color: @color, necessary: @admin)
+      else
+       @part.update(role: params[:role], role_color: @color, necessary: @admin)
        respond_to do |format|
         format.html { redirect_to show_p_url(@group), notice: "Role updated" }
         format.json { head :no_content }
+        
+       end
       end
     else
       respond_to do |format|
@@ -243,6 +252,15 @@ def correct_user?
    if Partecipation.find_by(group_id:@group, user_id: current_user).nil?
        redirect_to root_path, notice: "Not Authorized on this Group"
    end
+  end
+end
+
+def check_admin
+  @group=Group.find(params[:group_id])
+  @group.partecipations.each do |p|
+    if p.necessary==true
+      p.update!(role: "Admin")
+    end
   end
 end
 

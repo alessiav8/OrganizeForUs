@@ -402,3 +402,12 @@ Then('I press DestroyGroupWork') do
     Group.find(10).destroy
     visit root_path
 end
+
+Given('There is another user with an account') do
+  user=User.create(id: 13, name: "al", surname:"v", birthday: "2000-06-07", username: "user2", email: "alex@gm.com", password: "ciaociao")
+end
+
+Given('There is another user without an account') do
+  
+end
+
