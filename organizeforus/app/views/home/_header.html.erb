@@ -41,16 +41,16 @@
         <%if user_signed_in? %>
         <!-- notifiche -->
 
-            <li class="nav-item">
+            <li class="nav-item" style="display: block">
             <%=link_to "Create group", new_group_path, class:"nav-link"%>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item "  style= "display: block">
                 <%= render "layouts/notifications" %>
             </li>
 
-            <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="NavBarDropDown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            <li class="nav-item dropdown"  style: "display: block">
+                  <a class="nav-link dropdown-toggle" href="#" id="NavBarDropDown1" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
                   <%= image_tag user_avatar(current_user, 30), :size => "30x30", class: "rounded-circle" %>
                 </a>
 

@@ -22,6 +22,7 @@ class Partecipation < ApplicationRecord
       group.partecipations.where('created_at < ?', time).count
     end
 
+    
   
     
 
