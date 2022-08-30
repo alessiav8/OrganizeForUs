@@ -56,14 +56,16 @@
     <hr class="my-4"> </hr>
   
   <!--INIZIO ACCORDION-->
+  <div class="container" style="width:100%">
+
   <div class="accordion" id="accordionExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
         Members
       </button>
     </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
             <%  i=0 %>
             <% if i<3 %>
@@ -113,9 +115,8 @@
               <% @group.surveys.active.take(3).each do |s| %>
               <% if i < 3 && i <= @group.surveys.count %>
                 <%i=i+1%>
-                <div class="row">
                 <%= link_to s.title , show_survey_path(@group,s) %>
-                </div>
+                <!--QUESTO NON FUNZIONA-->
               <%end%>
               <%end%>
             <%else%>
@@ -126,6 +127,8 @@
       </div>
     </div>
   </div>
+</div>
+ 
 </div>
   <!--FINE ACCORDION-->
 
