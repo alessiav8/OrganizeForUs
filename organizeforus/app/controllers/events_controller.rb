@@ -8,7 +8,7 @@ class EventsController < ApplicationController
     def index
         @event_list =  get_all_events(current_user)
         @events = current_user.events
-        @try = search_slots(Event.first.group , '2022-08-25' , '2022-08-25' , '08:00:00' , '17:00:00' , 1)
+        @try = organize_for_us(Event.first.group , '2022-08-25' , '2022-08-26' , '08:00:00' , '17:00:00' , 1)
     end
     def event_calendar; end
 
