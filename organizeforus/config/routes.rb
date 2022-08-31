@@ -78,7 +78,7 @@ Rails.application.routes.draw do
 
   put '/groups/:group_id/posts/:id/update' , to: 'posts#update', as: 'update_post'                                                
 
-  
+  get 'calendar' => 'events#event_calendar'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
