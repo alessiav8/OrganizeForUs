@@ -103,7 +103,7 @@ module Search
           end
         end
       end 
-      #byebug
+      byebug
       ore = compute_total_hours(merged_t_slots)
       debugger.log ore
       merged_t_slots
@@ -169,7 +169,7 @@ module Search
       s_n = 0
       events.items.each do |event|
         if event.start.date_time < datetimeI
-          datetimeI = event.end.datetime
+          datetimeI = event.end.date_time
         else
             if add_time(datetimeI , duration) <= event.start.date_time
                 slots[member.id] << [datetimeI,event.start.date_time]
