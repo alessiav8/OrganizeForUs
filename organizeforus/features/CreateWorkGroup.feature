@@ -1,6 +1,10 @@
+
 Feature: User could create a group
 
-    Scenario: Create group
+    US: As a user I want to create a work group, so that I can organize
+        activities with other users.
+
+    Scenario: creating a group successfully
         Given There is a user
         When I try to logged the user in
         Then I should be on the home page

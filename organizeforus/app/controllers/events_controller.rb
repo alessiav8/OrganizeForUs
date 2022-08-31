@@ -6,17 +6,20 @@ class EventsController < ApplicationController
 
  CALENDAR_ID = 'primary'
     def index
-        @event_list =  get_all_events(current_user)
-        @events = current_user.events
-        @try = organize_for_us(Event.first.group , '2022-08-25' , '2022-08-26' , '08:00:00' , '17:00:00' , 1)
+      @group=Group.find(params[:group_id])
+      @events=@group.events
+        #@event_list =  get_all_events(current_user)
+        #@events = current_user.events
+        #@try = organize_for_us(Event.first.group , '2022-08-25' , '2022-08-26' , '08:00:00' , '17:00:00' , 1)
+        # <% @event_list.items.each do |event|%>
+         # <li><%= event.summary%> </li>
+          #<%end %>
     end
     def event_calendar; end
 
     def new
-  
-        @event=Event.new
-        
-       
+      @group=Group.find(params[:group_id])
+      @event=Event.new
     end
 
     def create

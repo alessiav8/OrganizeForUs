@@ -28,7 +28,6 @@ class GroupsTest < ApplicationSystemTestCase
     visit edit_group_url(@group)  
     fill_in "Name", with: "Updated"
     click_on "Update"
-
     assert_text "Group was successfully updated"
   end
 

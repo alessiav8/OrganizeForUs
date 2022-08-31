@@ -5,13 +5,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user=users(:one)
   end
 
-  test "should log in" do
-    get new_user_session_path
+  test "should sign up" do
+    get new_user_registration_path
     assert_response :success
     assert_difference("User.count") do
-      post user_session_url, params: { user: { name: @user.name, surname: @user.surname, birthday:@user.birthday, email: @user.email} }
+      post user_registration_path, params: { user: { name: "Esempio", surname: "Esempio cognome", birthday: @user.birthday, email: "esempio@gmail.com", username: "Username",password:"password"} }
     end
-    assert_response :success
   end
 
 

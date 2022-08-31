@@ -1,12 +1,10 @@
 require 'rails_helper'
  
-
-
 RSpec.describe Group, type: :model do
     before do 
         @user= User.create(name: "User",surname: "test", username: "user", birthday: "2001-07-07", email: "example@gm.com",password: "ciaociao")
-        @group_work=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last)
-        @group_fun=Group.create(name: "Gr",description: "sjhd",work: false,fun: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last)
+        @group_work=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last,hours: 6)
+        @group_fun=Group.create(name: "Gr",description: "sjhd",work: false,fun: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last, hours: 6)
     end
     context 'Attributes' do
         context 'name' do
@@ -55,6 +53,9 @@ RSpec.describe Group, type: :model do
               expect(@group_work).to respond_to(:hours)
              end
             it 'should be invalid without a hours attribute' do @group_work.hours = nil
+                expect(@group_work).to be_invalid
+            end
+            it 'should be invalid if the hours is bigger than possible' do @group_work.hours = 100
                 expect(@group_work).to be_invalid
             end
         end

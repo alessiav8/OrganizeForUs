@@ -103,9 +103,9 @@ module Search
           end
         end
       end 
-      byebug
+      #byebug
       ore = compute_total_hours(merged_t_slots)
-      debugger.log ore
+      #debugger.log ore
       merged_t_slots
     end
 

@@ -1,5 +1,14 @@
-<ul>
-<% @event_list.items.each do |event|%>
-<li><%= event.summary%> </li>
-<%end %>
-</ul>
+<html>
+<head></head>
+<body>
+<h3>Events List </h3>
+    <%if @events.empty? %>
+        <span> There isn't Events! </span>
+        <%= button_to "Add one", new_group_event_path(@group), method: :get%>
+    <%else%>
+        <% @events.each do |event|%>
+        <li><%= event.title%> </li>
+        <%end %>
+    <%end%>
+    </ul>
+</body>
