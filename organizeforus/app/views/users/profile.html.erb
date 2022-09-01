@@ -1,5 +1,6 @@
 <% if @user == current_user%>
-    <h1><%= full_name%></h1>
+    
+    <h1 class="display-6"><%= full_name%></h1>
     <%= image_tag user_avatar(current_user, 150), :size => "150x150", class: "rounded-circle" %>
     <p>Username: <%= @user.username%><p>
     <p>Email: <%= @user.email%><p>
