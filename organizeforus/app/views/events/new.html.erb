@@ -43,13 +43,12 @@
  
 
   <div class="field">
-    <%= form.label :members %>
-    <%= form.text_field :members %>
+        <% @group.list_accepted.each do |part| %>
+          <%= form.label :members , User.find(part.user_id).username %>
+          <%= form.check_box :members, {multiple: true}, User.find(part.user_id).email, nil%>
+          <br>
+        <%end%>
   </div>
-  
-    <%= form.text_field :user_id,type:'hidden', value:current_user.id %>
-    <%= form.text_field :group_id,type:'hidden',value:"1" %>
-
 
   <div class="actions">
     <%= form.submit "Create" %>

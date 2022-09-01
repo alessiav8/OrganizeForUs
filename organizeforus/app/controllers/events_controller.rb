@@ -1,7 +1,8 @@
 require "google/apis/calendar_v3"
 require "google/api_client/client_secrets.rb"
 class EventsController < ApplicationController
-
+before_action :authenticate_user!
+before_action :is_authorized? , only: [:destroy]
   include Search
 
  CALENDAR_ID = 'primary'
@@ -24,26 +25,34 @@ class EventsController < ApplicationController
 
     def create
       @event = Event.new(event_params)
+      @group=Group.find(event_params[:group_id])
       client = get_google_calendar_client current_user
       eevent = params[:event]
       event = get_event eevent
-    
       client.insert_event('primary', event)
       flash[:notice] = 'Event was successfully added.'
       @event.save!
-      redirect_to events_path
+      redirect_to group_events_path(@group)
+      
+    end
+
+    def is_authorized
+      @group=Group.find(params[:group_id])
+      if @group.list_accepted.where(user_id: current_user.id).empty?
+        redirect_to root_path, notice: "Not Authorized on this Group"
+      end
     end
 
 
-
     def show
+        @group=Group.find(params[:group_id])
         @event=Event.find(params[:id])
         
     end
 
     def get_event event
       
-        attendees = event[:members].split(',').map{ |t| {email: t.strip} }
+        attendees = event[:members].map{ |t| {email: t.strip} }        
         
         eevent = Google::Apis::CalendarV3::Event.new(
           summary: event[:title],
@@ -76,12 +85,33 @@ class EventsController < ApplicationController
         )
       end
 
-  
-  
+      def destroy
+        @event=Event.find(params[:id])
+        @group=Group.find(params[:group_id])
+        respond_to do |format|
+        if @event.destroy
+            format.html { redirect_to group_url(@group), notice: "Event succesfully destroy." }
+            format.json { render :show, status: :ok, location: @group }
+        else
+            format.html { redirect_to group_url(@group), notice: "Event was not successfully destroy."}
+            format.json { render :edit , status: :unprocessable_entity }
+        end
+      end
+        
+      end
+
+      def is_authorized?
+        @group=Group.find(params[:group_id])
+        @event=Event.find(params[:id])
+        if @event.user_id!=current_user
+          redirect_to group_url(@event), notice: "Not Authorized on Group"
+        end
+      end
 
     
   def event_params
     params.require(:event).permit!
+
   end
 
 end

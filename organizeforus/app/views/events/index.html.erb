@@ -7,7 +7,7 @@
         <%= button_to "Add one", new_group_event_path(@group), method: :get%>
     <%else%>
         <% @events.each do |event|%>
-        <li><%= event.title%> </li>
+        <li><%=link_to event.title, group_event_path(@group, event)%> </li>
         <%end %>
     <%end%>
     </ul>

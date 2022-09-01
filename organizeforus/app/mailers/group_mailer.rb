@@ -28,4 +28,13 @@ class GroupMailer < ApplicationMailer
     )
   end
 
+  def registration 
+    @user=params[:user]
+    @url="http://localhost:3000/user/sign_in"
+    mail(
+      to: String(@user.email),
+      subject: "Welcome into OrganizeForUs!"
+    )
+  end
+
 end

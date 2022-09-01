@@ -68,6 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.string "members"
+    t.string "pass"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"

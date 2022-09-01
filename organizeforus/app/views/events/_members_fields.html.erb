@@ -1,0 +1,14 @@
+<div class='field clearfix'>
+  <div class="row" style="width: 50%">
+
+  <% @group.list_accepted.each do |member| %>
+    <div class="col-1">
+    <%= f.check_box :user, value: member.id %> 
+    </div>
+    <div class="col">
+    <%= f.label :user, User.find(member.user_id).username %> 
+    </div>
+  <%end%>
+  </div>
+  
+</div>
