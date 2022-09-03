@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   scope :get_provider_account , -> (user_id,auth_provider_id) { Identity.where("user_id = ? and authentication_provider_id = ? ",user_id,auth_provider_id) }
 
-  after_save :send_email
+  after_create :send_email
 
   # Active Storage
   AVATAR_SIZES = {

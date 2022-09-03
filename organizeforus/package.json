@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "webpack": "^4.46.0",
+    "fullcalendar": "^5.11.3",
+    "webpack": "^5.74.0",
     "webpack-cli": "^3.3.12"
   }
 }

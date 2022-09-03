@@ -17,6 +17,7 @@ class Survey < ApplicationRecord
 
 
   validates :title, presence: true, length: { minimum: 2 }
+  validates :body, presence: true, length: { minimum: 2 }
 
   scope :active, -> { where(:terminated => false) }
 

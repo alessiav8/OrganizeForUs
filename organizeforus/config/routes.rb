@@ -11,6 +11,8 @@ Rails.application.routes.draw do
  
   resources :events
   resources :groups
+  resources :positions
+
 
   #get 'home/index'
   root 'home#index'

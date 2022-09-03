@@ -68,7 +68,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.string "members"
-    t.string "pass"
+    t.string "mode"
+    t.string "type_of_hours"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"
@@ -128,15 +129,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
   end
 
   create_table "positions", force: :cascade do |t|
-    t.string "address"
+    t.string "street"
     t.string "city"
     t.string "string"
     t.string "country"
     t.string "province"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
+    t.integer "event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_positions_on_event_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -204,6 +207,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
   add_foreign_key "comments", "users"
   add_foreign_key "events", "groups"
   add_foreign_key "events", "users"
+  add_foreign_key "positions", "events"
   add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
   add_foreign_key "questions", "surveys"

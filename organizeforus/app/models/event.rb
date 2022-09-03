@@ -2,11 +2,24 @@ class Event < ApplicationRecord
   belongs_to :group
   belongs_to :user
 
-  #h_g=self.group.houres
 
+  has_one :position, dependent: :destroy
+  accepts_nested_attributes_for :position, allow_destroy: true
+
+
+  #h_g=self.group.houres
+  has_many :notifications, as: :recipient, dependent: :destroy
+  has_noticed_notifications model_name: 'Notification'
 
   validates :title, presence: true
   validates :description, presence: true
+  validates :mode, presence: true
+  validates :type_of_hours, presence: true
+
+  validates :end_date, presence: true,comparison: { greater_than_or_equal_to: :start_date}
+  validates :start_date, presence: true
+
+
   #validates :houres, numericality: { greater_than: 0 }
   #validates :houres, numericality: {less_than: h_g}, if: :houre_on_group
 

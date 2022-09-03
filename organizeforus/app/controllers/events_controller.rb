@@ -3,6 +3,9 @@ require "google/api_client/client_secrets.rb"
 class EventsController < ApplicationController
 before_action :authenticate_user!
 before_action :is_authorized? , only: [:destroy]
+before_action :is_authenticate?, only: [:new]
+before_action :is_ok?
+before_action :is_a_member?, only:[:show]
   include Search
 
  CALENDAR_ID = 'primary'
@@ -31,9 +34,23 @@ before_action :is_authorized? , only: [:destroy]
       event = get_event eevent
       client.insert_event('primary', event)
       flash[:notice] = 'Event was successfully added.'
-      @event.save!
-      redirect_to group_events_path(@group)
-      
+      respond_to do |format|
+        if @event.save!
+          if position_params[:street]!="" && position_params[:city]!="" && position_params[:province]!="" && position_params[:country]!=""
+            @position= Position.new(position_params)
+            @position.event_id=@event.id
+            @position.save
+          end
+          @event.get_array_members.each do |member|
+            notify_recipent(@group,@event,member)
+          end
+          format.html { redirect_to group_event_path(@group,@event), notice: "Event was successfully created." }
+          format.json { render :show, status: :ok, location: @event }
+        else
+          format.html { redirect_to  groups_path, notice: "Event was not successfully updated."}
+          format.json { render :index , status: :unprocessable_entity }
+        end
+      end   
     end
 
     def is_authorized
@@ -47,6 +64,8 @@ before_action :is_authorized? , only: [:destroy]
     def show
         @group=Group.find(params[:group_id])
         @event=Event.find(params[:id])
+        mark_notification_as_read
+        @location= @event.position
         
     end
 
@@ -93,7 +112,7 @@ before_action :is_authorized? , only: [:destroy]
             format.html { redirect_to group_url(@group), notice: "Event succesfully destroy." }
             format.json { render :show, status: :ok, location: @group }
         else
-            format.html { redirect_to group_url(@group), notice: "Event was not successfully destroy."}
+            format.html { redirect_to root_path, notice: "Event was not successfully destroy."}
             format.json { render :edit , status: :unprocessable_entity }
         end
       end
@@ -103,15 +122,57 @@ before_action :is_authorized? , only: [:destroy]
       def is_authorized?
         @group=Group.find(params[:group_id])
         @event=Event.find(params[:id])
-        if @event.user_id!=current_user
-          redirect_to group_url(@event), notice: "Not Authorized on Group"
+        if @event.user_id != current_user.id
+          redirect_to root_path, notice: "Not Authorized on this Event"
         end
       end
 
-    
-  def event_params
-    params.require(:event).permit!
+      def is_a_member?
+        @event=Event.find(params[:id])
+        members=@event.get_array_members
+        if !members.include?(current_user) || @event.user!=current_user
+          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authorized on this Event "
+        end
 
-  end
+      end
+
+
+      def is_authenticate
+        if !User.last.access_token?
+          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authenticate"
+        end
+      end
+
+      def is_ok?
+        @group=Group.find(params[:group_id])
+        if @group.list_accepted.where(user_id: current_user.id).empty?
+          redirect_to root_path, notice: "Not Authorized"
+        end
+
+      end
+
+
+
+    private
+    def event_params
+      params.require(:event).permit(:title, :description, :user_id, :group_id,:start_date, :end_date, members: [])
+
+    end
+
+    def position_params
+      params.require(:position).permit!
+    end
+
+    def notify_recipent(group,event,user)
+      EventNotification.with(user: user,event: event, group: group).deliver_later(user)
+    end
+
+    def mark_notification_as_read
+      @event=Event.find(params[:id])
+      if current_user
+        notifications_to_mark_as_read= @event.notifications_as_event.where(recipient: current_user)
+        notifications_to_mark_as_read.update_all(read_at: Time.zone.now)
+      end
+    end
 
 end

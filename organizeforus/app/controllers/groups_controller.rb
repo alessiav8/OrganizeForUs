@@ -212,6 +212,9 @@ class GroupsController < ApplicationController
     end
   end
 
+  def set_organization
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

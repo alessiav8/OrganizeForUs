@@ -1,6 +1,7 @@
 class PositionsController < ApplicationController
-    static targets=[]
-    connect(){
-        console.log("places")
-    }
+
+    def index
+        
+    end
+
 end

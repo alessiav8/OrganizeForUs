@@ -42,10 +42,7 @@
         <%if user_signed_in? %>
         <!-- notifiche -->
 
-            <li class="nav-item" style="display: block">
-            <%=link_to "Create group", new_group_path, class:"nav-link"%>
-            </li>
-
+  
             <li class="nav-item "  style= "display: block">
                 <%= render "layouts/notifications" %>
             </li>
@@ -60,22 +57,10 @@
                 <li class="dropdown-item">
                   <%=link_to "My Groups", groups_path, class:"nav-link"%>
                 </li>
-
-                <li class="dropdown-item">
-                    <%=link_to "Edit Profile", edit_user_registration_path(current_user), class:"nav-link"%>
-                </li>
-
                 <li class="dropdown-item">
                     <!--non fatto-->
                      <%=link_to "Profile", profile_path, class:"nav-link"%>
                 </li>
-                
-                <li class="dropdown-item">
-                   
-                   
-                    <%=link_to "Events" , events_path , class:"nav-link"%>
-                </li>
-
                 <li class="dropdown-item">
                     <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %> </a>
                 <li>
