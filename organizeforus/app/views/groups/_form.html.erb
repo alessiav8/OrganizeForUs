@@ -10,8 +10,6 @@
     </div>
   <% end %>
 
-  
-
   <!--da vedere come fare-->
   <div class="row">
   <div class="col">
@@ -22,16 +20,13 @@
       <%= form.file_field :image, multiple: false,  size: "50x4", class:"bi bi-paperclip" %>
     </div>
   </div>
-      
     <div class="col mt-3">
     <div class="field form group">
     <% form.label :color, style: "display: block" %> Color:  <br>
       <%= form.color_field :color , class:"bi bi-paperclip" %>
       </div>
     </div>
-
 </div>
-
   
   <div class="field form group">
     </br>
@@ -53,9 +48,7 @@
       $('.btn-check').prop('checked',false);
       $(id).prop('checked',true);
       let t=document.getElementById("max_hours");
-
       t.setAttribute("style","visibility: hidden")
-
       };
 </script>
 <script type="text/javascript">
@@ -67,9 +60,6 @@
       };
 </script>
 
-
-
-
   <% if controller_name == 'groups' && action_name == 'new' %>
     <div class="form-row" >
       <label for="fun">This group is for: </label>
@@ -79,8 +69,6 @@
           
           <%= form.check_box :work,   class:"btn-check",onclick:"unCheckFun(this)"%>
           <%= form.label :work,class:"btn btn-secondary"%>
-
-          
     </div>
     <div class="form-row">
             <div class="col">
@@ -105,16 +93,12 @@
         </div>
   <%end%>
 
-
-  
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">
-  </br>
   <%= form.number_field :user_id, id: :groups_user_id, class:"form-control",value: current_user.id,type: :hidden %>
   </div>
  
   <div>
-    </br>
     <% if controller_name == 'groups' && action_name == 'new' %>
     <%= form.submit "Continue",class:'btn btn-secondary'%>
     <% else %>

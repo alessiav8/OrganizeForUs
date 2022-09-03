@@ -33,7 +33,7 @@
 <head></head>
 <body>
     <%if @events.empty? %>
-        <span> There isn't Events! </span>
+        <span> No events yet</span>
         <%= button_to "Add one", new_group_event_path(@group), method: :get%>
     <%else%>
         <% @events.each do |event|%>

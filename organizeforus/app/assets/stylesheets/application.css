@@ -11,8 +11,11 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_tree .
+ *= require homepage.css
  *= require_self
  */
+
+
 
  li span { 
     color: black; 
@@ -25,3 +28,12 @@
       width: 100%;
       /* The width is the width of the web page */
     }
+.parallax-section{
+   background-image: url(../images/background1.jpg);
+   padding: 100px;
+   height: 300px;
+   background-attachment: fixed;
+   background-position:  center;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
