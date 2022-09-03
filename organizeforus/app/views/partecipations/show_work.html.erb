@@ -43,8 +43,6 @@
 <div class="col">  </div>
 <hr class="my"> </hr>
 <br>
-
-
 </div>
 
 <% @group.partecipations.each do |member| %>
@@ -77,14 +75,14 @@
               </div>
 <div class="col">
 
-<%= link_to "Update", update_url(@group,member.user.id), class:"btn btn-secondary btn-sm" %>
+<%= link_to "Update role", update_url(@group,member.user.id), class:"btn btn-secondary btn-sm" %>
 </div>
        
 </div>
 <% end %>
 
 <% end %><br><br>
-<!-- Righe per indietro o aggiunta -->
+<!-- Righe per indietro o aggiunta 
     <div class="row">
       <div class="col-1" ,style="text-align: right">
       <%= link_to "Back", @group, class:"btn btn-secondary" %>
@@ -93,4 +91,5 @@
       <%= link_to "New Member", new_partecipations_url(@group), class:"btn btn-secondary" %>
       </div>
     </div></body>
+    -->
 </html>

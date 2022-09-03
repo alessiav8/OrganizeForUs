@@ -1,3 +1,4 @@
+<h1 class="display-6">Create new event</h1>
 <%= form_with(model: @event, local: true) do |form| %>
 
 <% if false%>
@@ -40,8 +41,8 @@
   <%= form.text_field :user_id, type:"hidden", value: current_user.id%>
   <%= form.text_field :group_id, type:"hidden", value: @group.id%>
 
- 
-
+  <br>
+  <p class="lead">Select requested participants:</p>
   <div class="field">
         <% @group.list_accepted.each do |part| %>
           <%= form.label :members , User.find(part.user_id).username %>
@@ -49,7 +50,7 @@
           <br>
         <%end%>
   </div>
-
+  <br>
   <div class="actions">
     <%= form.submit "Create" %>
   </div>
