@@ -4,6 +4,8 @@ class Group < ApplicationRecord
     has_many :partecipations, dependent: :destroy
     has_many :surveys, dependent: :destroy
     has_many :posts, dependent: :destroy
+    has_many :events, dependent: :destroy
+
     has_one_attached :image, dependent: :destroy
 
 
@@ -155,9 +157,8 @@ class Group < ApplicationRecord
   validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
   validates :hours, presence: true
 
+
   
-
-
 
 
   def is_a_work_group

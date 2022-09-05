@@ -17,14 +17,12 @@
   <div class="field form-group">
     <div class="row">
       <div class="col-sm-8">
-        <%= image_tag user_avatar(resource, 200), class: "rounded-circle", :size => "200x180" %>
+        <%= image_tag user_avatar(resource, 200), class: "rounded-circle", :size => "120x115" %>
         <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
         <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %>
       </div>
-
       <div class="field form-group">
-        <!--%= f.file_field :avatar, clas:"input form-controll"%-->
-        <%= f.file_field :avatar, hide_label: true, help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()", data: { max_file_size: 5.megabytes }, class:"input form-controll" %>
+        <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes } %>
       </div>
     </div>
   </div>

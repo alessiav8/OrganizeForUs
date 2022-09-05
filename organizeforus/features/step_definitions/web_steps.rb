@@ -88,6 +88,7 @@ When /^(?:|I )fill in the following:$/ do |fields|
   end
 end
 
+
 When /^(?:|I )select "([^"]*)" from "([^"]*)"$/ do |value, field|
   select(value, :from => field)
 end
@@ -288,6 +289,10 @@ And('I try works') do
   puts User.last.email
 end
 
+When('I follow Sign up') do 
+  visit new_user_registration_path
+end
+
 Given('There is a user') do 
   User.create(id: 45, name: "ale", surname:"v", birthday: "2000-06-06", username: "ok", email: "al@gm.com", password: "ciaociao")
 end
@@ -299,15 +304,14 @@ When('I try to logged the user in') do
   click_on "Log in"
 end
 
-When('I follow Sign up') do 
-  visit new_user_registration_path
-end
 
 And('I press Create group') do
   visit new_group_path
 end
 
-
+Given('There is another user with an account') do
+  user=User.create(id: 13, name: "al", surname:"v", birthday: "2000-06-07", username: "user2", email: "alex@gm.com", password: "ciaociao")
+end
 
 Given('the show page of a specific group') do
   group=Group.create(id: 10, name: "GroupoWork", description: "Descrizione Gruppo" , work: true, fun: false, created: "t", user_id: 45, date_of_start: "2022-08-21", date_of_end: "2022-08-25", hours: 10)
@@ -319,11 +323,9 @@ Then('I move to the Posts section') do
 end
 
 Then('I create post with title Post1 and body Description') do
-
   post=Group.find(10).posts.build(id: 12 , title: "Post1", body: "Description", user_id: 45 )
   post.save!
   visit group_post_path(Group.find(10),post)
-
 end
 
 Then('I test the function') do
@@ -332,9 +334,6 @@ Then('I test the function') do
   puts Group.last.user_id
   puts "Start"
   puts Group.last.date_of_start
-
-
-
 end
 
 Then('I create post with title Post1 and body empty') do
@@ -402,3 +401,9 @@ Then('I press DestroyGroupWork') do
     Group.find(10).destroy
     visit root_path
 end
+
+
+Given('There is another user without an account') do
+  
+end
+

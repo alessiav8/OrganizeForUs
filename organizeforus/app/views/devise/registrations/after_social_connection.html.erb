@@ -16,7 +16,7 @@
   window.location.reload();
 }</script>
 
-<h2>Completing the Sign Up</h2>
+<h1 class="display-6">Complete the sign up</h1>
 
 <%= form_for(@user, url: user_after_social_connection_path(@user)) do |f| %>
   <%=  render "devise/shared/error_messages", resource: @user  %>
@@ -25,14 +25,14 @@
   <div class="field form-group">
     <div class="row">
       <div class="col-sm-8">
-        <%= image_tag user_avatar(@user, 200), class: "rounded-circle", :size => "200x180" %>
+        <%= image_tag user_avatar(@user, 200), class: "rounded-circle", :size => "120x115" %>
+        </br>
         <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
         <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %> 
       </div>
-
       <div class="field form-group">
         <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes } %>
-  
+
         <!--% if resource.avatar.attached? && resource.valid? %-->
           <!--%= f.label :remove_image %-->
           <!--%= f.check_box :remove_image, default: 0%-->

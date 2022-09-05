@@ -2,7 +2,7 @@ require "test_helper"
 
 class GroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:one) #ha fatto il secondo gruppo
+    sign_in users(:one) 
     @group = groups(:two)
   end
 
@@ -20,7 +20,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
   test "should create group" do
     sign_in users(:one)
     assert_difference("Group.count") do
-      post groups_url, params: { group: { description: @group.description, name: @group.name, fun: @group.fun, work: @group.work, user_id: users(:one),created: @group.created } }
+      post groups_url, params: { group: { description: @group.description, name: @group.name, fun: @group.fun, work: @group.work, user_id: users(:one),hours: 10,date_of_start:"2022-07-06",date_of_end:"2022-07-10" } }
     end
     get group_url(Group.last)
     assert_response :success
@@ -38,21 +38,6 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     get group_url(@group)
     assert_redirected_to root_path
   end 
-
-  test "should get edit" do
-    get edit_group_url(@group)
-    assert_response :success
-  end
-
-  test "should update group" do
-    group = groups(:two)    
-
-    patch group_url(group), params: {group: { name: "updated" } }
-    group.reload
-    assert_equal "updated", group.name
-
-  end
-
 
   test "should destroy group" do
     group=groups(:two)

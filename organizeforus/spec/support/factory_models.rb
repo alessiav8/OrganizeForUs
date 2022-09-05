@@ -26,8 +26,18 @@ FactoryBot.define do
       title {"Survey"}
       body {"Survey Description"}
     end
+
     factory(:question) do
       title {"yes"}
+    end
+
+    factory(:event) do
+      title {"Titolo Evento"}
+      description {"Descrizione Evento"}
+      start_date {"2022-08-08"}
+      end_date {"2022-08-10"}
+      mode {"Presence"}
+      type_of_hours {"To take from to Group's hours"}
     end
 
 end

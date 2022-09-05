@@ -9,7 +9,8 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.datetime :start_date
       t.datetime :end_date
       t.string :members
-
+      t.string :mode
+      t.string :type_of_hours
 
       t.timestamps
     end

@@ -10,11 +10,11 @@ class User < ApplicationRecord
   has_many :identities, dependent: :destroy
         
   #statement che associa un user a più gruppi          
-  has_many :groups
-  has_many :partecipations
+  has_many :groups, dependent: :destroy
+  has_many :partecipations, dependent: :destroy
   has_one_attached :avatar, dependent: :purge_later
-  has_many :events
-  has_many :posts
+  has_many :events, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :answer, dependent: :destroy
@@ -27,6 +27,7 @@ class User < ApplicationRecord
 
   scope :get_provider_account , -> (user_id,auth_provider_id) { Identity.where("user_id = ? and authentication_provider_id = ? ",user_id,auth_provider_id) }
 
+  after_create :send_email
 
   # Active Storage
   AVATAR_SIZES = {
@@ -130,18 +131,20 @@ class User < ApplicationRecord
       return true
     end
   end
-
   
   def expired?
     expires_at < Time.current.to_i
   end
-
 
   def for_display
     {
     email: email,
     id: id,
     }
+  end
+
+  def send_email
+    GroupMailer.with(user: self).registration.deliver_later
   end
 
 end

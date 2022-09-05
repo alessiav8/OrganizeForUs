@@ -67,31 +67,49 @@ module Search
         busiest_member
     end
 
+      def compute_total_hours(slots)
+        t_minutes = 0
+        slots.each do |day|
+          slots.each do |slot|
+            start_to_minutes = slot.first.first.hour * 60
+            end_to_minutes = slot.first.second.hour * 60
+            t_minutes += (end_to_minutes - start_to_minutes) + (slot.first.second.minute - slot.first.first.minute)
+          end
+        end
+        hours = t_minutes / 60
+        hours.to_i 
+        minutes = t_minutes % 60
+        tt_minutes = hours.to_s+":"+minutes.to_s
+        return tt_minutes
+      end
 
 
     def organize_for_us(group , dataI , dataF , hI , hF , duration)
-      slots = search_slots(group , dataI , dataF , hI , hF , duration)
-      merged_slots = merge_slots(slots , hI , hF , duration)
-
+      t_slots = []
+      merged_t_slots = []
+      dataR = dataI 
+        while dataR <= dataF
+          #byebug
+          t_slots << search_slots(group , dataR , dataR , hI , hF , duration)
+          merged_t_slots << merge_slots(t_slots.last , hI , hF , duration)
+          dataR = add_time(dataR.to_datetime , 1440)
+          dataR = dataR.strftime("%Y-%m-%d")
+          logger.debug dataR
+      end
+      merged_t_slots.each do |day|
+        day.each do |slot|
+          if ((slot.second.hour * 60)+slot.second.minute) - ((slot.first.hour * 60)+slot.first.minute) < duration
+          day.remove(slot)
+          end
+        end
+      end 
+      #byebug
+      ore = compute_total_hours(merged_t_slots)
+      #debugger.log ore
+      merged_t_slots
     end
 
 
-
-
-#      def search_time_slot(group,TimeMax , TimeMin) 
-#     
-#       members_list = group.users
-#       n_members = members_list.length()
-#       c = 0
-#        members_list.each do |member|
-#          if member.provider = 'google_oauth2'
-#            busy = get_all_events_in_range(member, TimeMax, TimeMin)
-#            if busy.nil?
-#              c = c+1
-#            end
-#        end
-#      
-#     end
 
     def add_time(starting_time , duration)
       minutes = starting_time.minute + duration
@@ -111,6 +129,10 @@ module Search
 
    def parse_datetime(data , h)
     #"2022-08-25T14:48:00+02:00"
+    if data.class == DateTime
+      data.to_s
+    end
+    logger.debug data
     dt = data+"T"+h+"+02:00"
     dt
    end
@@ -138,17 +160,18 @@ module Search
       datetimeI = parse_datetime(dataI , hI).to_datetime
       datetimeF = parse_datetime(dataF , hF).to_datetime
       events = get_all_events_in_range(member , datetimeF , datetimeI)
-      if events.nil? 
-        continue 
+      if events.items.empty? 
+        slots[member.id] = [[datetimeI , datetimeF]]
+        next
       end
       @flag = 1
       slots[member.id] = []
       s_n = 0
       events.items.each do |event|
         if event.start.date_time < datetimeI
-          datetimeI = event.end.datetime
+          datetimeI = event.end.date_time
         else
-            if add_time(datetimeI , duration) < event.start.date_time
+            if add_time(datetimeI , duration) <= event.start.date_time
                 slots[member.id] << [datetimeI,event.start.date_time]
             #[1,0]:inizio , [1,1]:fine
             s_n += 1
@@ -156,6 +179,7 @@ module Search
           end
           datetimeI = event.end.date_time 
       end
+      
       if events.items.last.end.date_time < datetimeF && add_time(events.items.last.end.date_time , duration) < datetimeF
           slots[member.id] << [events.items.last.end.date_time,datetimeF]
       end
@@ -168,10 +192,10 @@ module Search
     r = []
     if slots.empty? && @flag == 1
       #Nessuno ha tempo libero
-      Nil
+      return nil
     elsif slots.empty? && @flag == 0
       #Nessuno ha eventi
-      []
+      return []
     end
     slots.first.second.each do |slot| r << slot end
 
@@ -206,13 +230,7 @@ module Search
       end
   end
     res = res.uniq
-
-    
-
-
-
     res
     end
-    
 end
 

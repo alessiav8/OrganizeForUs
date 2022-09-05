@@ -23,7 +23,7 @@ class SurveyNotification < Noticed::Base
   def message
     @group=Group.find(params[:group][:id])
     @survey=Survey.find(params[:survey][:id])
-    "There is a new survey in #{@group.name} please replay!"
+    "There is a new survey in #{@group.name} please reply!"
   end
   #
   def url

@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [ :show, :edit ,:update ,:destroy ]
   before_action :authenticate_user!
+  before_action :check_id, except: [:index, :new, :create]
   before_action :correct_user, only: [:edit, :update]
   before_action :only_real_admin, only:[:destroy]
   before_action :delete_incomplete, only: [:index]
@@ -9,6 +10,11 @@ class GroupsController < ApplicationController
 
 
   
+  def check_id
+    if params[:id].nil?
+      redirect_to root_path, notice: "Something goes wrong"
+    end
+  end
 
 
   #se l'user non è autenticato non può fare nulla se non le cose specificate nella index e nella show
@@ -74,6 +80,7 @@ class GroupsController < ApplicationController
         format.json { render :show, location: @group, status: :unprocessable_entity }
 
       elsif @group.save 
+        Partecipation.create(group_id: @group.id, user_id: current_user.id, accepted: true, necessary:true, role: "Admin")
         format.html { redirect_to new_partecipations_url(@group)}
         format.json { render :show, status: :created, location: @group }
          
@@ -159,6 +166,9 @@ class GroupsController < ApplicationController
         format.html { redirect_to group_url(@group), notice: "Group was successfully created." }
         format.json { head :no_content }
       end
+      sendNotification(@group)
+      #quando il gruppo viene correttamente creato invia le notifiche di partecipazione
+
     else #se ci sono errori nella modifica
       @group.destroy
       respond_to do |format|
@@ -196,6 +206,15 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
   end
 
+  def sendNotification(group)
+    Partecipation.where(group_id: @group.id).each do |partecipation| #where.not(user_id: @group.user) per non includere l'admin
+      notify_partecipation_recipent(@group, partecipation.user , partecipation.role)
+    end
+  end
+
+  def set_organization
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -222,6 +241,9 @@ class GroupsController < ApplicationController
       TerminatedSurveyNotification.with(survey: survey, group: group).deliver_later(group.user)
     end
 
+    def notify_partecipation_recipent(group,user,role)
+      GroupNotification.with(group: group, user: user, creator: group.user,role: role).deliver_later(user) # creazione notifiche
+    end
     
  
 end

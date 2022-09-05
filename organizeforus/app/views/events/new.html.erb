@@ -1,3 +1,4 @@
+<h1 class="display-6">Create new event</h1>
 <%= form_with(model: @event, local: true) do |form| %>
 
 <% if false%>
@@ -16,42 +17,89 @@
 
   <div class="field">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title ,class: 'form-control'  %>
   </div>
 
   <div class="field">
     <%= form.label :description %>
-    <%= form.text_field :description %>
+    <%= form.text_field :description, class: 'form-control'  %>
   </div>
 
-  <div class="field">
+  <div class="field mt-2">
     <%= form.label :start_date %>
-    <%= form.datetime_select :start_date %>
+    <%= form.datetime_select :start_date, class: 'form-control'  %>
   </div>
 
   
 
-  <div class="field">
+  <div class="field mt-2">
     <%= form.label :end_date %>
-    <%= form.datetime_select :end_date %>
+    <%= form.datetime_select :end_date, class: 'form-control'  %>
   </div>
 
 
-  <%= form.text_field :user_id, type:"hidden", value: 1%>
-  <%= form.text_field :group_id, type:"hidden", value: 1%>
+  <%= form.text_field :user_id, type:"hidden", value: current_user.id%>
+  <%= form.text_field :group_id, type:"hidden", value: @group.id%>
 
- 
+  <div class="row mt-2 mb-2">
+    <div class="col-4">
+        <div class="field mt-2 mb-2">
+          <%=form.label :type_of_hours %>
+          <%=form.select :type_of_hours, ["To take from to Group's hours","To add from Group's hours"], value: "To take from to Group's hours" %>
+        </div>
+    </div>
+    <div class="col-2">
+    <div class="field mt-2 mb-2">
+      <%=form.label :mode %>
+      <%=form.select :mode, ["Presence","Online"], value: "Presence" %>
+    </div>
+</div>
 
-  <div class="field">
-    <%= form.label :members %>
-    <%= form.text_field :members %>
   </div>
-  
-    <%= form.text_field :user_id,type:'hidden', value:current_user.id %>
-    <%= form.text_field :group_id,type:'hidden',value:"1" %>
 
+  <p class="lead">Select requested participants:</p>
+  <div class="field mt-1">
+        <% @group.list_accepted.each do |part| %>
+          <%= form.label :members , User.find(part.user_id).username %>
+          <%= form.check_box :members, {multiple: true}, User.find(part.user_id).email, nil%>
+          <br>
+        <%end%>
+  </div>
+
+
+  <!-- Posizione dell'evento -->
+<br>
+  <div class="container" id="position_container">
+    <div class="field">
+      <b>Position:</b>
+      <%= fields_for :position do |builder| %>
+        <%= render 'position_fields', f: builder %> 
+      <%end%>
+    </div>
+    <br>
+  </div>
+<br>
 
   <div class="actions">
     <%= form.submit "Create" %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+
+window.onload = (event )=> {
+let mode=document.getElementById("event_mode");
+  mode.addEventListener('change',setOnlineMode);
+  function setOnlineMode(){
+    position=document.getElementById("position_container");
+    if (mode.value=="Online"){
+      position.hidden=true
+    }
+  else{
+      position.hidden=false
+  }
+  }
+};
+
+
+</script>
