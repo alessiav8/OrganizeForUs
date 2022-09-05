@@ -36,7 +36,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.uid = session["devise.google_data"]["uid"]
         
             @user.access_token = session["devise.google_data"]["credentials"]["token"]
-            @user.expires_at = session["devise.google_data"]["credentials"]["expires_at"]
+            @user.expires_at = get_expiration_time(session["devise.google_data"]["credentials"]["expires_at"].seconds)
             @user.refresh_token = session["devise.google_data"]["credentials"]["refresh_token"]
 
             file = user_params[:avatar]
@@ -66,8 +66,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.provider = session["devise.github_data"]["provider"]
             #@user.uid = session["devise.github_data"]["uid"]
         
-            @user.access_token = session["devise.github_data"]["credentials"]["token"]
-            @user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
+            #@user.access_token = session["devise.github_data"]["credentials"]["token"]
+            #@user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
       
             file = user_params[:avatar]
             if (!file.nil?)
@@ -128,6 +128,11 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
         redirect_to root_path
     end
 
+    def handle_unverified_request
+        flash[:notice] = "NOPE!"
+        redirect_to root_path
+    end
+
     protected
 
     def set_cache_buster
@@ -143,5 +148,10 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
         allowed_params << :avatar if !(:avatar.nil?)
      
         params.require(:user).permit(allowed_params)
+    end
+
+    def get_expiration_time(seconds)
+        jan1970 = DateTime.rfc3339("1970-01-01T00:00:00Z")
+        jan1970 + seconds
     end
 end

@@ -1,3 +1,11 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "reload" %>
+<% end %>
+
+<%if !user_signed_in? %>
+  <% controller.redirect_to new_user_session_path %>
+<%end%>
+
 <!-- QUESTA PAGINA è PER AGGIUNGERE MEMBRI DOPO LA CREAZIONE -->
 <h1 class="display-6">Add a new member to the group</h1>
 

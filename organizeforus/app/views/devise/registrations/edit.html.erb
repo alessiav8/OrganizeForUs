@@ -1,11 +1,12 @@
 <% content_for :head do %>
   <%= javascript_import_module_tag "img_preview" %>
+  <%= javascript_import_module_tag "reload" %>
 <% end %>
 
 <% if !user_signed_in? %>
-  <% redirect_to new_user_session_path %>
+  <% controller.redirect_to new_user_session_path %>
 <% elsif current_user != resource %>
-  <% redirect_to edit_user_registration_path %>
+  <% controller.redirect_to edit_user_registration_path %>
 <% end %>
 
 

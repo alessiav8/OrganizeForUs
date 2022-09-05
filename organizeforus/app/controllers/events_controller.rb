@@ -6,6 +6,7 @@ before_action :is_authorized? , only: [:destroy]
 before_action :is_authenticate?, only: [:new]
 before_action :is_ok?
 before_action :is_a_member?, only:[:show]
+
   include Search
 
  CALENDAR_ID = 'primary'
@@ -18,6 +19,14 @@ before_action :is_a_member?, only:[:show]
         # <% @event_list.items.each do |event|%>
          # <li><%= event.summary%> </li>
           #<%end %>
+      
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # parametri dell'altra versione dell'algoritmo
+        # @event_list =  get_all_events_in_range(current_user, DateTime.strptime("28/08/2022 23:59:00 +0200", "%d/%m/%Y %H:%M:%S %Z").rfc3339, DateTime.strptime("25/08/2022 00:00:00 +0200", "%d/%m/%Y %H:%M:%S %Z").rfc3339)
+        # @events = current_user.events
+        # @try = organize_for_us(Event.first.group , '2022-08-25' , '2022-08-28' , '08:00:00' , '17:00:00' , 1)
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     end
     def event_calendar; end
 
