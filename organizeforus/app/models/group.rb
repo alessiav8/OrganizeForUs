@@ -167,6 +167,10 @@ class Group < ApplicationRecord
     end 
   end
 
+  def start_time
+    self.date_of_start ##Where 'start' is a attribute of type 'Date' accessible through MyModel's relationship
+  end
+
 
 
 

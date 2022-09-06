@@ -78,7 +78,12 @@ Rails.application.routes.draw do
   get '/groups/:group_id/posts/:id/destroy' , to: 'posts#destroy', as: 'destroy_post'                                                
 
 
-  put '/groups/:group_id/posts/:id/update' , to: 'posts#update', as: 'update_post'                                                
+  put '/groups/:group_id/posts/:id/update' , to: 'posts#update', as: 'update_post'       
+
+  post 'groups/:id/set_organization', to: 'groups#set_organization', as: 'set_organization'
+                        
+  get 'groups/:id/show_organization', to: 'groups#show_organization', as: 'show_organization'
+
 
   get 'calendar' => 'events#event_calendar'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

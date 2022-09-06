@@ -18,6 +18,7 @@ RSpec.describe "Events", type: :request do
       get "/groups/#{@group.id}/events"
       expect(response).to have_http_status(302)
     end
+   
 
   end
 

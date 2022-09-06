@@ -85,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_102856) do
     t.date "date_of_start"
     t.date "date_of_end"
     t.string "color", default: "#000000"
+    t.string "organization"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"

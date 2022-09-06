@@ -11,6 +11,7 @@ class CreateGroups < ActiveRecord::Migration[7.0]
       t.date :date_of_start
       t.date :date_of_end
       t.string :color, default: "#000000"
+      t.string :organization
       t.timestamps
     end
   end

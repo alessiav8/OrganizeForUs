@@ -1,0 +1,19 @@
+<div class="container mt-5 text-center">
+    <%= month_calendar(start_date: @group.date_of_start) do |date| %> <!-- inizia quando inizia la data del gruppo-->
+            <div class="day">
+            <% if date >= @group.date_of_start && date <= @group.date_of_end%>
+                <b><%= date.day %></b>
+                <%else%>
+                <%= date.day %>
+                <%end%>
+            </div>
+            <div class="event">
+                <% @slots.each do |slot| %>
+                    <% if (slot.first.first.day == date.day) && (slot.first.first.month == date.month)%>
+                        <div class="mt-1 mb-1"><b>Slot: </b><%= slot.first.first.hour.to_s+"-"+slot.first.second.hour.to_s%></div>
+                    <%end%>
+                <%end%>
+            </div>
+    <% end %>
+</div>
+  

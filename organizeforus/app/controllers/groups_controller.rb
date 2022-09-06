@@ -3,12 +3,12 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_id, except: [:index, :new, :create]
   before_action :correct_user, only: [:edit, :update]
-  before_action :only_real_admin, only:[:destroy]
+  before_action :only_real_admin, only:[:destroy,:set_organization]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
   before_action :member_or_admin, only: [:show]
 
-
+include Search
   
   def check_id
     if params[:id].nil?
@@ -144,7 +144,7 @@ class GroupsController < ApplicationController
   def only_real_admin
     @group = current_user.groups.find_by(id: params[:id])
       if @group.nil? 
-          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized on this Group"
       end
   end
 
@@ -213,7 +213,64 @@ class GroupsController < ApplicationController
   end
 
   def set_organization
+     @group = Group.find(params[:id])
+     @start=@group.date_of_start
+     @end_d=@group.date_of_end
+
+     if @start.month.to_i < 10
+      @ms="0"+@start.month.to_s
+     else
+      @ms=@start.month.to_s
+     end
+
+     if @end_d.month < 10
+      @me="0"+@end_d.month.to_s
+     else
+      @me=@end_d.month.to_s
+     end
+
+     @try = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , '08:00:00' , '17:00:00' , 1)
+     
+     respond_to do |format|
+      if @try==nil
+          format.html { redirect_to group_url(@group),notice: "Not possible to find an organizzation" }
+          format.json { render json: show, status: :unprocessable_entity }
+      elsif @try==[]
+        format.html { redirect_to group_url(@group),notice: "All members are free" }
+        format.json { render json: show, status: :unprocessable_entity }
+      else 
+        format.html { redirect_to show_organization_path(@group,@try),notice: "All members are free" }
+        format.json { render json: show, status: :unprocessable_entity } 
+      end 
+    end
   end
+
+  def show_organization
+    @group = Group.find(params[:id])
+    @start=@group.date_of_start
+    @end_d=@group.date_of_end
+
+    if @start.month.to_i < 10
+     @ms="0"+@start.month.to_s
+    else
+     @ms=@start.month.to_s
+    end
+
+    if @end_d.month < 10
+     @me="0"+@end_d.month.to_s
+    else
+     @me=@end_d.month.to_s
+    end
+
+   # @group.update!(organization: @try) serve fare un metodo che data stringa restituisca i vari slots
+
+    @slots = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , '08:00:00' , '17:00:00' , 1)
+  end
+
+  
+
+
+
 
 
   private

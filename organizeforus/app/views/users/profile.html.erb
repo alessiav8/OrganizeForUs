@@ -60,6 +60,28 @@
         </div>
         </center>
 
+        <% if current_user.access_token? %>
+            <div class="container mt-5 text-center">
+                <%= month_calendar do |date| %> 
+                            <div class="day">
+                                <%= date.day %>
+                            </div>
+                    <% @event_list.each do |event| %>
+                        <% if event.start.date_time.to_date == date.to_datetime %>
+                            <div class="event">
+                                    <b><%=event.summary %></b><br>
+                                    <%=event.start.date_time.hour%> : <%=event.start.date_time.minute%>
+                                    - <%=event.end.date_time.hour%>: <%=event.end.date_time.minute%><br>
+                            </div>
+                        <%end%>
+                    <% end %>
+                <% end %>
+            </div>
+        <%end%>
     <% end %>
+
+
+
+  
 
 <%end%>

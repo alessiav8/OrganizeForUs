@@ -137,7 +137,7 @@ before_action :is_a_member?, only:[:show]
       end
 
 
-      def is_authenticate
+      def is_authenticate?
         if !User.last.access_token?
           redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authenticate"
         end
