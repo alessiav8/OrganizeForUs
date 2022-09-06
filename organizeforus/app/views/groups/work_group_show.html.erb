@@ -119,9 +119,8 @@
           <li><%= event.title%> </li>
         <%end %>
       <%else%>
-        No events yet
+        <p class="lead">No events yet</p>
       <%end%>
-      </br>
       <span><%= link_to "Show More", group_events_path(@group), class:"btn btn btn-sm" %></span>
       </div>  
     </div>
@@ -143,9 +142,8 @@
                     <%end%>
                   <%end%>
               <%else%>
-              No surveys yet
+              <p class="lead">No surveys yet</p>
               <%end%>
-      </br>
       <span><%= link_to "Show More", index_survey_url(@group), class:"btn btn btn-sm" %></span>
       </div>
     </div>
@@ -192,7 +190,7 @@
 <%= link_to "Events", group_events_path(@group) %>
 
 -->
-<%= button_to "Set organization", set_organization_path(@group) %>
+<%= button_to "See slots", set_organization_path(@group) %>
 
 
   </body>

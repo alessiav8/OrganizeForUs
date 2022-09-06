@@ -38,13 +38,8 @@
 <div class="container" id="container_not_terminated_survey">
 
     <% if @surveys.empty? %>
-        <center> 
-            <div class="row mb-2" > 
-                <span style="text-align: center">No surveys yet</span>
-            </div>
-        </center> 
+        <p class="lead">No surveys yet</p>
     <%else %>        
-    </center>
         <% @surveys.where(terminated: false).each do |survey| %>
             <div class="row">
                 <li> <%= link_to survey.title , show_survey_path(@group,survey) %></li>
