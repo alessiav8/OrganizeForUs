@@ -15,13 +15,10 @@
  *= require_self
  */
 
-
-
  li span { 
     color: black; 
    } 
 
-   
    #map {
       height: 400px;
       /* The height is 400 pixels */

@@ -1,10 +1,10 @@
 .parallax-section{
     /*questa roba viene linkata in index.html.erb ma il background non appare. carica la pagina e fai ispeziona*/
-    background-image: url(../images/background1.jpg);
+    background-image: url(background1.jpg);
     padding: 100px;
     height: 300px;
     background-attachment: fixed;
-    background-position:  center;
+    /*background-position:  center;*/
     background-repeat: no-repeat;
     background-size: cover;
 }
