@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 before_action :authenticate_user!
 before_action :is_authorized? , only: [:destroy]
 before_action :is_authenticate?, only: [:new]
-before_action :is_ok?
+before_action :is_ok?, except: [:create]
 before_action :is_a_member?, only:[:show]
   include Search
 
