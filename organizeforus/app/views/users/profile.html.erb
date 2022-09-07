@@ -1,21 +1,29 @@
 <% if @user == current_user%>
-    <div class="card-group">
+  
     
-    <div class="card" style="border: none">
+    <div class="card mb-3" style="max-width: 540px;border: none">
     <h1 class="display-6"><%= full_name%></h1>
+    <div class="row g-0">
+    <div class="col-md-4">
+    <br>
     <%= image_tag user_avatar(current_user, 150), :size => "150x150", class: "rounded-circle" %>
-    <ul class="list-group list-group-flush" align="left" style="padding-left: 0%; width: 60%; text-align:left">
+    </div>
+     <div class="col-md-8">
+    <div class="card-body">
+    <ul class="list-group list-group-flush" align="left" style="padding-left: 0%;  text-align:left">
     <li class="list-group-item"><b>Username:</b> <%= @user.username%></li>
     <li class="list-group-item"><b>Email:</b> <%= @user.email%></li>
     <li class="list-group-item"><b>Birthday:</b> <%= @user.birthday%></li>
     <li class="list-group-item"><b>You have created:</b> <%=Group.where(user_id: @current_user).count%> groups</li>
     
     <li class="list-group-item"><%=link_to "My Groups", groups_path, class:"btn btn-secondary"%>
-    <%=link_to "Events" , events_path , class:"btn btn-secondary"%>
     <%=link_to "Edit Profile", edit_user_registration_path(current_user),  class:"btn btn-secondary"%></li>
     </ul>
     </div>
-    <div class="card" style="border: none">
+    </div>
+    </div>
+</div>
+
     <% if current_user.access_token? %>
             <div class="container mt-5 text-center">
             <h5>My calendar</h5>
@@ -36,9 +44,7 @@
             </div>
         <%end%>
     
-    </div>
-</div>
-
+    
     <% if user_signed_in? %>
 
         <center>
