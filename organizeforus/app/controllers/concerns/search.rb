@@ -132,7 +132,6 @@ module Search
     if data.class == DateTime
       data.to_s
     end
-    logger.debug data
     dt = data+"T"+h+"+02:00"
     dt
    end

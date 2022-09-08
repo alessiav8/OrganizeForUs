@@ -123,7 +123,7 @@ before_action :is_a_member?, only:[:show]
         @group=Group.find(params[:group_id])
         @event=Event.find(params[:id])
         if @event.user_id != current_user.id
-          redirect_to root_path, notice: "Not Authorized on this Event auto"
+          redirect_to root_path, notice: "Not Authorized on this Event "
         end
       end
 
@@ -132,7 +132,7 @@ before_action :is_a_member?, only:[:show]
         members=@event.get_array_members
         if !members.include?(current_user) && @event.user != current_user
 
-          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authorized on this Event member"
+          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authorized on this Event"
         end
 
       end
@@ -140,7 +140,7 @@ before_action :is_a_member?, only:[:show]
 
       def is_authenticate?
         if !User.last.access_token?
-          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authenticate autenticate"
+          redirect_to group_url(Group.find(params[:group_id])), notice: "Not Authenticate"
         end
       end
 
@@ -156,7 +156,7 @@ before_action :is_a_member?, only:[:show]
 
     private
     def event_params
-      params.require(:event).permit(:title, :description, :user_id, :group_id,:start_date, :end_date, members: [])
+      params.require(:event).permit(:title, :description, :user_id, :mode, :type_of_hours, :group_id,:start_date, :end_date, members: [])
 
     end
 

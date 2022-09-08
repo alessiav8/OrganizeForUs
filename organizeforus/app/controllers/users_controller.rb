@@ -7,7 +7,9 @@ class UsersController < ApplicationController
     @user= User.find(current_user.id)
 
     if current_user.access_token?
-      @event_list =  get_all_events(current_user)
+      dataInizio=parse_datetime(Date.today.to_s, '00:00').to_datetime
+      dataFine=parse_datetime( (Date.today + 30).to_s, '00:00').to_datetime
+      @event_list =  get_all_events_in_range(current_user, dataInizio, dataFine)
       @event_list=@event_list.items
     end
 
