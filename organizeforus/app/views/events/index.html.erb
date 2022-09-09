@@ -11,7 +11,7 @@
       </svg>
       </a>
       </div>
-
+<!--
         <div class="col">
           <a href="<%= new_group_event_path(@group) %>" style="color: black">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
@@ -20,7 +20,7 @@
             </svg>
           </a>
         </div>
-        
+        -->
     </div>
   </div>
   
@@ -35,9 +35,21 @@
     <%if @events.empty? %>
         <p class="lead">No events yet</p>
     <%else%>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         <% @events.each do |event|%>
-        <li><%=link_to event.title, group_event_path(@group, event)%> </li>
+       <div class="col">
+        <div class="card" style="width: 18rem;">
+         <div class="card-header"><%=event.mode%></div>
+          <div class="card-body">
+            <h5 class="card-title"><%=link_to event.title, group_event_path(@group, event), style:"color: black"%></h5>
+            <p class="card-text"><%=event.description%></p>
+          </div>
+        </div>
+        </div>
         <%end %>
+        </div>
     <%end%>
     </ul>
+    <br>
+  <%= button_to "See slots", set_organization_path(@group), class:"btn btn btn-lg" %>
 </body>
