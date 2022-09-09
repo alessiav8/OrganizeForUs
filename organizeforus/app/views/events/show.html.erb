@@ -78,8 +78,7 @@
           -->
         </div>
       </div>
-    </div>
-    <div class="col-md-5">
+
       <h1 class="display-6">Event Participants</h1>
       <ul class="list-group">
         <% @event.email_guest_list.each do |guest| %>
@@ -93,9 +92,10 @@
           </li>
         <% end %>
       </ul>
-      <br><br>
+    </div>
+    <div class="col-md-5">
       <% if @event.position!=nil %> <!-- se c'è una posizione la mostro -->
-          <h3>Position </h3> 
+          <h1 class="display-6">Position</h1>
 
           <ul> 
             <div class="map-container">
