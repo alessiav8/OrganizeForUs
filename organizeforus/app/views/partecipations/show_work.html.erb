@@ -11,7 +11,7 @@
       </svg>
       </a>
       </div>
-
+      <% if current_user==@group.administrator %> 
       <div class="col" >
       <a href="<%= new_partecipations_url(@group) %>" title="Add member" style="color: black">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
@@ -20,6 +20,7 @@
       </svg>
       </a>
       </div>
+      <% end %>
     </div>
   </div>
   

@@ -51,5 +51,10 @@
     <%end%>
     </ul>
     <br>
+
+  <% if current_user==@group.administrator %> 
+  <p class="lead">Click on the "See slots" button below to access a calendar that shows you the free time slots for you 
+  and the other participants based on your Google Calendars! You can then click on "New event" to schedule your event. </p>
   <%= button_to "See slots", set_organization_path(@group), class:"btn btn btn-lg" %>
+  <% end %>
 </body>
