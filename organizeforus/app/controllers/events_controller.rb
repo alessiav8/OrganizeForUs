@@ -32,7 +32,11 @@ before_action :is_a_member?, only:[:show]
       client = get_google_calendar_client current_user
       eevent = params[:event]
       event = get_event eevent
-      client.insert_event('primary', event)
+      if @event.mode == "Online"
+        client.insert_event('primary', event, conference_data_version: 1)
+      else
+        client.insert_event('primary', event)
+      end
       flash[:notice] = 'Event was successfully added.'
       respond_to do |format|
         if @event.save!
@@ -66,13 +70,11 @@ before_action :is_a_member?, only:[:show]
         @event=Event.find(params[:id])
         mark_notification_as_read
         @location= @event.position
-        
     end
 
     def get_event event
       
         attendees = event[:members].map{ |t| {email: t.strip} }        
-        
         eevent = Google::Apis::CalendarV3::Event.new(
           summary: event[:title],
           location: '800 Howard St., San Francisco, CA 94103',
@@ -85,6 +87,14 @@ before_action :is_a_member?, only:[:show]
             date_time: Time.new(event['end_date(1i)'],event['end_date(2i)'],event['end_date(3i)'],event['end_date(4i)'],event['end_date(5i)']).to_datetime.rfc3339,
             time_zone: "Europe/Rome"
           },
+          conference_data: Google::Apis::CalendarV3::ConferenceData.new(
+            create_request: Google::Apis::CalendarV3::CreateConferenceRequest.new(
+              request_id: "sample123",
+              conference_solution_key: Google::Apis::CalendarV3::ConferenceSolutionKey.new(
+                type: "hangoutsMeet"
+              )
+            )
+          ),
           attendees: attendees,
           reminders: {
             use_default: false,
