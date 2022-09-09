@@ -12,6 +12,7 @@
       </a>
       </div>
 
+      <% if current_user==@group.administrator %> 
         <div class="col">
           <a href="<%= new_group_event_path(@group) %>" style="color: black">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
@@ -20,6 +21,7 @@
             </svg>
           </a>
         </div>
+      <% end %>
         
     </div>
   </div>

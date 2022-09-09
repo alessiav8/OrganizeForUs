@@ -6,8 +6,11 @@ class Ability
   def initialize(user)
     return unless user.present?
     can :read, :all
+    can :manage, :all, user: user
     return unless user.admin?
     can :manage, :all
+
+
 
     # Define abilities for the user here. For example:
     #
