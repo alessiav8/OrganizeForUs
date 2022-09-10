@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def profile
     @user= User.find(current_user.id)
-    @groups=Group.all
+    @groups=Group.where(user_id: @current_user)
     if current_user.access_token?
       dataInizio=parse_datetime(Date.today.to_s, '00:00').to_datetime
       dataFine=parse_datetime( (Date.today + 30).to_s, '00:00').to_datetime
