@@ -28,26 +28,66 @@
 <% if @user == current_user%>
   
     
-    <div class="card mb-3" style="max-width: 540px;border: none">
+    <div class="container">
     <h1 class="display-6"><%= full_name%></h1>
-    <div class="row g-0">
-    <div class="col-md-4">
+    <div class="row">
+    <div class="col-4">
     <br>
     <%= image_tag user_avatar(current_user, 150), :size => "150x150", class: "rounded-circle" %>
-    </div>
-     <div class="col-md-8">
-    <div class="card-body">
-    <ul class="list-group list-group-flush" align="left" style="padding-left: 0%;  text-align:left">
-    <li class="list-group-item"><b>Username:</b> <%= @user.username%></li>
-    <li class="list-group-item"><b>Email:</b> <%= @user.email%></li>
-    <li class="list-group-item"><b>Birthday:</b> <%= @user.birthday%></li>
-    <li class="list-group-item"><b>You have created:</b> <%=Group.where(user_id: @current_user).count%> groups</li>
+   
+     
+    
+    <ul class="list-group list-group-flush" align="left" style="padding-left: 0%;  width: 16rem; text-align:left">
+    <li class="list-group-item" style="width: 16rem;"><b>Username:</b> <%= @user.username%></li>
+    <li class="list-group-item" style="width: 16rem;"><b>Email:</b> <%= @user.email%></li>
+    <li class="list-group-item" style="width: 16rem;"><b>Birthday:</b> <%= @user.birthday%></li>
+    
     <!--
     <li class="list-group-item"><%=link_to "My Groups", groups_path, class:"btn btn-secondary"%>
     </li>
     -->
     </ul>
+    
     </div>
+    <div class="col-8">
+    <p><b>You have created:</b><%=Group.where(user_id: @current_user).count%> groups</p>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+    <%var=1%>
+         <% @groups.each do |group| %>
+        <%if group.is_administrator?(current_user)%>
+       <div class="col">
+       <%if var==1%>
+        <div class="card text-white bg-primary mb-3" style="width: 10rem;">
+        <%elsif var==2%>
+        <div class="card text-white bg-danger mb-3" style="width: 10rem;">
+        <%elsif var==3%>
+        <div class="card text-dark bg-warning mb-3" style="width: 10rem;">
+        <%elsif var==4%>
+        <div class="card text-white bg-success mb-3" style="width: 10rem;">
+        <%end%>
+        <%if var!=4%>
+        <%var=var+1%>
+        <%else%>
+        <%var=1%>
+        <%end%>
+        <%if group.fun==true%>
+         <div class="card-header">Fun group</div>
+         <%else%>
+        <div class="card-header">Work group</div>
+        <%end%>
+          <div class="card-body">
+            <h5 class="card-title"><%=link_to group.name, group_url(group), style:"color: black"%></h5>
+            <p class="card-text"><%=group.description%></p>
+          </div>
+        </div>
+        </div>
+        <%end %>
+        <%end%>
+        </div>
+    </div>
+
+
+
     </div>
     </div>
 </div>
