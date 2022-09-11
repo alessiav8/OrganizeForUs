@@ -4,7 +4,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github]
+         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github linkedin]
          
 
   has_many :identities, dependent: :destroy
@@ -41,8 +41,36 @@ class User < ApplicationRecord
     url_for(self.avatar, PICTURE_SIZES.fetch(size, nil))
   end
 
+  #inizio prova linkedin 1, non funziona quindi commento
+  #questa è la prima funzione da aggiungere
+  #def self.new_with_session(params, session)
+  #  super.tap do |user|
+  #    if data = session["devise.linkedin_data"] && session["devise.linkedin_data"]["extra"]["raw_info"]
+  #      user.email = data["email"] if user.email.blank?
+  #    end
+  #  end
+  #end
+  #fine prova linkedin 1
+
+  #inizio prova linkedin 2
+  #questa è la seconda funzione da aggiungere ma è già definita, 
+  #controlla se c'è un altro utente loggato con le credenziali di linkedin 
+  #e se non c'è ne crea uno con le credenziali passategli
+  #devo capire cosa va modificato e cosa no nella versione già esistente
+  #def self.from_omniauth(auth)
+  #  where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+  #    user.email = auth.info.email
+  #    user.first_name = auth.info.first_name
+  #    user.last_name = auth.info.last_name
+  #    user.picture_url = auth.info.picture_url
+  #    user.password = Devise.friendly_token[0, 20]
+  #  end
+  #end
+  #fine prova linkedin 2
+
   def self.from_omniauth(auth)
     iden = Identity.where(provider: auth.provider, uid: auth.uid).first
+    
     if iden.nil?
       user = User.new()
       user.name = auth[:info][:first_name]
@@ -63,6 +91,7 @@ class User < ApplicationRecord
         #date = json[:birthdays][0][:date]
        # user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
         #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+      
       end
     else
       user = iden.user
