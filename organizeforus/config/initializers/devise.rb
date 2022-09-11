@@ -333,4 +333,7 @@ Devise.setup do |config|
   # }
 
   #OmniAuth.config.allowed_request_methods = [:get]
+
+  config.omniauth :linkedin, Rails.application.credentials.dig(:linkedin, :api_id), Rails.application.credentials.dig(:linkedin, :api_key)
+
 end
