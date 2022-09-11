@@ -4,8 +4,10 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github]
-         
+         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github],
+         :authentication_keys => {login: true} #the value is a boolean determining whether or not authentication should be aborted when the value is not present.
+
+  attr_writer :login     
 
   has_many :identities, dependent: :destroy
         
@@ -21,7 +23,7 @@ class User < ApplicationRecord
   #Valido la presenza e l'unicità dei campi dell'utente:
   validates :name, presence: true
   validates :surname, presence: true
-  validates :username, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true, format: {without: /^.*@.*\..+$/, :multiline => true, message: "=> You dumbass! Don't put an email in username field!"}
   validates :birthday, presence: true
   validates :avatar, blob: { content_type: %r{^image/}, size_range: 0..5.megabytes }
 
@@ -39,6 +41,19 @@ class User < ApplicationRecord
 
   def profile_avatar_url(size=nil)
     url_for(self.avatar, PICTURE_SIZES.fetch(size, nil))
+  end
+
+  def login
+    @login || self.username || self.email
+  end
+
+  def self.find_for_database_authentication(warden_conditions={})   #modify with self.find_for_authentication(warden_conditions={}) if this causes problems...
+    conditions = warden_conditions.dup
+    if (login = conditions.delete(:login))
+      where(conditions).where(["username = :value OR lower(email) = lower(:value)", { :value => login }]).first
+    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+      where(conditions.to_h).first
+    end
   end
 
   def self.from_omniauth(auth)
@@ -60,8 +75,8 @@ class User < ApplicationRecord
         user.refresh_token = auth.credentials.refresh_token
         resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
         json = JSON.parse(resp.body, symbolize_names: true)
-        #date = json[:birthdays][0][:date]
-       # user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
+        date = json[:birthdays][0][:date]
+        user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
         #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
       end
     else
