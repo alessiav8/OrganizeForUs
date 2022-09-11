@@ -1,4 +1,10 @@
 class ApplicationController < ActionController::Base
+    #inizio modifiche cancan
+    rescue_from CanCan::AccessDenied do |exception|
+        redirect_to root_path, :alert => exception.message
+    end
+    #fine modifiche di cancan
+
     protect_from_forgery with: :exception, prepend: true
 
     before_action :configure_permitted_parameters, if: :devise_controller?

@@ -20,10 +20,6 @@ class Group < ApplicationRecord
       Partecipation.where(group_id: group)
     }
 
-
-
-
-
   scope :role_list, -> (group){
     array=Array.new
     if group.has_partecipation?
@@ -79,7 +75,6 @@ class Group < ApplicationRecord
     self.created=="t"
   end
 
-
   def is_administrator?(user)
     if user==self.user 
       true
@@ -94,7 +89,6 @@ class Group < ApplicationRecord
     @administrator=User.find(self.user_id)
     return @administrator
   end
-
 
   def is_a_member?(user)
       if !Partecipation.where(group_id: self.id, user_id: User.where(email: user.email).take.id).empty?
@@ -123,7 +117,6 @@ class Group < ApplicationRecord
   end
   #end 
 
-
   def exists?(group,role)
     !Partecipation.where(group_id:group, role: role).empty?
   end 
@@ -149,17 +142,11 @@ class Group < ApplicationRecord
     end
   end
   
-
-  
   validates :name, length: { minimum: 2 }
   validates :description, presence: true
   validates :date_of_start, presence: true
   validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
   validates :hours, presence: true
-
-
-  
-
 
   def is_a_work_group
     if self.work == true
@@ -170,10 +157,6 @@ class Group < ApplicationRecord
   def start_time
     self.date_of_start ##Where 'start' is a attribute of type 'Date' accessible through MyModel's relationship
   end
-
-
-
-
 
   private 
 

@@ -10,17 +10,13 @@ class Survey < ApplicationRecord
   has_many :notifications, as: :recipient, dependent: :destroy
   has_noticed_notifications model_name: 'Notification'
 
-
-
   before_destroy :cleanup_notification
   before_destroy :delete_questions_answers
-
 
   validates :title, presence: true, length: { minimum: 2 }
   validates :body, presence: true, length: { minimum: 2 }
 
   scope :active, -> { where(:terminated => false) }
-
 
   def get_question_answers
     array=Array.new
@@ -38,7 +34,6 @@ class Survey < ApplicationRecord
   def is_terminated?
     self.terminated==true
   end
-
   
   private
   def cleanup_notification
@@ -53,8 +48,5 @@ class Survey < ApplicationRecord
       self.questions.destroy_all
     end
   end
-
-
-
 
 end

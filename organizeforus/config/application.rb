@@ -26,5 +26,12 @@ module Organizeforus
     # config.eager_load_paths << Rails.root.join("extras")
     config.active_record.verify_foreign_keys_for_fixtures = false
 
+    #PARTE PER CANARD
+    # Don't generate system test files.
+    #config.generators.system_tests = nil
+    config.generators do |g|
+    g.test_framework = false
+    end
+
   end
 end

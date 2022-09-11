@@ -43,6 +43,7 @@ include Search
   end
   # GET /groups/new
   def new
+    #authorize! :create, @group, :message => "BEWARE: you are not authorized to create new groups."
     @group = Group.new
   end
 

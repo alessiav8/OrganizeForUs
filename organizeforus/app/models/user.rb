@@ -147,6 +147,4 @@ class User < ApplicationRecord
     GroupMailer.with(user: self).registration.deliver_later
   end
 
-
 end
-

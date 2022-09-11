@@ -1,11 +1,9 @@
 class Event < ApplicationRecord
   belongs_to :group
   belongs_to :user
-
-
+  
   has_one :position, dependent: :destroy
   accepts_nested_attributes_for :position, allow_destroy: true
-
 
   #h_g=self.group.houres
   has_many :notifications, as: :recipient, dependent: :destroy

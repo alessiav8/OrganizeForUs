@@ -1,7 +1,6 @@
 class Users::AfterAuthController < Devise::OmniauthCallbacksController
     before_action :set_cache_buster
 
-
     def create
        if( session["devise.facebook_data"].present?)
             @user = User.new(user_params)
@@ -31,6 +30,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
         elsif ( session["devise.google_data"].present? )
                      
             @user = User.new(user_params)
+            #tentativo di setting di roles_mask come user per login tramite google
+            #@user.roles_mask = :user
 
             #@user.provider = session["devise.google_data"]["provider"]
             #@user.uid = session["devise.google_data"]["uid"]

@@ -27,6 +27,7 @@ before_action :is_a_member?, only:[:show]
     end
 
     def create
+      #authorize! :create, @event, :message => "BEWARE: you are not authorized to create new events."
       @event = Event.new(event_params)
       @group=Group.find(event_params[:group_id])
       client = get_google_calendar_client current_user

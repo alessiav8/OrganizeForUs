@@ -13,7 +13,5 @@ class UsersController < ApplicationController
       @event_list=@event_list.items
     end
 
-    
-
   end
 end

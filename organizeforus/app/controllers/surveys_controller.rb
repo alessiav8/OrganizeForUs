@@ -8,6 +8,7 @@ class SurveysController < ApplicationController
     @surveys=@group.surveys
   end
   def new
+    #authorize! :create, @survey, :message => "BEWARE: you are not authorized to create new surveys."
     @survey=Survey.new
     @group=Group.find(params[:group_id])
 
