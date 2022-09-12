@@ -4,7 +4,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github],
+         :omniauthable, omniauth_providers: %i[facebook google_oauth2 github linkedin],
          :authentication_keys => {login: true} #the value is a boolean determining whether or not authentication should be aborted when the value is not present.
 
   attr_writer :login     
@@ -58,6 +58,7 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     iden = Identity.where(provider: auth.provider, uid: auth.uid).first
+    
     if iden.nil?
       user = User.new()
       user.name = auth[:info][:first_name]
@@ -78,6 +79,9 @@ class User < ApplicationRecord
         date = json[:birthdays][0][:date]
         user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
         #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+      elsif (auth.provider === "linkedin")
+        user.name = auth.info.first_name
+        user.surname = auth.info.last_name
       end
     else
       user = iden.user
