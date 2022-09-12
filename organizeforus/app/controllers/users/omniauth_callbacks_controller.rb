@@ -26,11 +26,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             else
 
                 @user = User.from_omniauth(auth)
-                file = URI.open(auth.info.image)
-                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_gglimage.'+file.content_type.split("/")[1]
-                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-                @user.avatar.attach(blob)
-                session[:blob_id] = blob.id
+                if(auth.info.image)
+                    file = URI.open(auth.info.image)
+                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_gglimage.'+file.content_type.split("/")[1]
+                    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                    @user.avatar.attach(blob)
+                    session[:blob_id] = blob.id
+                end
                 @user.access_token = auth.credentials.token
                 @user.expires_at = auth.credentials.expires_at
                 @user.refresh_token = auth.credentials.refresh_token
@@ -69,11 +71,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                 session["devise.facebook_data"] = request.env["omniauth.auth"]
 
                 @user = User.from_omniauth(request.env["omniauth.auth"])
-                file = URI.open(auth.info.image)
-                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
-                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-                @user.avatar.attach(blob)
-                session[:blob_id] = blob.id    
+                if(auth.info.image)
+                    file = URI.open(auth.info.image)
+                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_fbimage.'+file.content_type.split("/")[1]
+                    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                    @user.avatar.attach(blob)
+                    session[:blob_id] = blob.id   
+                end 
                 render 'devise/registrations/after_social_connection'
             end
         end
@@ -102,13 +106,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             else
                 session['devise.github_data'] = auth
                 @user = User.from_omniauth(auth)
-                file = URI.open(auth.info.image)
-                filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghlimage.'+file.content_type.split("/")[1]
-                blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
-                @user.avatar.attach(blob)
-                session[:blob_id] = blob.id
-                @user.access_token = auth.credentials.token
-                @user.expires_at = auth.credentials.expires_at
+                if(auth.info.image)
+                    file = URI.open(auth.info.image)
+                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghlimage.'+file.content_type.split("/")[1]
+                    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                    @user.avatar.attach(blob)
+                    session[:blob_id] = blob.id
+                end
+                #@user.access_token = auth.credentials.token
+                #@user.expires_at = auth.credentials.expires_at
                 session['devise.github_data'] = auth
                 session['devise.github_data'].extra = nil;
                 render 'devise/registrations/after_social_connection'
@@ -116,18 +122,40 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         end
     end
 
-    #inzio prova linkedin
     def linkedin
-        @user = User.from_omniauth(request.env["omniauth.auth"])
-        if @user.persisted?
-          sign_in_and_redirect @user, event: :authentication
-          set_flash_message(:notice, :success, kind: "Linkedin") if is_navigational_format?
+        auth = request.env["omniauth.auth"]
+        if user_signed_in?
+            @user = User.find_by(id: current_user.id)
+            if @user.identities.where(provider: "Linkedin").empty?
+                if Identity.where(provider: auth.provider, uid: auth.uid).empty?
+                    @user.identities.create(provider: auth.provider, uid: auth.uid)
+                    flash[:notice] = "Linkedin account successfully linked!"
+                else
+                    flash[:notice] = "It seems that you have another account linked with your Linkedin account... Unlink it on the other account and then try again!"
+                end
+            end
+            redirect_to profile_path
         else
-          session["devise.linkedin_data"] = request.env["omniauth.auth"].except(:extra) # Removing extra as it can overflow some session stores
-          redirect_to new_user_registration_url
+            authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
+            if authentication.present?
+                @user = authentication.user
+                sign_in_and_redirect @user, :event => :authentication
+                flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Linkedin'
+            else
+                session["devise.linkedin_data"] = request.env["omniauth.auth"]
+                
+                @user = User.from_omniauth(request.env["omniauth.auth"])
+                if (auth.info.picture_url)
+                    file = URI.open(auth.info.picture_url)
+                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_lkimage.'+file.content_type.split("/")[1]
+                    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
+                    @user.avatar.attach(blob)
+                    session[:blob_id] = blob.id
+                end    
+                render 'devise/registrations/after_social_connection'
+            end
         end
       end
-    #fine prova linkedin
 
     def failure
         if (!user_signed_in?)

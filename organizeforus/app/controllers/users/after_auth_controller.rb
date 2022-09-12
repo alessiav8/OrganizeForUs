@@ -67,8 +67,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.provider = session["devise.github_data"]["provider"]
             #@user.uid = session["devise.github_data"]["uid"]
         
-            @user.access_token = session["devise.github_data"]["credentials"]["token"]
-            @user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
+            #@user.access_token = session["devise.github_data"]["credentials"]["token"]
+            #@user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
       
             file = user_params[:avatar]
             if (!file.nil?)
@@ -87,6 +87,33 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                 @user.identities.create(provider: session["devise.github_data"]["provider"], uid: session["devise.github_data"]["uid"])
                 sign_in_and_redirect @user, :event => :authentication
                 set_flash_message(:notice, :success, :kind => "Github") if is_navigational_format?
+            else
+                render 'devise/registrations/after_social_connection'
+            end
+        elsif ( session["devise.linkedin_data"].present? )
+ 
+            @user = User.new(user_params)
+        
+            #@user.l_access_token = session["devise.linkedin_data"]["credentials"]["token"]
+            #@user.l_expires_at = session["devise.linkedin_data"]["credentials"]["expires_at"]
+      
+            file = user_params[:avatar]
+            if (!file.nil?)
+                filename = filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_Upimage.'+(file.content_type.split("/")[1])
+                blob = ActiveStorage::Blob.create_and_upload!(io: user_params[:avatar], filename: filename, content_type: file.content_type)
+                if (blob.byte_size <= 5242880)
+                    @user.avatar.attach(blob)
+                    session[:blob_id] = blob.id
+                end
+            elsif (!@user.avatar.attached?)
+                @user.avatar.attach(ActiveStorage::Blob.find_by(id: session[:blob_id]))
+            end
+
+            if @user.save
+                session[:blob_id] = nil
+                @user.identities.create(provider: session["devise.linkedin_data"]["provider"], uid: session["devise.linkedin_data"]["uid"])
+                sign_in_and_redirect @user, :event => :authentication
+                set_flash_message(:notice, :success, :kind => "Linkedin") if is_navigational_format?
             else
                 render 'devise/registrations/after_social_connection'
             end
@@ -111,6 +138,8 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                         flash[:notice] = "Facebook account successfully unlinked!"
                     elsif params[:provider] == "github"
                         flash[:notice] = "Github account successfully unlinked!"
+                    elsif params[:provider] == "linkedin"
+                        flash[:notice] = "Linkedin account successfully unlinked!"
                     end
                     redirect_to profile_path
                 end

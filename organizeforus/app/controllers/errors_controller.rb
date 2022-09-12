@@ -7,7 +7,7 @@ class ErrorsController < ApplicationController
     end
   
     def internal_server_error
-        ApplicationMailer.with(user: current_user, time: Time.now).error_500.deliver_now
+        #ApplicationMailer.with(user: current_user, time: Time.now).error_500.deliver_now
         respond_to do |format|
             format.html { render template: 'errors/500', layout: 'layouts/application', status: 500 }
             format.all  { render nothing: true, status: 500 }
