@@ -88,7 +88,7 @@ module Search
       merged_t_slots = []
       dataR = dataI 
         while dataR <= dataF
-          #byebug
+          byebug
           t_slots << search_slots(group , dataR , dataR , hI , hF , duration)
           merged_t_slots << merge_slots(t_slots.last , hI , hF , duration)
           dataR = add_time(dataR.to_datetime , 1440)
@@ -148,33 +148,34 @@ module Search
     group.partecipations.each do |part|
       members << part.user
     end
+    events = nil
+    datetimeI = nil
+    datetimeF = nil
     @flag = 0
     members.each do |member|
 
       datetimeI = parse_datetime(dataI , hI).to_datetime
       datetimeF = parse_datetime(dataF , hF).to_datetime
       events = get_all_events_in_range(member , datetimeF , datetimeI)
-      if events.items.empty? 
-        slots[member.id] = [[datetimeI , datetimeF]]
-        next
+      if events.nil? 
+        continue 
       end
       @flag = 1
       slots[member.id] = []
       events.items.each do |event|
         if event.start.date_time < datetimeI
-          datetimeI = event.end.date_time
+          datetimeI = event.end.datetime
         else
-            if add_time(datetimeI , duration) <= event.start.date_time
+            if add_time(datetimeI , duration) < event.start.date_time
                 slots[member.id] << [datetimeI,event.start.date_time]
             end
-        end
+          end
+          datetimeI = event.end.date_time 
       end
-      
       if events.items.last.end.date_time < datetimeF && add_time(events.items.last.end.date_time , duration) < datetimeF
           slots[member.id] << [events.items.last.end.date_time,datetimeF]
       end
     end
-    byebug
    slots
    end
 

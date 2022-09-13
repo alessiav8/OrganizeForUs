@@ -1,7 +1,0 @@
-<%if user_signed_in? %>
-  <%= controller.redirect_to root_path %>
-<%end%>
-
-<% content_for :head do %>
-  <%= javascript_import_module_tag "reload" %>
-<% end %>
