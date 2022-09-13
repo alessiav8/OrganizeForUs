@@ -246,27 +246,40 @@ include Search
     end
   end
 
+  def stringfy_date(td)
+    if td.month.to_i < 10
+      ms="0"+td.month.to_s
+     else
+      ms=td.month.to_s
+    end
+     return td.year.to_s+"-"+ms+"-"+td.day.to_s 
+  end
+
+  def get_total_number_of_hour(slots)
+    if slots.nil?
+      return 0
+    end
+    return compute_total_hours(slots)
+
+  end
+  helper_method :get_total_number_of_hour
+
   def show_organization
     @group = Group.find(params[:id])
-    @start=@group.date_of_start
-    @end_d=@group.date_of_end
+    # @start=@group.date_of_start
+    # @end_d=@group.date_of_end
 
-    if @start.month.to_i < 10
-     @ms="0"+@start.month.to_s
-    else
-     @ms=@start.month.to_s
-    end
+   str_s = stringfy_date(@group.date_of_start)
+   str_e = stringfy_date(@group.date_of_end)
 
-    if @end_d.month < 10
-     @me="0"+@end_d.month.to_s
-    else
-     @me=@end_d.month.to_s
-    end
+
 
    # @group.update!(organization: @try) serve fare un metodo che data stringa restituisca i vari slots
 
-    @slots = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , '08:00:00' , '17:00:00' , 1)
+    @slots = organize_for_us(@group ,str_s, str_e , '08:00:00' , '17:00:00' , 1)
+  
   end
+  helper_method :show_organization
 
   
 
@@ -279,6 +292,38 @@ include Search
 
 
     # Only allow a list of trusted parameters through.
+
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end)
+  @group = Group.find(params[:id])
+  
+  @h_p_d = []
+  if !@group.nil?
+    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , '08:00:00' , '17:00:00' , 1)
+    if @slots.nil?
+      return [0]
+    end 
+    logger.debug @slots
+    @slots.each do |day|
+      @h_p_d << 0
+      m_diff = 0
+      day.each do |slot|
+        m_diff = ((slot.second.hour*60)+slot.second.minute) - ((slot.first.hour*60)+slot.first.minute)
+       
+        @h_p_d[-1] += m_diff
+      end
+      logger.debug @h_p_d[-1]
+      
+      diff = ((@h_p_d[-1]/60).to_i + (@h_p_d[-1]%60)*0.01).round(1)
+      @h_p_d[-1] = diff 
+    end
+  end
+  @h_p_d 
+ end
+  helper_method :__init__
+
+
+
+
     def group_params
       params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end)
     end

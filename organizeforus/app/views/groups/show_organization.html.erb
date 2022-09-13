@@ -1,16 +1,85 @@
-<div class="row" style="width:100% ;text-align:right">
-      <div class="col" style="width:80%"> 
-      </div>    
-      <div class="col" > <div class="row" style=" text-align:right">
-        <div class="col">
-          <a href="<%= group_events_path(@group) %>" style="color: black">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
-            </svg>
-          </a>
+
+ <div class="row mt-5">
+ <% @h_p_d = __init__ %>
+    <div class="col-md-7">  
+      <h1 class="display-6">Configurazione di Ricerca attuale</h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <p>
+               <b> Partecipanti: </b><br>
+                <li><%
+                @group.partecipations.each do |part|
+                user = User.find_by(id: part.user_id)
+                if !user.nil? 
+                %>
+                    <strong class="lead"><%= user.name.capitalize %> <%= user.surname.capitalize %></strong><br>
+                 <%end%>
+          </p></li>
+                <%end%>
+                <b>Data d'inizio ricerca: </b><%= @group.date_of_start %><br>
+                <b>Data di fine ricerca: </b><%= @group.date_of_end %><br>
+                <b>Numero di ore totali trovate: </b><%
+                th = 0
+                tm = 0
+                if !@h_p_d.nil?
+                @h_p_d.each do |t_s|
+                  th += t_s.to_i
+                  tm += t_s - t_s.to_i
+                end
+                if tm >= 60
+                  th += (tm/60).to_i
+                  tm = (th % 60).round(2)
+                end
+              end
+                %><%= th %>h <%= (tm*100).to_i %>m
+                <br>
+          </div>
         </div>
+         
     </div>
-</div>
+    </div>
+  <div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Slots 
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+           <% i=0%>
+           <div class="row"> 
+              <% @slots.each do |day| %>
+              
+                
+                  <div class="col">
+                    <% if !day.empty?
+                      d = day.first.first.day
+                      m = day.first.first.month
+                    %>
+                   <%end%> 
+                  <div> 
+                   <%= d.to_s+" "+Date::MONTHNAMES[m].to_s%> 
+                 <% day.each do |slot|%>  
+                 <li>
+                  <%= slot.first.strftime("%H:%M") %> to <%= slot.second.strftime("%H:%M")%> 
+                </li>
+                <% i+=1 %>
+                <%end%>
+                    
+
+                  <br>
+                  </div>
+                </div>
+              <%end%>
+            
+            
+      </div>
+    </div>
+  </div>
+
+
+
 
 
 
@@ -23,15 +92,14 @@
                 <%= date.day %>
                 <%end%>
             </div>
-            <div class="event">
-                <% @slots.each do |slot| %>
-                    <% if (slot.first.first.day == date.day) && (slot.first.first.month == date.month)%>
-                        <div class="mt-1 mb-1"><b>Slot: </b><%= slot.first.first.hour.to_s+"-"+slot.first.second.hour.to_s%></div>
-                    <%end%>
-                <%end%>
-            </div>
-    <% end %>
+            <div class="event"> 
+                    <% if date >= @group.date_of_start && date <= @group.date_of_end && !@h_p_d.nil?%>
+                      <% n_h = @h_p_d.first %>
+                                <div class="mt-1 mb-1"><b></b> <%= (n_h.to_i).to_s+"h"+" "+((n_h-(n_h.to_i))*100).to_i.to_s+"m" %> </div>
+                            <% @h_p_d.shift%>
+                        <%end%> 
+                    </div>
+              </div>
+    <% end %> 
 </div>
 
-
-<%= link_to "New event", new_group_event_path(@group), class:"btn btn btn-lg" %>
