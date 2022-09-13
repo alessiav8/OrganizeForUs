@@ -1,7 +1,9 @@
 class PartecipationsController < ApplicationController
+  before_action :authenticate_user!
   before_action :is_authorized? , only: [:new, :create]
   before_action :correct_user?, only: [:new,:create,:show,:update]
   before_action :check_admin, only: [:show]
+  
   def index
   end
 

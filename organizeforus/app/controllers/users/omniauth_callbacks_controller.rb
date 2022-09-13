@@ -9,7 +9,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "google_oauth2").empty?
                 if Identity.where(provider: auth.provider, uid: auth.uid).empty?
-                    @user.update( access_token: auth.credentials.token, expires_at: auth.credentials.expires_at, refresh_token: auth.credentials.refresh_token )
+                    @user.update( access_token: auth.credentials.token, 
+                                  expires_at: get_expiration_time(auth.credentials.expires_at.seconds), 
+                                  refresh_token: auth.credentials.refresh_token )
                     @user.identities.create(provider: auth.provider, uid: auth.uid)
                     flash[:notice] = "Google account successfully linked!"
                 else
@@ -21,6 +23,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
             if authentication.present?
                 @user = authentication.user
+                @user.update!(access_token: auth.credentials.token, expires_at: get_expiration_time(auth.credentials.expires_at.seconds), refresh_token: auth.credentials.refresh_token)
                 sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
             else
@@ -34,7 +37,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                     session[:blob_id] = blob.id
                 end
                 @user.access_token = auth.credentials.token
-                @user.expires_at = auth.credentials.expires_at
+                @user.expires_at = get_expiration_time(auth.credentials.expires_at.seconds)
                 @user.refresh_token = auth.credentials.refresh_token
                 session['devise.google_data'] = auth
                 session['devise.google_data'].extra = nil;
@@ -170,5 +173,23 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "#{1.year.ago}"
+    end
+
+    def user_params
+        allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
+        allowed_params << :avatar unless :avatar.nil?
+     
+        params.require(:user).permit(allowed_params)
+    end
+
+    def get_expiration_time(seconds)
+        jan1970 = DateTime.rfc3339("1970-01-01T00:00:00Z")
+        jan1970 + seconds
+    end
+
+    def handle_unverified_request
+        super
+        flash[:notice] = "NOPE!"
+        redirect_to root_path
     end
 end

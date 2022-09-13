@@ -1,4 +1,10 @@
-   
+    <% content_for :head do %>
+        <%= javascript_import_module_tag "reload" %>
+    <% end %>
+
+    <%if !user_signed_in? %>
+        <% controller.redirect_to new_user_session_path %>
+    <%end%>
             <%= form_with model: answer, url: answer_survey_path do |form| %>
                 <div class="container" , style="width: 50%" >
                     <%  @survey.questions.each do |question| %>

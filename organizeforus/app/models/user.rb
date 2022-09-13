@@ -72,13 +72,12 @@ class User < ApplicationRecord
         user.username = auth[:info][:nickname]
       elsif (auth.provider === "google_oauth2")
         user.access_token = auth.credentials.token
-        user.expires_at = auth.credentials.expires_at
+        user.expires_at = DateTime.rfc3339("1970-01-01T00:00:00Z") + auth.credentials.expires_at.seconds
         user.refresh_token = auth.credentials.refresh_token
-        resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+        resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+User.token!(user))
         json = JSON.parse(resp.body, symbolize_names: true)
         date = json[:birthdays][0][:date]
-        user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:month].to_s
-        #user.birthday = HTTParty.get("https://people.googleapis.com/v1/people/"+user.uid.to_s+"?personFields=birthday&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+user.access_token)
+        user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:day].to_s
       elsif (auth.provider === "linkedin")
         user.name = auth.info.first_name
         user.surname = auth.info.last_name
@@ -97,6 +96,32 @@ class User < ApplicationRecord
     end
   end
 
+  def self.token!(user)
+    token = user.access_token
+    if !user.expires_at.nil? && user.expires_at < Time.now
+      data = {
+        body: {
+          client_id:     Rails.application.credentials.dig(:google, :google_client_id),
+          client_secret: Rails.application.credentials.dig(:google, :google_client_secret),
+          refresh_token: user.refresh_token,
+          grant_type:    'refresh_token'
+        },
+        headers: {
+          'Content-Type' => 'application/x-www-form-urlencoded'
+        }
+      }
+      response = HTTParty.post('https://accounts.google.com/o/oauth2/token', data)
+      if response.code == 200
+        token = response.parsed_response['access_token']
+        date = DateTime.now + response.parsed_response['expires_in'].seconds
+        user.update!(access_token: token, expires_at: date)
+      else
+        flash[:error] = "Your token has been expired and we can't refresh it... Please login again with google."
+        redirect_to back
+      end
+    end
+    token
+  end
 
   def update_token 
     client = Google::Apis::CalendarV3::CalendarService.new
@@ -152,7 +177,7 @@ class User < ApplicationRecord
   end
   
   def expired?
-    expires_at < Time.current.to_i
+    expires_at < Time.now
   end
 
   def for_display

@@ -8,11 +8,11 @@ module Search
     
     def get_google_calendar_client current_user
       client = Google::Apis::CalendarV3::CalendarService.new
-      return unless (current_user.present? && current_user.access_token.present? && current_user.refresh_token.present?)
+      return unless (current_user.present? && User.token!(current_user).present? && current_user.refresh_token.present?)
 
       secrets = Google::APIClient::ClientSecrets.new({
         "web" => {
-          "access_token" => current_user.access_token,
+          "access_token" => User.token!(current_user),
           "refresh_token" => current_user.refresh_token,
           "client_id" => ENV["GOOGLE_CLIENT_ID"],
           "client_secret" => ENV["GOOGLE_CLIENT_SECRET"]
@@ -27,7 +27,7 @@ module Search
           current_user.update_attributes(
             access_token: client.authorization.access_token,
             refresh_token: client.authorization.refresh_token,
-            expires_at: client.authorization.expires_at.to_i
+            expires_at: getExpirationTime(client.authorization.expires_at)
           )
         end
       rescue => e
@@ -45,8 +45,8 @@ module Search
     end
 
   def get_all_events_in_range(user , tmax , tmin)
-    client = get_google_calendar_client user 
-    events_list = client.list_events('primary', time_max: tmax, time_min: tmin , single_events: true , order_by: "StartTime")
+    client = get_google_calendar_client user
+    events_list = client.list_events('primary', time_max: tmax, time_min: tmin , single_events: true , order_by: "startTime")
     events_list
   end
 
@@ -83,7 +83,6 @@ module Search
         return tt_minutes
       end
 
-
     def organize_for_us(group , dataI , dataF , hI , hF , duration)
       t_slots = []
       merged_t_slots = []
@@ -111,7 +110,7 @@ module Search
 
 
 
-    def add_time(starting_time , duration)
+    def add_time(starting_time , duration=30)
       minutes = starting_time.minute + duration
       hours = starting_time.hour
       while minutes > 59
@@ -149,10 +148,6 @@ module Search
     group.partecipations.each do |part|
       members << part.user
     end
-    events = nil
-    s_n = 0
-    datetimeI = nil
-    datetimeF = nil
     @flag = 0
     members.each do |member|
 
@@ -165,30 +160,26 @@ module Search
       end
       @flag = 1
       slots[member.id] = []
-      s_n = 0
       events.items.each do |event|
         if event.start.date_time < datetimeI
           datetimeI = event.end.date_time
         else
             if add_time(datetimeI , duration) <= event.start.date_time
                 slots[member.id] << [datetimeI,event.start.date_time]
-            #[1,0]:inizio , [1,1]:fine
-            s_n += 1
             end
-          end
-          datetimeI = event.end.date_time 
+        end
       end
       
       if events.items.last.end.date_time < datetimeF && add_time(events.items.last.end.date_time , duration) < datetimeF
           slots[member.id] << [events.items.last.end.date_time,datetimeF]
       end
     end
-  slots
+    byebug
+   slots
    end
 
    def merge_slots(slots,  hI , hF , duration)
-    res = []
-    r = []
+    byebug
     if slots.empty? && @flag == 1
       #Nessuno ha tempo libero
       return nil
@@ -196,40 +187,118 @@ module Search
       #Nessuno ha eventi
       return []
     end
-    slots.first.second.each do |slot| r << slot end
 
-    slots.keys.each do |user|
-            slots.values_at(user).first.each do |slot| 
-            r << slot
-            end
-      while r.length() > 1
-            r = r.sort_by{|slot| slot.first}
-            aa = numerify_datetime(r.first.first.hour , r.first.first.minute)
-            bb = numerify_datetime(r.first.second.hour , r.first.second.minute)
-            cc = numerify_datetime(r.second.first.hour , r.second.first.minute)
-            dd = numerify_datetime(r.second.second.hour , r.second.second.minute)
-            
-            if(cc < bb && dd <= bb)
-              res << [r.second.first,r.second.second]
-              r.delete([r.second.first,r.second.second])
-            
-            elsif(dd>bb && cc>=bb)
-              r.delete(r.first)
-              
-            elsif(bb>cc && bb<=dd) 
-              res << [r.second.first,r.first.second]
-              r.delete([r.first.first,r.first.second])
-              
-            end
+    res = slots.first.second.clone            #risultato iniziale posto agli slot liberi del primo membro
+    slots.delete(slots.keys.first)            #eliminazione del primo membro dai membri da controllare
+    while !slots.empty?
+      if slots.first.second.empty?             #Il prossimo membro da controllare è sempre impegnato
+        res = []                               #Non vi sono dunque slot coincidenti
+        return res                             #L'algoritmo termina restituendo l'insieme vuoto
       end
-      if slots.keys.last != user
-        r = []
-        res.each do |e| r << e end
-        res = [] 
+
+      tmp = []
+      while res.length > 0 && slots.first.second.length > 0       #scannerizza tutti gli slot del primo membro e li confronta con quelli nel res
+        
+        iS = slots.first.second.first.first                       #inizio del primo slot nella lista di slot del primo membro
+        fS = slots.first.second.first.second                      #fine del primo slot nella lista di slot del primo membro
+        iR = res.first.first                                      #inizio del primo slot nella lista di slot risultato
+        fR = res.first.second                                     #fine del primo slot nella lista di slot risultato
+
+        if fR <= iS                                               #se la fine del primo slot di res succede prima dell'inizio del primo slot del primo membro
+          res.delete_at(0)                                          #eliminare il primo slot di res
+        elsif fS <= iR                                            #se invece la fine del primo slot del primo membro succede prima dell'inizio del primo di res
+          slots.first.second.delete_at(0)                           #eliminare il primo slot del primo membro
+        else                                                      #altrimenti
+          if iR <= iS                                               #se l'inizio del primo slot di res succede prima o come l'inizio del primo slot del primo membro
+            if fR <= fS                                               #e se la fine del primo slot di res succede prima della fine del primo slot del primo membro
+              if add_time(iS) <= fR                                     #e se lo slot trovato e di dimensione minima a quella di default (30 in questo caso)
+                tmp << [iS.clone, fR.clone]                               #salvare lo slot trovato in tmp
+              end
+              slots.first.second.first[0] = fR.clone                    #impostare l'orario di inizio del primo slot del primo membro a quello di fine del primo slot di res
+              res.delete_at(0)                                          #eliminare il primo slot di res
+            else                                                      #altrimenti
+              if add_time(iS) <= fS                                     #e se lo slot trovato e di dimensione minima a quella di default (30 in questo caso)
+                tmp << [iS.clone, fS.clone]                               #salvare lo slot trovato in tmp
+              end
+              res.first[0] = fS.clone                                   #cambiare l'inizio del primo slot di res con la fine del primo slot del primo membro
+              slots.first.second.delete_at(0)                           #eliminare il primo slot del primo membro
+            end
+          else                                                      #altrimenti (se l'inizio del primo slot di res succede dopo l'inizio del primo slot del primo membro)
+            if fR <= fS                                               #e se la fine del primo slot di res succede prima della fine del primo slot del primo membro
+              if add_time(iR) <= fR                                     #e se lo slot trovato e di dimensione minima a quella di default (30 in questo caso)
+                tmp << [iR.clone, fR.clone]                               #salvare lo slot trovato in tmp
+              end
+              slots.first.second.first[0] = fR.clone                    #impostare l'orario di inizio del primo slot del primo membro a quello di fine del primo slot di res
+              res.delete_at(0)                                          #eliminare il primo slot di res
+            else                                                      #altrimenti
+              if add_time(iR) <= fS                                     #e se lo slot trovato e di dimensione minima a quella di default (30 in questo caso)
+                tmp << [iR.clone, fS.clone]                               #salvare lo slot trovato in tmp
+              end
+              res.first[0] = fS.clone                                   #cambiare l'inizio del primo slot di res con la fine del primo slot del primo membro
+              slots.first.second.delete_at(0)                           #eliminare il primo slot del primo membro
+            end
+          end
+        end
       end
-  end
+      
+      res = tmp                                                   #res uguale agli slot trovati nell'ultimo confronto tra res ed il primo membro della lista da controllare
+      slots.delete(slots.keys.first)                              #eliminazione del primo membro dai membri da controllare
+    end
+    byebug
     res = res.uniq
-    res
+    return res
     end
 end
 
+=begin
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def organize_for_us(group , dataI , dataF , hI , hF , duration)
+      slots = search_slots(group , dataI , dataF , hI , hF , duration)
+      merged_slots = merge_slots(slots.clone , hI , hF , duration)
+      byebug
+    end
+  
+   def search_slots(group , dataI , dataF , hI , hF , duration)
+    slots = Hash.new   
+    members = Array.new
+    group.partecipations.each do |part|
+      members << part.user
+    end
+    events = nil
+    s_n = 0
+    datetimeI = nil
+    datetimeF = nil
+    @flag = 0
+    members.each do |member|
+
+      datetimeI = parse_datetime(dataI , hI).to_datetime
+      datetimeF = parse_datetime(dataF , hF).to_datetime
+      events = get_all_events_in_range(member , datetimeF , datetimeI)
+      byebug
+      if events.nil? 
+        continue 
+      end
+      @flag = 1
+      slots[member.id] = []
+      events.items.each do |event|
+        if event.start.date_time < datetimeI
+          if datetimeI < event.end.date_time
+            datetimeI = event.end.date_time
+          end
+        else
+            if add_time(datetimeI , duration) <= event.start.date_time
+              slots[member.id] << [datetimeI,event.start.date_time]
+              datetimeI = event.end.date_time
+            end
+        end
+      end
+      if add_time(datetimeI , duration) < datetimeF
+          slots[member.id] << [datetimeI,datetimeF]
+      end
+    end
+   slots
+   end
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=end

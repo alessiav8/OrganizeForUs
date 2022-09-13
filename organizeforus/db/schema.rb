@@ -193,7 +193,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_092233) do
     t.string "username"
     t.date "birthday"
     t.string "access_token"
-    t.integer "expires_at"
+    t.datetime "expires_at"
     t.string "refresh_token"
     t.integer "roles_mask"
     t.index ["email"], name: "index_users_on_email", unique: true

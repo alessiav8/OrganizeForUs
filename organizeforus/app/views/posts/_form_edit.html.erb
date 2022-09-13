@@ -1,3 +1,11 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "reload" %>
+<% end %>
+
+<%if !user_signed_in? %>
+  <% controller.redirect_to new_user_session_path %>
+<%end%>
+
 <%= form_with url:group_post_url(post.group,post), method: :put, action: :update, model: post do |form| %>
     <br>
     <% if action_name="new"%>

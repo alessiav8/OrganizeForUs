@@ -1,5 +1,11 @@
 <html>
-<head></head>
+<head><% content_for :head do %>
+  <%= javascript_import_module_tag "reload" %>
+<% end %>
+
+<%if !user_signed_in? %>
+  <% controller.redirect_to new_user_session_path %>
+<%end%></head>
 <body>
     <div class="container">
     <% if current_user==@post.user %>

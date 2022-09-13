@@ -1,5 +1,6 @@
 class Users::AfterAuthController < Devise::OmniauthCallbacksController
     before_action :set_cache_buster
+    before_action :user_params 
 
     def create
        if( session["devise.facebook_data"].present?)
@@ -37,7 +38,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.uid = session["devise.google_data"]["uid"]
         
             @user.access_token = session["devise.google_data"]["credentials"]["token"]
-            @user.expires_at = session["devise.google_data"]["credentials"]["expires_at"]
+            @user.expires_at = get_expiration_time(session["devise.google_data"]["credentials"]["expires_at"].seconds)
             @user.refresh_token = session["devise.google_data"]["credentials"]["refresh_token"]
 
             file = user_params[:avatar]
@@ -158,6 +159,11 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
         redirect_to root_path
     end
 
+    def handle_unverified_request
+        flash[:notice] = "NOPE!"
+        redirect_to root_path
+    end
+
     protected
 
     def set_cache_buster
@@ -169,9 +175,22 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
     private
     
     def user_params
-        allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
-        allowed_params << :avatar if !(:avatar.nil?)
-     
-        params.require(:user).permit(allowed_params)
+        if user_signed_in?
+            allowed_params = [:id, :provider]
+            flash[:notice] = "You're not allowed..." unless current_user.id === eval(params[:id])
+            flash[:notice] = "Seriously... You're not allowed..." unless Identity.providers_list.include?(params[:provider])
+            redirect_to profile_path
+        elsif  params[:user].nil?
+            redirect_to root_path
+        else
+            allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
+            allowed_params << :avatar unless :avatar.nil?
+        end
+        params.require(:user).permit(allowed_params) unless params[:user].nil?
+    end
+
+    def get_expiration_time(seconds)
+        jan1970 = DateTime.rfc3339("1970-01-01T00:00:00Z")
+        jan1970 + seconds
     end
 end
