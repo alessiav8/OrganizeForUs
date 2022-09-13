@@ -35,7 +35,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         if user_signed_in?
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "google_oauth2").empty?
-                @user.update( access_token: auth.credentials.token, expires_at: get_expiration_time(auth.credentials.expires_at.seconds), refresh_token: auth.credentials.refresh_token )
+                @user.update( access_token: auth.credentials.token, 
+                              expires_at: get_expiration_time(auth.credentials.expires_at.seconds), 
+                              refresh_token: auth.credentials.refresh_token )
                 @user.identities.create(provider: auth.provider, uid: auth.uid)
                 flash[:notice] = "Google account successfully linked!"
                 redirect_to profile_path
@@ -151,6 +153,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "#{1.year.ago}"
+    end
+
+    def user_params
+        allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
+        allowed_params << :avatar unless :avatar.nil?
+     
+        params.require(:user).permit(allowed_params)
     end
 
     def get_expiration_time(seconds)

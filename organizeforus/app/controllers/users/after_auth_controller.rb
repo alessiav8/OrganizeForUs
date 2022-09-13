@@ -1,5 +1,6 @@
 class Users::AfterAuthController < Devise::OmniauthCallbacksController
     before_action :set_cache_buster
+    before_action :user_params 
 
 
     def create
@@ -144,10 +145,18 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
     private
     
     def user_params
-        allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
-        allowed_params << :avatar if !(:avatar.nil?)
-     
-        params.require(:user).permit(allowed_params)
+        if user_signed_in?
+            allowed_params = [:id, :provider]
+            flash[:notice] = "You're not allowed..." unless current_user.id === eval(params[:id])
+            flash[:notice] = "Seriously... You're not allowed..." unless Identity.providers_list.include?(params[:provider])
+            redirect_to profile_path
+        elsif  params[:user].nil?
+            redirect_to root_path
+        else
+            allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
+            allowed_params << :avatar unless :avatar.nil?
+        end
+        params.require(:user).permit(allowed_params) unless params[:user].nil?
     end
 
     def get_expiration_time(seconds)
