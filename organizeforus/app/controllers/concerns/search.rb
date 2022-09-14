@@ -88,7 +88,7 @@ module Search
       merged_t_slots = []
       dataR = dataI 
         while dataR <= dataF
-          byebug
+          #byebug
           t_slots << search_slots(group , dataR , dataR , hI , hF , duration)
           merged_t_slots << merge_slots(t_slots.last , hI , hF , duration)
           dataR = add_time(dataR.to_datetime , 1440)
@@ -180,7 +180,7 @@ module Search
    end
 
    def merge_slots(slots,  hI , hF , duration)
-    byebug
+    #byebug
     if slots.empty? && @flag == 1
       #Nessuno ha tempo libero
       return nil
@@ -245,7 +245,7 @@ module Search
       res = tmp                                                   #res uguale agli slot trovati nell'ultimo confronto tra res ed il primo membro della lista da controllare
       slots.delete(slots.keys.first)                              #eliminazione del primo membro dai membri da controllare
     end
-    byebug
+    #byebug
     res = res.uniq
     return res
     end
