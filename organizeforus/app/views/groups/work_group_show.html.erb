@@ -23,7 +23,6 @@
           </a>
         </div>
         
-        <% if current_user==@group.administrator %> 
         <div class="col">
           <a href="<%= edit_group_path(@group) %>" title="Edit" style="color: black" id="EditGroup">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -52,7 +51,7 @@
             <%= button_to 'Delete group', @group, class:"btn btn-danger btn-sm", method: :delete, id: "DestroyGroupWork" %>
           </div>
         </div>
-        <% end %>
+        
       </div>
       </div>
     </div> 

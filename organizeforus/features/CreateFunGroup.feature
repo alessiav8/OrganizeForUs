@@ -13,7 +13,7 @@ Feature: User could create a group
         And I fill in "Enddata" with "2022-10-07"
         And I fill in "Hours" with "10"
         And I press "Continue"
-        Then I should see "Starting adding members"
+        Then I should see "Start adding members"
         Given There is another user with an account
         And I fill in "EmailUser" with "alex@gm.com"
         And I press "Create Partecipation"
