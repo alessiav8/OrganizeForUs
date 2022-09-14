@@ -240,7 +240,7 @@ include Search
         format.html { redirect_to group_url(@group),notice: "All members are free" }
         format.json { render json: show, status: :unprocessable_entity }
       else 
-        format.html { redirect_to show_organization_path(@group,@try),notice: "All members are free" }
+        format.html { redirect_to show_organization_path(@group),notice: "All members are free" }
         format.json { render json: show, status: :unprocessable_entity } 
       end 
     end
@@ -293,12 +293,12 @@ include Search
 
     # Only allow a list of trusted parameters through.
 
- def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end)
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = '08:00:00' , hf = '18:00:00', dur = 1)
   @group = Group.find(params[:id])
   
   @h_p_d = []
   if !@group.nil?
-    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , '08:00:00' , '17:00:00' , 1)
+    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , hs , hf , 1)
     if @slots.nil?
       return [0]
     end 
