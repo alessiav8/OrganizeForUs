@@ -70,10 +70,10 @@ module Search
       def compute_total_hours(slots)
         t_minutes = 0
         slots.each do |day|
-          slots.each do |slot|
-            start_to_minutes = slot.first.first.hour * 60
-            end_to_minutes = slot.first.second.hour * 60
-            t_minutes += (end_to_minutes - start_to_minutes) + (slot.first.second.minute - slot.first.first.minute)
+          day.each do |slot|
+            start_to_minutes = slot.first.hour * 60
+            end_to_minutes = slot.second.hour * 60
+            t_minutes += (end_to_minutes - start_to_minutes) + (slot.second.minute - slot.first.minute)
           end
         end
         hours = t_minutes / 60
@@ -88,23 +88,21 @@ module Search
       merged_t_slots = []
       dataR = dataI 
         while dataR <= dataF
-          #byebug
+          
           t_slots << search_slots(group , dataR , dataR , hI , hF , duration)
           merged_t_slots << merge_slots(t_slots.last , hI , hF , duration)
           dataR = add_time(dataR.to_datetime , 1440)
           dataR = dataR.strftime("%Y-%m-%d")
-          logger.debug dataR
       end
       merged_t_slots.each do |day|
         day.each do |slot|
+          
+          
           if ((slot.second.hour * 60)+slot.second.minute) - ((slot.first.hour * 60)+slot.first.minute) < duration
           day.remove(slot)
           end
         end
       end 
-      #byebug
-      ore = compute_total_hours(merged_t_slots)
-      #debugger.log ore
       merged_t_slots
     end
 
@@ -157,14 +155,15 @@ module Search
       datetimeI = parse_datetime(dataI , hI).to_datetime
       datetimeF = parse_datetime(dataF , hF).to_datetime
       events = get_all_events_in_range(member , datetimeF , datetimeI)
-      if events.nil? 
-        continue 
+      if events.items.empty? 
+        slots[member.id] = [[datetimeI , datetimeF]]
+        next 
       end
       @flag = 1
       slots[member.id] = []
       events.items.each do |event|
         if event.start.date_time < datetimeI
-          datetimeI = event.end.datetime
+          datetimeI = event.end.date_time
         else
             if add_time(datetimeI , duration) < event.start.date_time
                 slots[member.id] << [datetimeI,event.start.date_time]
@@ -180,7 +179,7 @@ module Search
    end
 
    def merge_slots(slots,  hI , hF , duration)
-    #byebug
+    
     if slots.empty? && @flag == 1
       #Nessuno ha tempo libero
       return nil
@@ -245,7 +244,7 @@ module Search
       res = tmp                                                   #res uguale agli slot trovati nell'ultimo confronto tra res ed il primo membro della lista da controllare
       slots.delete(slots.keys.first)                              #eliminazione del primo membro dai membri da controllare
     end
-    #byebug
+    
     res = res.uniq
     return res
     end
