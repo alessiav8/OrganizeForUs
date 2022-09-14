@@ -166,7 +166,7 @@ before_action :is_a_member?, only:[:show]
 
        def is_ok?
      
-        @group=Group.find(params[:id])
+        @group=Group.find(params[:group_id])
          if @group.list_accepted.where(user_id: current_user.id).empty?
            redirect_to root_path, notice: "Not Authorized ok"
          end
