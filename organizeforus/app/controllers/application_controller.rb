@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     protected
 
     def configure_permitted_parameters
-        allowed_params = [:name, :surname, :username, :birthday]
+        allowed_params = [:name, :email, :surname, :username, :birthday]
         allowed_params << :avatar unless :avatar.nil?
 
         devise_parameter_sanitizer.permit(:sign_up, keys: allowed_params)  #Permette di inserire nell'user il nome, il cognome, il nickname e la data di nascita
