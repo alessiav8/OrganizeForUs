@@ -65,15 +65,19 @@
   <div class="container" id="info_fun">
       <div class="row">
           <div class="col mb-2",  style="width:80%, margin-left:10px">
+          <br>
           <h4 class="display-6"><%= @group.description %></h4>
             <h6 class="lead">Work group</h6>
           </div>
 
-         
+       
 
-          <div class="col"></div>
+          <div class="col">     
+          </div>
         </div>
     </div>
+
+    
 
   </br>
 
@@ -165,7 +169,102 @@
 </div>
   
 </div>
+
+
+
+
+
   <!-- FINE ACCORDION -->
+<br>
+<br>
+
+  <div class="row", style="align: center">
+  <div class="col", style="align: left", id="grafico1">
+   <%worked_hours=0%>
+      <%extra_hours=0%>
+      <%added_hours=0%>
+      <% @group.events.each do |event| %>
+        <%if event.type_of_hours=="To take from to Group's hours"%>
+        <%worked_hours=worked_hours+(event.end_date-event.start_date)/3600%>
+          <%if worked_hours>@group.hours%>
+          <%rimanenza=worked_hours-@group.hours%>
+           <%worked_hours=worked_hours-rimanenza%>
+           <%extra_hours=extra_hours+rimanenza%>
+          <%end%>
+        <%elsif event.type_of_hours=="To add from Group's hours" %>
+          <%added_hours=added_hours+(event.end_date-event.start_date)/3600%>
+        <%end%>   
+      <%end%>  
+      </div>
+      <%if added_hours==0 && extra_hours==0%>
+         <div class="col", style="align: right; visibility: hidden", id="grafico2">
+         </div>
+      <%else%>
+         <div class="col", style="align: right", id="grafico2">
+         </div>
+      <%end%>
+    </div>
+
+
+
+
+<br><br>
+  <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-pie.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-exports.min.js"></script>
+<script type="text/javascript">
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = [
+
+      {x: "Remaining hours", value: <%=@group.hours-worked_hours%>},
+      {x: "Worked hours", value: <%=worked_hours%>},
+    ];
+
+    // create a chart and set the data
+    var chart = anychart.pie();
+    chart.data(data);
+    // set the chart title
+    chart.title("Group's scheduled hours stats");
+
+    // set the container id
+    chart.container("grafico1");
+
+    // initiate drawing the chart
+    chart.draw();
+});
+
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = [
+
+      {x: "Added hours", value: <%=added_hours%>},
+      {x: "Extra hours", value: <%=extra_hours%>},
+    ];
+
+    // create a chart and set the data
+    var chart = anychart.pie();
+    chart.data(data);
+    // set the chart title
+    chart.title("Group's extra hours stats");
+
+    // set the container id
+    chart.container("grafico2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
+
+     </script>    
+
+
+
+
+
+
+
 
   <br>
 
