@@ -316,7 +316,7 @@ Devise.setup do |config|
 
   OmniAuth.config.allowed_request_methods = [:get]
 
-  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'], {
+  config.omniauth :google_oauth2, Rails.application.credentials.dig(:google, :google_client_id), Rails.application.credentials.dig(:google, :google_client_secret), {
     access_type: "offline",
     prompt: "consent",
     select_account: true,
