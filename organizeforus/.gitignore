@@ -33,7 +33,7 @@
 
 # Ignore master key for decrypting credentials and more.
 
-.env
+/env
 /public/packs
 /public/packs-test
 /node_modules
