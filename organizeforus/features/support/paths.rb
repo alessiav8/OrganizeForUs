@@ -48,6 +48,9 @@ module NavigationHelpers
      
     when /^the Group2 homepage/
       group_path(Group.find(9))
+
+
+    
     
 
     when /^Google provider authentication/

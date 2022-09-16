@@ -3,10 +3,12 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_id, except: [:index, :new, :create]
   before_action :correct_user, only: [:edit, :update]
-  before_action :only_real_admin, only:[:destroy,:set_organization]
+  before_action :only_real_admin, only:[:destroy,:set_organization,:set_github_repo]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
   before_action :member_or_admin, only: [:show]
+
+  before_action :user_google, only: [:set_organization]
 
 include Search
   
@@ -22,7 +24,6 @@ include Search
   # GET /groups or /groups.json
   def index
     @groups = Group.all
-
   end
 
 
@@ -179,6 +180,9 @@ include Search
     end 
   end
 
+  def set_group
+    @group = Group.find(params[:id])
+  end
 
   def delete_incomplete
     Group.where(created: "f",user_id: current_user.id).destroy_all
@@ -203,13 +207,17 @@ include Search
     end
      }
   end
-  def set_group
-    @group = Group.find(params[:id])
-  end
+
 
   def sendNotification(group)
     Partecipation.where(group_id: @group.id).each do |partecipation| #where.not(user_id: @group.user) per non includere l'admin
       notify_partecipation_recipent(@group, partecipation.user , partecipation.role)
+    end
+  end
+
+  def user_google
+    if current_user.access_token.nil?
+      redirect_to root_path, notice: "You can't see slots if you are not a Google user"
     end
   end
 
@@ -255,6 +263,66 @@ include Search
      return td.year.to_s+"-"+ms+"-"+td.day.to_s 
   end
 
+
+  def set_github_repo
+    @group=Group.find(params[:id])
+
+      url = URI("https://api.github.com/user/repos")
+      
+      https = Net::HTTP.new(url.host, url.port)
+      https.use_ssl = true
+      
+      request = Net::HTTP::Post.new(url)
+      request["Authorization"] = "Bearer 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"
+      request["Content-Type"] = "text/plain"
+
+    if !@group.user.gh_username.nil? #se l'utente si è autenticato con github
+      request.body = "{\n    \"name\": \"#{@group.name}\",\n    \"private\" : \"true\"\n}"
+      response = https.request(request)
+      resp=JSON.parse(response.read_body)
+      respond_to do |format|
+          if !resp.values_at("id").first.nil? #se il gruppo viene correttamente creato inserirsco link nel gruppo
+            @group.update!(git_repository: "https://github.com/repos/#{@group.user.gh_username}/#{@group.name}")
+              format.html { redirect_to group_url(@group),notice: "GitHub private repository created" }
+              format.json { render json: show, status: :unprocessable_entity }
+              #invio invito
+            if @group.user.gh_username!="organizeforus"
+              url2 = URI("https://api.github.com/repos/organizeforus/#{@group.name}/transfer")
+              https2 = Net::HTTP.new(url2.host, url2.port)
+              https2.use_ssl = true
+              request2 = Net::HTTP::Post.new(url2)
+              request2["Authorization"] = "Bearer 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"
+              request2["Content-Type"] = "text/plain"
+              request2.body = "{\n    \"new_owner\": \"#{@group.user.gh_username}\"\n}"
+              response2 = https.request(request2)
+              puts response2.read_body
+            end
+            byebug
+          else
+            format.html { redirect_to group_url(@group),notice: "Something goes wrong" }
+            format.json { render json: show, status: :unprocessable_entity }
+            byebug
+          end
+        end
+      else #utente non autenticato con github
+        request.body = "{\n    \"name\": \"#{@group.name}\",\n    \"private\" : \"false\"\n}"
+        response = https.request(request)
+        resp=JSON.parse(response.read_body)
+        respond_to do |format|
+            if !resp.values_at("id").first.nil? #se il gruppo viene correttamente creato inserirsco link nel gruppo
+              @group.update!(git_repository: "https://github.com/repos/organizeforus/#{@group.name}")
+                format.html { redirect_to group_url(@group),notice: "GitHub public repository created" }
+                format.json { render json: show, status: :unprocessable_entity }
+            else
+              format.html { redirect_to group_url(@group),notice: "Something goes wrong" }
+              format.json { render json: show, status: :unprocessable_entity }
+            end
+          end
+      end
+  end
+
+
+  
   def get_total_number_of_hour(slots)
     if slots.nil?
       return 0
@@ -269,14 +337,16 @@ include Search
     # @start=@group.date_of_start
     # @end_d=@group.date_of_end
 
-   str_s = stringfy_date(@group.date_of_start)
-   str_e = stringfy_date(@group.date_of_end)
+    str_s = stringfy_date(@group.date_of_start)
+    str_e = stringfy_date(@group.date_of_end)
 
+    time_start=@group.strat_hour.strftime("%H:%M:%S")
+    time_end=@group.end_hour.strftime("%H:%M:%S")
 
 
    # @group.update!(organization: @try) serve fare un metodo che data stringa restituisca i vari slots
-
-    @slots = organize_for_us(@group ,str_s, str_e , '08:00:00' , '17:00:00' , 1)
+   
+    @slots = organize_for_us(@group ,str_s, str_e , time_start , time_end , 1)
   
   end
   helper_method :show_organization
@@ -293,12 +363,12 @@ include Search
 
     # Only allow a list of trusted parameters through.
 
- def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = '08:00:00' , hf = '18:00:00', dur = 1)
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.strat_hour , hf = @group.end_hour, dur = 1)
   @group = Group.find(params[:id])
   
   @h_p_d = []
   if !@group.nil?
-    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , hs , hf , 1)
+    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , hs.strftime("%H:%M:%S") , hf.strftime("%H:%M:%S") , 1)
     if @slots.nil?
       return [0]
     end 
@@ -325,7 +395,7 @@ include Search
 
 
     def group_params
-      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end)
+      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end, :strat_hour, :end_hour)
     end
 
     def role_params

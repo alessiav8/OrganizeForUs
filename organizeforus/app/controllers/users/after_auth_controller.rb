@@ -34,7 +34,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #tentativo di setting di roles_mask come user per login tramite google
             #@user.roles_mask = :user
         
-            @user.access_token = session["devise.google_data"]["credentials"]["token"]
+            @user.gh_access_token = session["devise.google_data"]["credentials"]["token"]
             @user.expires_at = get_expiration_time(session["devise.google_data"]["credentials"]["expires_at"].seconds)
             @user.refresh_token = session["devise.google_data"]["credentials"]["refresh_token"]
 
@@ -65,9 +65,12 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.provider = session["devise.github_data"]["provider"]
             #@user.uid = session["devise.github_data"]["uid"]
         
-            @user.access_token = session["devise.github_data"]["credentials"]["token"]
+            @user.gh_access_token = session["devise.github_data"]["credentials"]["token"]
             #@user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
       
+            #@user.access_token = session["devise.github_data"]["credentials"]["token"] + "&token_type=bearer&scope=public_repo%2Cgist"
+            @user.gh_username = session["devise.github_data"]["info"]["nickname"]
+            
             file = user_params[:avatar]
             if (!file.nil?)
                 filename = filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_Upimage.'+(file.content_type.split("/")[1])
@@ -182,7 +185,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
         elsif  params[:user].nil?
             redirect_to root_path
         else
-            allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation]
+            allowed_params = [:name, :surname, :username, :birthday, :email, :password, :password_confirmation, :gh_username]
             allowed_params << :avatar unless :avatar.nil?
         end
         params.require(:user).permit(allowed_params) unless params[:user].nil?

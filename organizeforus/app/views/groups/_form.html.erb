@@ -14,7 +14,6 @@
     </div>
   <% end %>
 
-  <!--da vedere come fare-->
   <div class="row">
   <div class="col">
 
@@ -91,11 +90,26 @@
             </div>
           </div>
        </div>
-       <div class="mt-3" id="max_hours" style="visibility: hidden">
+       <div class="form-row mt-3" style="width:50%">
+       <div class="col">
+         <% form.label :strat_hour, style: "display: block" %> Hour of start: <br>
+         <%= form.time_field :strat_hour , id:"StartHour", as: :date, html5: true, class:"form-control", value: DateTime.now %>
+       </div>
+   
+       <div class="col">
+         <% form.label :end_hour, style: "display: block" %> Hour of end: <br>
+         <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control ", value: DateTime.now%>
+       </div>
+     </div>
+       <div class="mt-2 mb-3" id="max_hours" style="visibility: hidden">
               <% form.label :max_hours_in_a_day, style: "display: block" %> Max hours in a day: <br>
               <%= form.number_field :max_hours_in_a_day ,id:"Max"%>
         </div>
   <%end%>
+
+
+ 
+
 
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->
   <div class="field form group">

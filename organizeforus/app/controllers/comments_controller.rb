@@ -10,10 +10,10 @@ class CommentsController < ApplicationController
         respond_to do |format|
           if @comment.save
             notify_recipent(@post, @post.group, current_user)
-            format.html { redirect_to group_post_url(@post.group,@post),status: :created, notice: "Comment generated" }
+            format.html { redirect_to group_post_url(@post.group,@post), notice: "Comment generated" }
             format.json { render :show, location: @post, status: :created }             
           else
-            format.html { render :new, status: :unprocessable_entity }
+            format.html { redirect_to group_post_url(@post.group,@post), notice: "Comment not long enough, the minimum is 3 characters" }
             format.json { render json: @comment.errors, status: :unprocessable_entity }
           end
         end

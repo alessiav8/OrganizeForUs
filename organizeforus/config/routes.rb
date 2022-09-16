@@ -8,15 +8,16 @@ Rails.application.routes.draw do
   end
 
   get '/profile' => "users#profile"
- 
+
+
   resources :events
   resources :groups
   resources :positions
 
-
   #get 'home/index'
   root 'home#index'
   get 'home/about'
+  get 'home/bho'
  
   
   resources :groups do
@@ -83,8 +84,10 @@ Rails.application.routes.draw do
   post 'groups/:id/set_organization', to: 'groups#set_organization', as: 'set_organization'
                         
   get 'groups/:id/show_organization', to: 'groups#show_organization', as: 'show_organization'
+  
+  get 'groups/:id/:user_id/set_github_repo', to: 'groups#set_github_repo', as: 'set_github_repo'
 
-
+  get '/home/bho'
   get 'calendar' => 'events#event_calendar'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

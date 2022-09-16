@@ -165,4 +165,7 @@ class Group < ApplicationRecord
   end
 
     
+  def readonly?
+    false
+  end
 end

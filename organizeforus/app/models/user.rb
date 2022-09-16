@@ -67,11 +67,11 @@ class User < ApplicationRecord
 
       if (auth.provider === "facebook")
         user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
-        byebug
+        
         user.fb_access_token = auth.credentials.token
         user.fb_expires_at = DateTime.rfc3339("1970-01-01T00:00:00Z") + auth.credentials.expires_at.seconds
       elsif (auth.provider === "github")
-        byebug
+        
         user.name = auth[:info][:name]
         user.username = auth[:info][:nickname]
         user.gh_access_token = auth.credentials.token

@@ -191,9 +191,14 @@
 <!-- Index eventi 
 <%= link_to "Events", group_events_path(@group) %>
 
+
+
 -->
-
-
+  <% if @group.git_repository.nil?%>
+    <%=link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id)  %>
+  <%else%>
+    <a href="https://github.com/<%=@group.user.gh_username%>" > Click to see the repository </a>
+  <%end%>
 
   </body>
 </html>

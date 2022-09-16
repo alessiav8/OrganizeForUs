@@ -19,7 +19,7 @@ RSpec.describe Comment, type: :model do
             expect(@comment).to be_invalid
         end
 
-        it 'should be invalid with a text contain less then 10 characters' do @comment.text = "a"
+        it 'should be invalid with a text contain less then 3 characters' do @comment.text = "a"
             expect(@comment).to be_invalid
         end
 

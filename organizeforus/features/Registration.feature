@@ -7,8 +7,8 @@ Scenario: User created an account
     When I fill in "Name" with "ale"
     And I fill in "Surname" with "v"
     And I fill in "Username" with "al"
-    And I fill in "Email" with "al@gmail.com"
-    And I fill in "Birthday" with "2000/08/07"
+    And I fill in "Email" with "emaildiesempio@gmail.com"
+    And I fill in "Birthday" with "2000-08-07"
     And I fill in "Password" with "ciaociao"
     And I fill in "Password confirmation" with "ciaociao"
     And I press "Sign up"
@@ -27,5 +27,3 @@ Scenario: User not successfully be created
     And I fill in "Password confirmation" with "ciaociao"
     And I press "Sign up"
     Then I should see "Name can't be blank"
-
-

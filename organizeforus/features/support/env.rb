@@ -47,10 +47,12 @@ end
 #     # this setting.
 #     DatabaseCleaner.strategy = :truncation
 #   end
-#
-#   Before('not @no-txn', 'not @selenium', 'not @culerity', 'not @celerity', 'not @javascript') do
-#     DatabaseCleaner.strategy = :transaction
-#   end
+  #
+  #   Before('not @no-txn', 'not @selenium', 'not @culerity', 'not @celerity', 'not @javascript') do
+  #     DatabaseCleaner.strategy = :transaction
+  #   end
+
+
 #
 
 # Possible values are :truncation and :transaction

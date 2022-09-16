@@ -99,7 +99,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "github").empty?
                 if Identity.where(provider: auth.provider, uid: auth.uid).empty?
-                    @user.update!(gh_access_token: auth.credentials.token)
+                    @user.update!(gh_access_token: auth.credentials.token, gh_username: auth.extra.raw_info.login)
+
                     @user.identities.create(provider: auth.provider, uid: auth.uid)
                     flash[:notice] = "Github account successfully linked!"
                 else
@@ -111,7 +112,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
             if authentication.present?
                 @user = authentication.user
-                @user.update!(gh_access_token: auth.credentials.token)
                 sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Github'
             else
@@ -124,11 +124,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                     @user.avatar.attach(blob)
                     session[:blob_id] = blob.id
                 end
+                
                 @user.gh_access_token = auth.credentials.token
-
+                @user.gh_username = auth.extra.raw_info.login
                 session['devise.github_data'] = auth
                 session['devise.github_data'].extra = nil;
                 render 'devise/registrations/after_social_connection'
+                
             end
         end
     end

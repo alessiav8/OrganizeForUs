@@ -9,6 +9,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         render :edit, layout: 'application'                                                 
       end  
     end
+    
 
     protected
 
