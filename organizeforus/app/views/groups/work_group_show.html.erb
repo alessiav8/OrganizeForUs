@@ -41,6 +41,8 @@
           </a>
         </div>
         -->
+
+        
         <div class="col">
           <button type="button" class="btn btn-sm" id="ButtonGroupDelete" title="Delete" onclick="show('box')"> 
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -293,11 +295,12 @@ anychart.onDocumentReady(function () {
 
 
 -->
+<div class="row ml-2">
   <% if @group.git_repository.nil?%>
     <%=link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id)  %>
   <%else%>
-    <a href="https://github.com/<%=@group.user.gh_username%>" > Click to see the repository </a>
+    <a href="https://github.com/<%=@group.user.gh_username%>?tab=repositories" > Go to your Github </a>
   <%end%>
-
+</div>
   </body>
 </html>

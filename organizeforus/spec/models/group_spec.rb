@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Group, type: :model do
     before do 
         @user= User.create(name: "User",surname: "test", username: "user", birthday: "2001-07-07", email: "example@gm.com",password: "ciaociao")
-        @group_work=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last,hours: 6)
-        @group_fun=Group.create(name: "Gr",description: "sjhd",work: false,fun: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last, hours: 6)
+        @group_work=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last,hours: 6, strat_hour:"08:00:00",end_hour:"17:00:00")
+        @group_fun=Group.create(name: "Gr",description: "sjhd",work: false,fun: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last, hours: 6,strat_hour:"08:00:00",end_hour:"17:00:00")
     end
     context 'Attributes' do
         context 'name' do
@@ -64,6 +64,18 @@ RSpec.describe Group, type: :model do
               expect(@group_work).to respond_to(:user_id)
              end
             it 'should be invalid without a user' do @group_work.user_id = nil
+                expect(@group_work).to be_invalid
+            end
+        end
+
+        context 'start_hour' do
+            it 'should have an hour of start attribute' do
+                expect(@group_work).to respond_to(:strat_hour)
+            end
+            it 'should be invalid without a date of start' do @group_work.strat_hour = nil
+                expect(@group_work).to be_invalid
+            end
+            it 'should be smaller then date of end' do @group_work.strat_hour = "18:00:00"
                 expect(@group_work).to be_invalid
             end
         end

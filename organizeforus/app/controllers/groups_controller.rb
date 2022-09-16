@@ -283,7 +283,7 @@ include Search
       respond_to do |format|
           if !resp.values_at("id").first.nil? #se il gruppo viene correttamente creato inserirsco link nel gruppo
             @group.update!(git_repository: "https://github.com/repos/#{@group.user.gh_username}/#{@group.name}")
-              format.html { redirect_to group_url(@group),notice: "GitHub private repository created" }
+              format.html { redirect_to group_url(@group),notice: "GitHub private repository created, now check the email" }
               format.json { render json: show, status: :unprocessable_entity }
               #invio invito
             if @group.user.gh_username!="organizeforus"
@@ -297,7 +297,6 @@ include Search
               response2 = https.request(request2)
               puts response2.read_body
             end
-            byebug
           else
             format.html { redirect_to group_url(@group),notice: "Something goes wrong" }
             format.json { render json: show, status: :unprocessable_entity }

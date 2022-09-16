@@ -15,6 +15,8 @@ Feature: User could create a group
         And I check "Work"
         And I fill in "Startdata" with "2022/07/08"
         And I fill in "Enddata" with "2022/07/10"
+        And I fill in "StartHour" with "08:00"
+        And I fill in "EndHour" with "17:00"
         And I fill in "Hours" with "10"
         And I fill in "Max" with "10"
         And I press "Continue"
