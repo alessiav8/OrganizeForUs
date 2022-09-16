@@ -47,16 +47,24 @@
                 th = 0
                 tm = 0
                 if !@h_p_d.nil?
-                @h_p_d.each do |t_s|
-                  th += t_s.to_i
-                  tm += t_s - t_s.to_i
+                  @h_p_d.each do |t_s|
+                    th += t_s.to_i
+                    tm += (t_s - t_s.to_i)
+                  end
+                  logger.debug th 
+                  logger.debug tm
+                  logger.debug "-------------------"
+                  tm = (tm*100).round
+                   logger.debug tm
+                  if tm >= 60
+                  
+                    th += (tm/60).to_i
+                    tm = (tm % 60)
+                 
                 end
-                if tm >= 60
-                  th += (tm/60).to_i
-                  tm = (th % 60).round(2)
-                end
+ 
               end
-                %><%= th %>h <%= (tm*100).to_i %>m
+                %><%= th %>h <%= (tm).to_i %>m
                 <br>
           
           </div>
@@ -75,6 +83,7 @@
       <div class="accordion-body">
            <% i=0%>
            <div class="row"> 
+           
               <% @slots.each do |day| %>
            
                   <div class="col">
@@ -89,7 +98,7 @@
                    <%end%> 
                   <div> 
                    
-                
+                <% logger.debug @h_p_d%>
                 <% i+=1 %>
                 <%end%>
                     

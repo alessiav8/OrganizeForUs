@@ -50,22 +50,22 @@ module Search
     events_list
   end
 
-    def find_busiest_person(group , tmax , tmin)
-        members_list = group.users
-        max = 0
-        busiest_member = nil
-        members_list.items.each do |member| 
-            if member.provider = 'google_oauth2'
-                events_list = get_all_events_in_range(member,tmax,tmin)
-                n_of_events = events_list.length()
-                if max < n_of_events
-                    max = n_of_events
-                    busiest_member = member
-                end
-            end
-        end 
-        busiest_member
-    end
+    # def find_busiest_person(group , tmax , tmin)
+    #     members_list = group.users
+    #     max = 0
+    #     busiest_member = nil
+    #     members_list.items.each do |member| 
+    #         if member.provider = 'google_oauth2'
+    #             events_list = get_all_events_in_range(member,tmax,tmin)
+    #             n_of_events = events_list.length()
+    #             if max < n_of_events
+    #                 max = n_of_events
+    #                 busiest_member = member
+    #             end
+    #         end
+    #     end 
+    #     busiest_member
+    # end
 
       def compute_total_hours(slots)
         t_minutes = 0
@@ -151,9 +151,13 @@ module Search
     datetimeF = nil
     @flag = 0
     members.each do |member|
-
+      
       datetimeI = parse_datetime(dataI , hI).to_datetime
       datetimeF = parse_datetime(dataF , hF).to_datetime
+      if !member.identities.where(provider: 'google_oauth2')
+        slots[member.id] = [[datetimeI , datetimeF]]
+        next
+      end
       events = get_all_events_in_range(member , datetimeF , datetimeI)
       if events.items.empty? 
         slots[member.id] = [[datetimeI , datetimeF]]

@@ -34,7 +34,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #tentativo di setting di roles_mask come user per login tramite google
             #@user.roles_mask = :user
         
-            @user.gh_access_token = session["devise.google_data"]["credentials"]["token"]
+            @user.access_token = session["devise.google_data"]["credentials"]["token"]
             @user.expires_at = get_expiration_time(session["devise.google_data"]["credentials"]["expires_at"].seconds)
             @user.refresh_token = session["devise.google_data"]["credentials"]["refresh_token"]
 

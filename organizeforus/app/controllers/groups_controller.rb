@@ -371,7 +371,7 @@ include Search
     if @slots.nil?
       return [0]
     end 
-    logger.debug @slots
+
     @slots.each do |day|
       @h_p_d << 0
       m_diff = 0
@@ -380,9 +380,9 @@ include Search
        
         @h_p_d[-1] += m_diff
       end
-      logger.debug @h_p_d[-1]
+  
       
-      diff = ((@h_p_d[-1]/60).to_i + (@h_p_d[-1]%60)*0.01).round(1)
+      diff = ((@h_p_d[-1]/60).to_i + (@h_p_d[-1]%60)*0.01)
       @h_p_d[-1] = diff 
     end
   end
