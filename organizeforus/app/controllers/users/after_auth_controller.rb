@@ -1,12 +1,12 @@
 class Users::AfterAuthController < Devise::OmniauthCallbacksController
     before_action :set_cache_buster
-    before_action :user_params 
+    before_action :user_params, except: [:unlink_account]
 
     def create
        if( session["devise.facebook_data"].present?)
             @user = User.new(user_params)
-            #@user.provider = session["devise.facebook_data"]["provider"]
-            #@user.uid = session["devise.facebook_data"]["uid"]
+            @user.fb_access_token = session["devise.facebook_data"]["credentials"]["token"]
+            @user.fb_expires_at = get_expiration_time(session["devise.facebook_data"]["credentials"]["expires_at"].seconds)
             file = user_params[:avatar]
             if (!file.nil?)
                 filename = filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_Upimage.'+(file.content_type.split("/")[1])
@@ -33,9 +33,6 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             @user = User.new(user_params)
             #tentativo di setting di roles_mask come user per login tramite google
             #@user.roles_mask = :user
-
-            #@user.provider = session["devise.google_data"]["provider"]
-            #@user.uid = session["devise.google_data"]["uid"]
         
             @user.access_token = session["devise.google_data"]["credentials"]["token"]
             @user.expires_at = get_expiration_time(session["devise.google_data"]["credentials"]["expires_at"].seconds)
@@ -68,7 +65,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
             #@user.provider = session["devise.github_data"]["provider"]
             #@user.uid = session["devise.github_data"]["uid"]
         
-            #@user.access_token = session["devise.github_data"]["credentials"]["token"]
+            @user.access_token = session["devise.github_data"]["credentials"]["token"]
             #@user.expires_at = session["devise.github_data"]["credentials"]["expires_at"]
       
             file = user_params[:avatar]
@@ -136,8 +133,10 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                         @user.update(access_token: nil, expires_at: nil, refresh_token: nil)
                         flash[:notice] = "Google account successfully unlinked!"
                     elsif params[:provider] == "facebook"
+                        @user.update(fb_access_token: nil, fb_expires_at: nil)
                         flash[:notice] = "Facebook account successfully unlinked!"
                     elsif params[:provider] == "github"
+                        @user.update(gh_access_token: nil)
                         flash[:notice] = "Github account successfully unlinked!"
                     elsif params[:provider] == "linkedin"
                         flash[:notice] = "Linkedin account successfully unlinked!"

@@ -9,7 +9,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "google_oauth2").empty?
                 if Identity.where(provider: auth.provider, uid: auth.uid).empty?
-                    @user.update( access_token: auth.credentials.token, 
+                    @user.update!(access_token: auth.credentials.token, 
                                   expires_at: get_expiration_time(auth.credentials.expires_at.seconds), 
                                   refresh_token: auth.credentials.refresh_token )
                     @user.identities.create(provider: auth.provider, uid: auth.uid)
@@ -57,6 +57,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "facebook").empty?
                 if Identity.where(provider: auth.provider, uid: auth.uid).empty?
+                    @user.update!(fb_access_token: auth.credentials.token, 
+                                  fb_expires_at: get_expiration_time(auth.credentials.expires_at.seconds))
                     @user.identities.create(provider: auth.provider, uid: auth.uid)
                     flash[:notice] = "Facebook account successfully linked!"
                 else
@@ -68,6 +70,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
             if authentication.present?
                 @user = authentication.user
+                @user.update!(fb_access_token: auth.credentials.token, fb_expires_at: get_expiration_time(auth.credentials.expires_at.seconds))
                 sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Facebook'
             else
@@ -80,7 +83,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                     blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
                     @user.avatar.attach(blob)
                     session[:blob_id] = blob.id   
-                end 
+                end
+                @user.fb_access_token = auth.credentials.token
+                @user.fb_expires_at = get_expiration_time(auth.credentials.expires_at.seconds)
+
                 render 'devise/registrations/after_social_connection'
             end
         end
@@ -93,6 +99,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             @user = User.find_by(id: current_user.id)
             if @user.identities.where(provider: "github").empty?
                 if Identity.where(provider: auth.provider, uid: auth.uid).empty?
+                    @user.update!(gh_access_token: auth.credentials.token)
                     @user.identities.create(provider: auth.provider, uid: auth.uid)
                     flash[:notice] = "Github account successfully linked!"
                 else
@@ -104,6 +111,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
             if authentication.present?
                 @user = authentication.user
+                @user.update!(gh_access_token: auth.credentials.token)
                 sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Github'
             else
@@ -116,8 +124,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                     @user.avatar.attach(blob)
                     session[:blob_id] = blob.id
                 end
-                #@user.access_token = auth.credentials.token
-                #@user.expires_at = auth.credentials.expires_at
+                @user.gh_access_token = auth.credentials.token
+
                 session['devise.github_data'] = auth
                 session['devise.github_data'].extra = nil;
                 render 'devise/registrations/after_social_connection'

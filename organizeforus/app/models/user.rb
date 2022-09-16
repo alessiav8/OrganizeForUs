@@ -23,7 +23,7 @@ class User < ApplicationRecord
   #Valido la presenza e l'unicità dei campi dell'utente:
   validates :name, presence: true
   validates :surname, presence: true
-  validates :username, presence: true, uniqueness: true, format: {without: /^.*@.*\..+$/, :multiline => true, message: "=> You dumbass! Don't put an email in username field!"}
+  validates :username, presence: true, uniqueness: true, format: {without: /^.*@.*\..+$/, :multiline => true, message: "=> Emails are not allowed in username field!"}
   validates :birthday, presence: true
   validates :avatar, blob: { content_type: %r{^image/}, size_range: 0..5.megabytes }
 
@@ -67,9 +67,14 @@ class User < ApplicationRecord
 
       if (auth.provider === "facebook")
         user.birthday = auth.extra.raw_info.birthday.split('/').rotate(-1).reverse.join('-')
+        byebug
+        user.fb_access_token = auth.credentials.token
+        user.fb_expires_at = DateTime.rfc3339("1970-01-01T00:00:00Z") + auth.credentials.expires_at.seconds
       elsif (auth.provider === "github")
+        byebug
         user.name = auth[:info][:name]
         user.username = auth[:info][:nickname]
+        user.gh_access_token = auth.credentials.token
       elsif (auth.provider === "google_oauth2")
         user.access_token = auth.credentials.token
         user.expires_at = DateTime.rfc3339("1970-01-01T00:00:00Z") + auth.credentials.expires_at.seconds
@@ -121,6 +126,14 @@ class User < ApplicationRecord
       end
     end
     token
+  end
+
+  def self.fb_token!(user)
+    if (fb_expires_at < Time.now)
+      flash[:error] = "Your token has been expired and we can't refresh it... Please login again with Facebook."
+      redirect_to back
+    end
+    user.fb_access_token
   end
 
   def update_token 

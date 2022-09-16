@@ -12,7 +12,7 @@
 <h1 class="display-6">Edit profile <% resource_name.to_s.humanize %></h1>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), multipart: true, html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= render "devise/shared/error_messages", resource: resource if params[:_method] != "delete" %>
    
   <div class="field form-group">
     <div class="row">
@@ -83,18 +83,17 @@
   <h5 class="card-header">Cancel my account</h5>
   <div class="card-body">
     <h5 class="card-title">Unhappy?</h5>
-    <!--<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
     
-    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), multipart: true, html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+    <%= simple_form_for(@user, url: registration_path(@user)) do |f| %>
+      <%= render "devise/shared/error_messages", resource: @user unless params[:_method] != "delete" %>
       
       <div class="field form-group">
       <%= f.label :Password %> <br />
-      <%= f.password_field :current_password, placeholder: "Current Password...", autocomplete: "off", class: "form-control" %>
+      <%= f.password_field :password_for_delete, placeholder: "Current Password...", autocomplete: "off", class: "form-control" %>
       </div>
 
       </br>
-      <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: 'It cannot be restored after deletion, are you sure to delete it?' }, method: :delete, class:"btn btn-danger" %>
+      <%= button_to "Cancel my account", registration_path(@user), confirm: 'It cannot be restored after deletion, are you sure to delete it?', method: :delete, class:"btn btn-danger" %>
     <%end%>
 
   </div>
