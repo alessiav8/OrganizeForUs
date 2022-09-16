@@ -99,7 +99,7 @@ end
 
 #Per generare le form di Sign Up ed Edit Profile
 gem "simple_form"
-gem 'dotenv-rails'
+gem 'dotenv-rails' , groups: [:development, :test]
 
 #Per Autenticazione tramite facebook:
 gem 'omniauth-facebook'
