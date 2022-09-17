@@ -82,7 +82,7 @@ include Search
         format.json { render :show, location: @group, status: :unprocessable_entity }
 
       elsif @group.save 
-        Partecipation.create(group_id: @group.id, user_id: current_user.id, accepted: true, necessary:true, role: "Admin")
+        Partecipation.create(group_id: @group.id, user_id: current_user.id, accepted: true, admin:true, role: "Admin")
         format.html { redirect_to new_partecipations_url(@group)}
         format.json { render :show, status: :created, location: @group }
          
@@ -134,7 +134,7 @@ include Search
     @group = current_user.groups.find_by(id: params[:id])
       if @group.nil? 
         if !Partecipation.find_by(group_id: params[:id], user_id: current_user.id).nil?
-          if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).necessary == false
+          if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).admin == false
             redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
           end
         else 

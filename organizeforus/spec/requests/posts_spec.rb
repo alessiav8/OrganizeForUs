@@ -7,7 +7,7 @@ RSpec.describe "Posts", type: :request do
     @group.save!
     @not_user= create(:user, id: 5, email: "email2@gmail.com", username: "us2")
     @member_user= create(:user, email: "email3@gmail.com", username: "us3")
-    @part=Partecipation.create(group_id: @group.id, user_id: @member_user.id, accepted: true, necessary: false)
+    @part=Partecipation.create(group_id: @group.id, user_id: @member_user.id, accepted: true, admin: false)
     @post= @user.posts.build(attributes_for(:post, group_id: @group.id))
     @post.save!
   end

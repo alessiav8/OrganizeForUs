@@ -47,7 +47,7 @@ end
         end #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
-          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, necessary: partecipation_params[:necessary])
+          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, admin: partecipation_params[:admin])
           respond_to do |format|
             if @partecipation.save
               format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
@@ -62,7 +62,7 @@ end
           
           if @role=='1' #E DD
             @g.delect_driver
-            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'Driver', necessary: false)
+            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'Driver', admin: false)
             respond_to do |format|
               if @partecipation.save
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }
@@ -74,7 +74,7 @@ end
             end
 
           else # non è DD
-            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'No Role',necessary: false)
+            @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: 'No Role',admin: false)
             respond_to do |format|
               if @partecipation.save
                 format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added'  }
@@ -166,13 +166,13 @@ end
     @member=User.find(params[:member_id])
     @color=params[:role_color]
     @role=params[:role]
-    @admin=params[:necessary]
+    @admin=params[:admin]
     @part=Partecipation.find_by(group_id: @group.id, user_id: @member.id)
     if @role != nil && @role != ""
-      if @role==@part.role && ( @part.necessary==true && @admin=="0")
-        @part.update(role: "No Role", role_color: @color, necessary: @admin)
+      if @role==@part.role && ( @part.admin==true && @admin=="0")
+        @part.update(role: "No Role", role_color: @color, admin: @admin)
       else
-       @part.update(role: params[:role], role_color: @color, necessary: @admin)
+       @part.update(role: params[:role], role_color: @color, admin: @admin)
        respond_to do |format|
         format.html { redirect_to show_p_url(@group), notice: "Role updated" }
         format.json { head :no_content }
@@ -239,7 +239,7 @@ def is_authorized?
    @group=Group.find(params[:group_id])
    if @group.user != current_user
     if !Partecipation.find_by(group_id:@group, user_id: current_user).nil?
-      if Partecipation.find_by(group_id:@group, user_id: current_user).necessary == false
+      if Partecipation.find_by(group_id:@group, user_id: current_user).admin == false
         redirect_to group_url(@group), notice: "Not Authorized to create Partecipation on this Group"
       end
     else 
@@ -260,7 +260,7 @@ end
 def check_admin
   @group=Group.find(params[:group_id])
   @group.partecipations.each do |p|
-    if p.necessary==true
+    if p.admin==true
       p.update!(role: "Admin")
     end
   end
@@ -272,7 +272,7 @@ end
 private
 
   def partecipation_params
-    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color,:necessary)
+    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color,:admin)
   end
 
   def role_params

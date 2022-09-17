@@ -79,7 +79,7 @@ class Group < ApplicationRecord
     if user==self.user 
       true
     elsif !Partecipation.find_by(group_id: self,user_id: user).nil?
-      Partecipation.find_by(group_id: self,user_id: user).necessary
+      Partecipation.find_by(group_id: self,user_id: user).admin
     else
       false
     end

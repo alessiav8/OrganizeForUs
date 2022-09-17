@@ -393,7 +393,7 @@ end
 And('he is a member of a group') do 
   user=User.create(id: 45, name: "ale", surname:"v", birthday: "2000-06-06", username: "alexok", email: "al@gm.com", password: "ciaociao")
   group=Group.create(id: 10, name: "GroupoWork", description: "Descrizione Gruppo" , work: true, fun: false, created: "t", user_id: 45, date_of_start: "2022-08-21", date_of_end: "2022-08-25", hours: 10, start_hour:"08:00:00",end_hour:"17:00:00")
-  part= Partecipation.create(group_id: group.id, user_id: 13, accepted: true, necessary: false)
+  part= Partecipation.create(group_id: group.id, user_id: 13, accepted: true, admin: false)
 
 end 
 And('he move into the group') do 

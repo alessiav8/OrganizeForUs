@@ -77,12 +77,12 @@
     <div class="form-row">
             <div class="col">
               <% form.label :date_of_start, style: "display: block" %> Date started: <br>
-              <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control", value: DateTime.now %>
+              <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control", value: Date.current %>
             </div>
 
           <div class="col">
             <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
-            <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control ", value: DateTime.now%>
+            <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control ", value: Date.tomorrow %>
           </div>
           <div class="col">
             <div class="field form group">
@@ -94,12 +94,12 @@
        <div class="form-row mt-3" style="width:50%">
        <div class="col">
          <% form.label :start_hour, style: "display: block" %> Hour of start: <br>
-         <%= form.time_field :start_hour , id:"StartHour", as: :date, html5: true, class:"form-control", value: DateTime.now %>
+         <%= form.time_field :start_hour , id:"StartHour", as: :date, html5: true, class:"form-control", value: "08:00" %>
        </div>
    
        <div class="col">
          <% form.label :end_hour, style: "display: block" %> Hour of end: <br>
-         <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control ", value: DateTime.now%>
+         <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control ", value: "18:00"%>
        </div>
      </div>
        <div class="mt-2 mb-3" id="max_hours" style="visibility: hidden">
