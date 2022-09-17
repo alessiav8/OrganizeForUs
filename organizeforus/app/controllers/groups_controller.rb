@@ -3,7 +3,8 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_id, except: [:index, :new, :create]
   before_action :correct_user, only: [:edit, :update]
-  before_action :only_real_admin, only:[:destroy,:set_organization,:set_github_repo]
+  before_action :only_real_admin, only:[:destroy,:set_organization,:set_github_repo, :name_repository]
+  before_action :not_already_created, only: [:name_repository]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
   before_action :member_or_admin, only: [:show]
@@ -270,7 +271,6 @@ include Search
       flash[:notice] = "You must have linked your Github account to your account"
       redirect_to @group
     end
-
     url = URI.parse("https://api.github.com/user/repos")
     https = Net::HTTP.new(url.host, url.port)
     https.use_ssl = true
@@ -278,17 +278,22 @@ include Search
     request["Authorization"] = "token #{token}"
     request["Content-Type"] = 'application/json'
     request["Accept"] = 'application/vnd.github+json'
-    request.body = {name: @group.name+Group.diff, private: true}.to_json
+    name_repository=@group.git_repository
+    request.body = {name: name_repository, private: true}.to_json
     response = https.request(request)
     json = JSON.parse(response.body, symbolize_names: true)
     if eval(response.code.to_s) === 201
         url = json[:html_url]
         flash[:notice] = "Repository successfully created on your Github account!"
+        redirect_to @group
     elsif eval(response.code.to_s) === 422
       flash[:notice] = "#{json[:message]} Cause: #{json[:errors][0][:message]}!!"
+      redirect_to name_repository_path(@group)
+      @group.update!(git_repository: "422")
     else
       GroupMailer.with(user: current_user, time: Time.now).github_repo_api_error.deliver_now
       flash[:notice] = "There may be an issue with your github token... Please login again with Github... If the error persists, don't worry, or team has already been informated about your issue!!"
+      redirect_to @group
     end
 =begin
     if !@group.user.gh_username.nil? #se l'utente si è autenticato con github
@@ -334,7 +339,16 @@ include Search
           end
       end
 =end
-  #redirect_to @group
+  end
+
+  def name_repository
+    @group=Group.find(params[:id])
+  end
+
+  def set_name_for_new_repository
+    @group=Group.find(params[:id])
+    @group.update(group_params)
+    redirect_to set_github_repo_path(@group,current_user.id)
   end
 
   
@@ -367,7 +381,12 @@ include Search
   helper_method :show_organization
 
   
-
+  def not_already_created
+    @group=Group.find(params[:id])
+    if @group.git_repository!= nil && @group.git_repository!= "422"
+      redirect_to root_path, notice: "not allowed"
+    end
+  end
 
 
 
@@ -409,7 +428,7 @@ include Search
 
 
     def group_params
-      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :min_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour)
+      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :min_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour,:git_repository)
     end
 
     def role_params

@@ -1,0 +1,15 @@
+
+<center>
+<%= form_with model: @group, url: set_name_for_new_repository_path(@group), method: :post do |form| %>
+    <div class="row" style="align: center"><center> Please choose a name for repository</center> </div>
+        <div class="row mb-3 " style="width: 50%">
+            <div class="field">
+                <%= form.text_field :git_repository, class: 'form-control'  %>
+            </div>
+        </div>
+<div class="actions">
+    <%= form.submit "Create" %>
+</div>
+<%end%>
+
+</center>

@@ -91,6 +91,11 @@ Rails.application.routes.draw do
 
   
 
+  get 'groups/:id/get_github_link', to: 'groups#get_github_link', as: 'get_github_link'
+
+  post 'groups/:id/set_name_for_new_repository', to: 'groups#set_name_for_new_repository', as: 'set_name_for_new_repository'
+
+  get 'groups/:id/name_repository', to: 'groups#name_repository', as: 'name_repository'
 
   get 'home/sign_in', to: 'home#sign_in', as: 'sign_in'
 
