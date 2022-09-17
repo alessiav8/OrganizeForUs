@@ -16,9 +16,13 @@
     <div class="row">
       <div class="col-sm-8">
         <%= image_tag user_avatar(@user, 200), class: "rounded-circle", :size => "120x115" %>
-        </br>
+        <br>
         <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
         <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %> 
+      </div>
+      <div>
+      <br>
+      <br>
       </div>
       <div class="field form-group">
         <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes } %>
