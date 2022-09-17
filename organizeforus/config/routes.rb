@@ -87,6 +87,15 @@ Rails.application.routes.draw do
   
   get 'groups/:id/:user_id/set_github_repo', to: 'groups#set_github_repo', as: 'set_github_repo'
 
+  get 'groups/:group_id/events/:month/:day/:data_inizio/:data_fine/parameterize_date', to: 'events#parameterize_date', as: 'parameterize_date'
+
+  
+
+
+  get 'home/sign_in', to: 'home#sign_in', as: 'sign_in'
+
+  get 'home/prova_git', to: 'home#prova_git', as: 'prova_git'
+
   get '/home/bho'
   get 'calendar' => 'events#event_calendar'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -94,7 +94,7 @@
                       <%= d.to_s+" "+Date::MONTHNAMES[m].to_s%> 
                        <% day.each do |slot|%>  
                       <li>
-                        <%= slot.first.strftime("%H:%M") %> to <%= slot.second.strftime("%H:%M")%> 
+                        <%=link_to slot.first.strftime("%H:%M")+ "to"+slot.second.strftime("%H:%M") , parameterize_date_path(@group,day.first.first.month,day.first.first.day, slot.first.strftime("%H:%M"), slot.second.strftime("%H:%M") ) %> 
                       </li>
                    <%end%> 
                   <div> 

@@ -4,7 +4,7 @@
 
 <h1 class="display-6">Create new event</h1>
 
-<%= form_with(model: @event, local: true) do |form| %>
+<%= form_with(model: @event, local: true, url: group_events_path(@group)) do |form| %>
 
 <% if false%>
   <% if event.errors.any? %>
@@ -32,14 +32,14 @@
 
   <div class="field mt-2">
     <%= form.label :start_date %>
-    <%= form.datetime_select :start_date, class: 'form-control'  %>
+    <%= form.datetime_select :start_date, class: 'form-control', selected: @dataI %>
   </div>
 
   
 
   <div class="field mt-2">
     <%= form.label :end_date %>
-    <%= form.datetime_select :end_date, class: 'form-control'  %>
+    <%= form.datetime_select :end_date, class: 'form-control',id:"end_data_evento", selected: @dataF %>
   </div>
 
 
@@ -66,7 +66,7 @@
   <div class="field mt-1">
         <% @group.list_accepted.each do |part| %>
           <%= form.label :members , User.find(part.user_id).username %>
-          <%= form.check_box :members, {multiple: true}, User.find(part.user_id).email, nil%>
+            <%= form.check_box :members, {multiple: true}, User.find(part.user_id).email, nil%>
           <br>
         <%end%>
   </div>
@@ -93,7 +93,8 @@
 <script type="text/javascript">
 
 window.onload = (event )=> {
-let mode=document.getElementById("event_mode");
+let mode= (document.getElementById("event_mode")==null)? document.getElementById("mode"): document.getElementById("event_mode") ;
+
   mode.addEventListener('change',setOnlineMode);
   function setOnlineMode(){
     position=document.getElementById("position_container");

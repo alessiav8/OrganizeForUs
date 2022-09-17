@@ -100,7 +100,7 @@ module Search
           
           
           if ((slot.second.hour * 60)+slot.second.minute) - ((slot.first.hour * 60)+slot.first.minute) < duration
-          day.remove(slot)
+          day.delete(slot)
           end
         end
       end 
@@ -118,7 +118,7 @@ module Search
       end
       days = starting_time.day
       while hours > 24
-          day = day + 1
+          days = days + 1
           hours = hours - 24
       end
       new_time = DateTime.new(starting_time.year , starting_time.month , days ,hours , minutes , starting_time.second , starting_time.zone)

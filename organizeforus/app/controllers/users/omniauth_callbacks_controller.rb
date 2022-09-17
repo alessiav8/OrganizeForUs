@@ -133,7 +133,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                 session['devise.github_data'] = auth
                 session['devise.github_data'].extra = nil;
                 render 'devise/registrations/after_social_connection'
-                
             end
         end
     end

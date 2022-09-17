@@ -355,6 +355,10 @@ end
 Then('I move to the Surveys section') do
   visit index_survey_path(Group.find(10))
 end
+And('he press New') do 
+  group=Group.find(10)
+  visit new_survey_path(group,group.user)
+end
 
 And('I press New') do 
   group=Group.find(10)
@@ -394,6 +398,9 @@ And('he is a member of a group') do
 end 
 And('he move into the group') do 
   visit group_url(Group.find(10))
+end
+Then('he move to the Surveys section') do
+   visit index_survey_path(Group.find(10))
 end
 
 Then('I press DestroyGroupWork') do
