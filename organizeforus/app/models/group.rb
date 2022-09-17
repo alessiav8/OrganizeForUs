@@ -170,7 +170,9 @@ class Group < ApplicationRecord
   def readonly?
     false
   end
-  def diff
-    SecureRandom.hex(4))
+
+  def self.diff
+    SecureRandom.hex(4)
   end
+
 end
