@@ -87,13 +87,14 @@ module Search
       t_slots = []
       merged_t_slots = []
       dataR = dataI 
-        while dataR <= dataF
+        while dataR.to_datetime <= dataF.to_datetime
           
           t_slots << search_slots(group , dataR , dataR , hI , hF , duration)
           merged_t_slots << merge_slots(t_slots.last , hI , hF , duration)
           dataR = add_time(dataR.to_datetime , 1440)
           dataR = dataR.strftime("%Y-%m-%d")
       end
+    
       merged_t_slots.each do |day|
         day.each do |slot|
           
