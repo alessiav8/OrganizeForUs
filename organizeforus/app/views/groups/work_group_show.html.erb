@@ -285,7 +285,7 @@ anychart.onDocumentReady(function () {
 -->
 <div>
   <% if @group.git_repository.nil?%>
-    <span><%= link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id), class:"btn btn btn-sm" %></span>
+    <span><%= link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id), class:"btn btn btn-sm border border-dark" %></span>
   <%else%>
     <a href="https://github.com/<%=@group.user.gh_username%>?tab=repositories" > Go to your Github </a>
   <%end%>

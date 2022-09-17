@@ -65,7 +65,7 @@
     <%= f.label :password %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
+    <% end %>
     <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
   </div>
 
@@ -76,7 +76,9 @@
   <br/>
 
   <div class="actions">
-    <%= f.submit "Complete", class: "btn btn-secondary" %>
+    <%= f.submit "Complete", class:"btn btn btn-sm border border-dark" %>
   </div>
   
+  <br>
+  <br>
 <% end %>

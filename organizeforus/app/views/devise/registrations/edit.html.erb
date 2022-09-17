@@ -8,6 +8,21 @@
   <% controller.redirect_to edit_user_registration_path %>
 <% end %>
 
+<div class="row" style="width:100% ;text-align:right">
+  <div class="col" style="width:80%"> 
+  </div>  
+  <div class="col" > 
+    <div class="row" style=" text-align:right">
+      <div class="col" >
+      <a href="<%= profile_path(@user) %>" style="color: black">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
+      </svg>
+      </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <h1 class="display-6">Edit profile <% resource_name.to_s.humanize %></h1>
 
@@ -21,6 +36,10 @@
         <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
         <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %>
       </div>
+      
+<div>
+<br>
+</div>
       <div class="field form-group">
         <%= f.file_field :avatar, class:"input form-control", help: "PNG or JPG only", id:"imgInp", onChange: "Preview.validate_and_preview()" , data: { max_file_size: 5.megabytes } %>
       </div>
@@ -72,13 +91,11 @@
   </div>
   </br>
   <div class="actions">
-    <%= f.submit "Update", class:"btn btn-secondary"%>
+    <%= f.submit "Update", class:"btn btn btn-sm border border-dark"%>
   </div>
 <% end %>
 </br>
-
 <br/>
-
 <div class="card">
   <h5 class="card-header">Cancel my account</h5>
   <div class="card-body">
@@ -86,19 +103,13 @@
     
     <%= simple_form_for(@user, url: registration_path(@user)) do |f| %>
       <%= render "devise/shared/error_messages", resource: @user unless params[:_method] != "delete" %>
-      
       <div class="field form-group">
       <%= f.label :Password %> <br />
       <%= f.password_field :password_for_delete, placeholder: "Current Password...", autocomplete: "off", class: "form-control" %>
       </div>
-
       </br>
       <%= button_to "Cancel my account", registration_path(@user), confirm: 'It cannot be restored after deletion, are you sure to delete it?', method: :delete, class:"btn btn-danger" %>
     <%end%>
-
   </div>
 </div>
-
 <br/>
-
-<%= link_to "Back", :back , class:"btn btn-secondary"%>
