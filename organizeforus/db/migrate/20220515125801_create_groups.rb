@@ -13,7 +13,7 @@ class CreateGroups < ActiveRecord::Migration[7.0]
       t.string :color, default: "#000000"
       t.string :organization
       t.string :git_repository
-      t.time :strat_hour
+      t.time :start_hour
       t.time :end_hour
       t.timestamps
     end

@@ -146,8 +146,8 @@ class Group < ApplicationRecord
   validates :description, presence: true
   validates :date_of_start, presence: true
   validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
-  validates :strat_hour, presence: true
-  validates :end_hour, presence: true, comparison: { greater_than_or_equal_to: :strat_hour}
+  validates :start_hour, presence: true
+  validates :end_hour, presence: true, comparison: { greater_than_or_equal_to: :start_hour}
   validates :hours, presence: true
 
   def is_a_work_group
@@ -169,5 +169,8 @@ class Group < ApplicationRecord
     
   def readonly?
     false
+  end
+  def diff
+    SecureRandom.hex(4))
   end
 end

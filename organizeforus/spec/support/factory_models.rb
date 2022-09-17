@@ -15,7 +15,7 @@ FactoryBot.define do
       hours { 10 }
       date_of_start {"2022-07-05"}
       date_of_end {"2022-07-07"}
-      strat_hour {"08:00:00"}
+      start_hour {"08:00:00"}
       end_hour {"17:00:00"}
     end
 

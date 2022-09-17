@@ -122,12 +122,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                 @user = User.from_omniauth(auth)
                 if(auth.info.image)
                     file = URI.open(auth.info.image)
-                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghlimage.'+file.content_type.split("/")[1]
+                    filename = 'OrganizeForUs_'+SecureRandom.hex(5)+'_ghimage.'+file.content_type.split("/")[1]
                     blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: filename, content_type: file.content_type)
                     @user.avatar.attach(blob)
                     session[:blob_id] = blob.id
                 end
-                
                 @user.gh_access_token = auth.credentials.token
                 @user.gh_username = auth.extra.raw_info.login
                 session['devise.github_data'] = auth

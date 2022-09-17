@@ -287,6 +287,8 @@ anychart.onDocumentReady(function () {
   <% if @group.git_repository.nil?%>
     <span><%= link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id), class:"btn btn btn-sm" %></span>
   <%elsif @group.git_repository=="private"%>
+    <span><%= link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id), class:"btn btn btn-sm border border-dark" %></span>
+  <%else%>
     <a href="https://github.com/<%=@group.user.gh_username%>?tab=repositories" > Go to your Github </a>
   <%elsif @group.git_repository=="public"%>
     <a href="https://github.com/organizeforus?tab=repositories" > Click to see OrganizeForUs's GitHub repositories </a>

@@ -323,7 +323,7 @@ Devise.setup do |config|
     scope: 'userinfo.email, userinfo.profile, user.birthday.read, calendar'
   }
 
-  config.omniauth :github, Rails.application.credentials.dig(:github, :github_client_id), Rails.application.credentials.dig(:github, :github_client_secret), scope: 'user:email, public_repo'
+  config.omniauth :github, Rails.application.credentials.dig(:github, :github_client_id), Rails.application.credentials.dig(:github, :github_client_secret), scope: 'user:email, public_repo, repo'
   # , { 
   #   loginPath: "/auth/github",
   #   access_type: "offline",

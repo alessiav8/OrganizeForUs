@@ -3,7 +3,26 @@
 <%end%>
 
 <!-- AGGIUNTA MEMNBRI PER QUANDO IL GRUPPO è GIA STATO CREATO-->
-<h1 class="display-6">Add new member to the group</h1>
+ <div class="row" style="width:100%">
+      <div class="col" > 
+      <h1 class="display-6">Add a new member to the group</h1>
+      </div>     
+      <div class="col" > <div class="row" style=" text-align:right">
+        <div class="col">
+        </div>
+        
+        <div class="col">
+        </div>
+        <div class="col">
+          <a href="<%= groups_path %>" style="color: black" title="Back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
+            </svg>
+          </a>
+        </div>
+         </div>
+      </div>
+  </div>
 <br>
 <%= render "partecipations/form"%>
 <br>
@@ -26,7 +45,4 @@
 </div>
   <% end %>
 <br>
-  <div style="text-align: left">
-  <%= link_to "Back", set_created_url(@group), class:"btn btn-secondary" %>
-  </div>
 </div>
