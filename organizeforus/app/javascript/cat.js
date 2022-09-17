@@ -1,4 +1,4 @@
-
+//credits for loading animation: https://codepen.io/eyesight
 document.addEventListener("DOMContentLoaded", function(){
 const cat = document.querySelector('.cat');
 const body = document.querySelector('.body');
@@ -18,14 +18,20 @@ const frontcircle = document.querySelector('.body-frontcircle');
 const bodybetween = document.querySelector('.body-between');
 const logo = document.querySelector('.logoani');
 const logofix = document.querySelector('.logo');
-const resetbutton = document.querySelector('.restart');
+const see_slots = document.querySelector('#see_slots');
 const ani = document.querySelector('.animation-wrapper');
 const layout = document.querySelector('.layout');
 
+
+
 //start-animation
 function initAni(){
+  cat.style.display = "block";
+  logo.style.display = "flex";
+
   const tl = new TimelineMax({delay:0.5, onComplete:logonotVisible});
   const tl_eye = new TimelineMax({delay:1.5, repeat:3, repeatDelay: 1});
+  cat.get
   resetit();
   logonotVisible();
   tl.to([head, eyes, ears], 0.2, {y:45, x:30})
@@ -124,16 +130,17 @@ function initAni(){
     .to(eyel, 0.1, {scaleY:1, y:45}, "twinkall +=0.1")
       .to(eyer, 0.1, {scaleY:0.1, y:55}, "twinkall")
       .to(eyer, 0.1, {scaleY:1, y:45}, "twinkall +=0.1");
+      
 }
 function logoVisible() {
     logofix.classList.add("visible");
-    resetbutton.classList.add('visible');
+    //resetbutton.classList.add('visible');
     ani.classList.add("notvisible");
     layout.classList.remove("notvisible");
 }
 function logonotVisible(){
   logofix.classList.remove("visible");
-  resetbutton.classList.remove('visible');
+  //resetbutton.classList.remove('visible');
   ani.classList.remove("notvisible");
   layout.classList.add("notvisible");
 }
@@ -154,6 +161,6 @@ function resetit(){
   TweenMax.set(earsl, {x:0, y:0, rotation: 0});
   TweenMax.set(earsr, {x:0, y:0, rotation: 0});
 }
-initAni();
-resetbutton.addEventListener("click", initAni);
+
+see_slots.addEventListener("click", initAni);
 });

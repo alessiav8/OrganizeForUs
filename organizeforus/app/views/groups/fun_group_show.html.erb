@@ -194,10 +194,10 @@
    <% if current_user==@group.administrator %> 
   <p class="lead">Click on the "See slots" button below to access a calendar that shows you the free time slots for you 
   and the other participants based on your Google Calendars!</p>
-  <%= button_to "See slots", set_organization_path(@group), class:"btn btn btn-lg" , id: "see_slots"%>
+  <%= button_to "See slots", set_organization_path(@group), class:"btn btn btn-lg" , id: "see_slots" %>
 
 
- 
+ <% #credits for the loading animation: https://codepen.io/eyesight%>
 
 
 <style>
@@ -363,7 +363,7 @@
     <div class="logo">Loading</div>
     <div class="animation-wrapper">
         <div class="cat-wrapper">
-            <svg class="cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 207.68 163.77" preserveAspectRatio="none">
+            <svg class="cat" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 207.68 163.77" preserveAspectRatio="none">
               <title>cat</title>
               <g class="body">
                 <circle class="body-backcircle" cx="76.86" cy="83.31" r="45.5"/>
@@ -390,7 +390,7 @@
               </g>
             </svg>
         </div>
-        <div class="logoani">Loading</div>
+        <div class="logoani" style="display: none">Loading</div>
     </div>
     <div class="layout notvisible">
         <div class="layout__nav">
