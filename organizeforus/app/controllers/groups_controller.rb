@@ -97,7 +97,7 @@ include Search
   def update
     respond_to do |format|
       @group=Group.find(params[:id])
-      if @group.update(name: group_params[:name],description: group_params[:description])
+      if @group.update(group_params)
         format.html { redirect_to group_url(@group), notice: "Group was successfully updated." }
         format.json { render :show, status: :ok, location: @group }
       else
@@ -238,7 +238,7 @@ include Search
       @me=@end_d.month.to_s
      end
 
-     @try = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , '08:00:00' , '17:00:00' , 1)
+     @try = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , @group.strat_hour.strftime("%H:%M:%S") , @group.end_hour.strftime("%H:%M:%S") , @group.min_hours_in_a_day*60)
      
      respond_to do |format|
       if @try==nil
@@ -301,7 +301,7 @@ include Search
       resp=JSON.parse(response.read_body)
       respond_to do |format|
           if !resp.values_at("id").first.nil? #se il gruppo viene correttamente creato inserirsco link nel gruppo
-            @group.update!(git_repository: "https://github.com/repos/#{@group.user.gh_username}/#{@group.name}")
+            @group.update!(git_repository: "private")
               format.html { redirect_to group_url(@group),notice: "GitHub private repository created, now check the email" }
               format.json { render json: show, status: :unprocessable_entity }
               #invio invito
@@ -310,7 +310,7 @@ include Search
               https2 = Net::HTTP.new(url2.host, url2.port)
               https2.use_ssl = true
               request2 = Net::HTTP::Post.new(url2)
-              request2["Authorization"] = "Bearer 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"
+              request2["Authorization"] = "Bearer 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"
               request2["Content-Type"] = "text/plain"
               request2.body = "{\n    \"new_owner\": \"#{@group.user.gh_username}\"\n}"
               response2 = https.request(request2)
@@ -319,7 +319,7 @@ include Search
           else
             format.html { redirect_to group_url(@group),notice: "Something goes wrong" }
             format.json { render json: show, status: :unprocessable_entity }
-            byebug
+            
           end
         end
       else #utente non autenticato con github
@@ -328,7 +328,7 @@ include Search
         resp=JSON.parse(response.read_body)
         respond_to do |format|
             if !resp.values_at("id").first.nil? #se il gruppo viene correttamente creato inserirsco link nel gruppo
-              @group.update!(git_repository: "https://github.com/repos/organizeforus/#{@group.name}")
+              @group.update!(git_repository: "public")
                 format.html { redirect_to group_url(@group),notice: "GitHub public repository created" }
                 format.json { render json: show, status: :unprocessable_entity }
             else
@@ -364,13 +364,12 @@ include Search
 
    # @group.update!(organization: @try) serve fare un metodo che data stringa restituisca i vari slots
    
-    @slots = organize_for_us(@group ,str_s, str_e , time_start , time_end , 1)
+    @slots = organize_for_us(@group ,str_s, str_e , time_start , time_end , @group.min_hours_in_a_day*60)
   
   end
   helper_method :show_organization
 
   
-
 
 
 
@@ -381,12 +380,12 @@ include Search
 
     # Only allow a list of trusted parameters through.
 
- def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.start_hour , hf = @group.end_hour, dur = 1)
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.strat_hour , hf = @group.end_hour, dur =  @group.min_hours_in_a_day*60)
   @group = Group.find(params[:id])
   
   @h_p_d = []
   if !@group.nil?
-    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , hs.strftime("%H:%M:%S") , hf.strftime("%H:%M:%S") , 1)
+    @slots = organize_for_us(@group , stringfy_date(s_d), stringfy_date(s_e) , hs.strftime("%H:%M:%S") , hf.strftime("%H:%M:%S") , dur)
     if @slots.nil?
       return [0]
     end 
@@ -413,7 +412,7 @@ include Search
 
 
     def group_params
-      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour)
+      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :min_hours_in_a_day, :hours, :date_of_start, :date_of_end, :strat_hour, :end_hour)
     end
 
     def role_params

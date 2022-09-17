@@ -33,6 +33,9 @@ before_action :is_a_member?, only:[:show]
     def new
       @group=Group.find(params[:group_id])
       @event=Event.new
+      d=DateTime.now
+      @dataI= d
+      @dataF= DateTime.new(d.year,d.month,d.day,d.hour+1,d.second)
     end
 
     def create
@@ -170,7 +173,18 @@ before_action :is_a_member?, only:[:show]
          if @group.list_accepted.where(user_id: current_user.id).empty?
            redirect_to root_path, notice: "Not Authorized ok"
          end
-         end
+        end
+
+        def parameterize_date
+          @event=Event.new
+          d=params[:day].to_i
+          m=params[:month].to_i
+          oraI=params[:data_inizio].to_datetime
+          oraF=params[:data_fine].to_datetime
+          @dataI= DateTime.new(DateTime.now.year,m,d,oraI.hour,oraI.minute,oraI.sec)
+          @dataF= DateTime.new(DateTime.now.year,m,d,oraF.hour,oraF.minute,oraF.sec)
+          render "new"
+        end
 
 
 

@@ -103,9 +103,44 @@
        </div>
      </div>
        <div class="mt-2 mb-3" id="max_hours" style="visibility: hidden">
-              <% form.label :max_hours_in_a_day, style: "display: block" %> Max hours in a day: <br>
-              <%= form.number_field :max_hours_in_a_day ,id:"Max"%>
+              <% form.label :min_hours_in_a_day, style: "display: block" %> Min hours in a day: <br>
+              <%= form.number_field :min_hours_in_a_day ,id:"Min"%>
         </div>
+
+  <%elsif controller_name == 'groups' && action_name == 'edit' %>
+      <div class="form-row">
+            <div class="col">
+              <% form.label :date_of_start, style: "display: block" %> Date started: <br>
+              <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control"%>
+            </div>
+
+          <div class="col">
+            <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
+            <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control "%>
+          </div>
+          <div class="col">
+            <div class="field form group">
+              <% form.label :hours, style: "display: block" %> Number of hours: <br>
+              <%= form.number_field :hours,id: "Hours"%>
+            </div>
+          </div>
+      </div>
+      <div class="form-row mt-3" style="width:50%">
+      <div class="col">
+        <% form.label :strat_hour, style: "display: block" %> Hour of start: <br>
+        <%= form.time_field :strat_hour , id:"StartHour", as: :date, html5: true, class:"form-control" %>
+      </div>
+
+      <div class="col">
+        <% form.label :end_hour, style: "display: block" %> Hour of end: <br>
+        <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control "%>
+      </div>
+    </div>
+      <div class="mt-2 mb-3" id="max_hours">
+              <% form.label :min_hours_in_a_day, style: "display: block" %> Max hours in a day: <br>
+              <%= form.number_field :min_hours_in_a_day ,id:"Min"%>
+        </div>
+
   <%end%>
 
   <!--campo nascosto per lo user_id che associa il group all'utente che lo crea-->

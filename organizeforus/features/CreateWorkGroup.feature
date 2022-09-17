@@ -18,7 +18,7 @@ Feature: User could create a group
         And I fill in "StartHour" with "08:00"
         And I fill in "EndHour" with "17:00"
         And I fill in "Hours" with "10"
-        And I fill in "Max" with "10"
+        And I fill in "Min" with "2"
         And I press "Continue"
         Given There is another user with an account
         And I fill in "EmailUser" with "alex@gm.com"

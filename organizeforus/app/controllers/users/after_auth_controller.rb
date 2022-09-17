@@ -58,7 +58,6 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                 render 'devise/registrations/after_social_connection'
             end
         elsif ( session["devise.github_data"].present? )
-                     
             @user = User.new(user_params)
 
             #@user.provider = session["devise.github_data"]["provider"]

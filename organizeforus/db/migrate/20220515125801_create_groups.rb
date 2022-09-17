@@ -7,7 +7,7 @@ class CreateGroups < ActiveRecord::Migration[7.0]
       t.string :description
       t.string :created, default: false
       t.integer :hours
-      t.integer :max_hours_in_a_day, default: 8
+      t.integer :min_hours_in_a_day, default: 1
       t.date :date_of_start
       t.date :date_of_end
       t.string :color, default: "#000000"
