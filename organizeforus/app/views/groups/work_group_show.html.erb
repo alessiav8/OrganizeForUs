@@ -284,12 +284,12 @@ anychart.onDocumentReady(function () {
 <%= link_to "Events", group_events_path(@group) %>
 -->
 <div>
+
   <% if @group.git_repository.nil? || @group.git_repository== "422"%>
     <span><%= link_to "Create a github repository for the group", name_repository_path(@group), class:"btn btn btn-sm" %></span>
   <%else%>
     <%=link_to "Click to see OrganizeForUs's GitHub repositories", get_github_link_path(@group) , method: :get,class:"btn btn btn-sm"%>
     <!--a href="<%=@group.git_url%>", class:"btn btn btn-sm">Click to see OrganizeForUs's GitHub repositories</a-->
-
   <%end%>
 </div>
   </body>

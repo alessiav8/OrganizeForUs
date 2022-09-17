@@ -344,6 +344,10 @@ include Search
   end
 
   def name_repository
+    if current_user.gh_access_token.nil?
+      redirect_to group_path(@group), notice: "GitHub isn't connected"
+    end
+
     @group=Group.find(params[:id])
   end
 
