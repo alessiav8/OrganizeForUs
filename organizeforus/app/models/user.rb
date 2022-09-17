@@ -116,7 +116,7 @@ class User < ApplicationRecord
         }
       }
       response = HTTParty.post('https://accounts.google.com/o/oauth2/token', data)
-      if response.code == 200
+      if eval(response.code.to_s) === 200
         token = response.parsed_response['access_token']
         date = DateTime.now + response.parsed_response['expires_in'].seconds
         user.update!(access_token: token, expires_at: date)
