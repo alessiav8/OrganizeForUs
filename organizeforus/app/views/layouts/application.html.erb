@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-  
     <title>Organizeforus</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -14,6 +13,7 @@
 
     
     <%= yield :head %>
+    <%= favicon_link_tag asset_path('favicon.ico.jpg') %>
   </head>
   <body>
     <%=render 'home/header'%>
