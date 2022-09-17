@@ -137,7 +137,7 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                         @user.update(fb_access_token: nil, fb_expires_at: nil)
                         flash[:notice] = "Facebook account successfully unlinked!"
                     elsif params[:provider] == "github"
-                        @user.update(gh_access_token: nil)
+                        @user.update(gh_access_token: nil, gh_username: nil)
                         flash[:notice] = "Github account successfully unlinked!"
                     elsif params[:provider] == "linkedin"
                         flash[:notice] = "Linkedin account successfully unlinked!"

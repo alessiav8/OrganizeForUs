@@ -269,8 +269,10 @@ include Search
     token = current_user.gh_access_token
     if !token
       flash[:notice] = "You must have linked your Github account to your account"
+      @group.update!(git_repository: nil)
       redirect_to @group and return 
     end
+    byebug
     url = URI.parse("https://api.github.com/user/repos")
     https = Net::HTTP.new(url.host, url.port)
     https.use_ssl = true
@@ -280,7 +282,7 @@ include Search
     request["Accept"] = 'application/vnd.github+json'
     name_repository=@group.git_repository
     private_or_not = (@group.status=="private")? true : false
-    request.body = {name: name_repository, private: private_or_not}.to_json
+    request.body = {name: name_repository, private: private_or_not, description: "This repository has been created by an amazing website: OrganizeForUs!!"}.to_json
     response = https.request(request)
     json = JSON.parse(response.body, symbolize_names: true)
     if eval(response.code.to_s) === 201
@@ -290,12 +292,13 @@ include Search
         redirect_to @group 
     elsif eval(response.code.to_s) === 422
       flash[:notice] = "#{json[:message]} Cause: #{json[:errors][0][:message]}!!"
+      @group.update!(git_repository: nil)
       redirect_to name_repository_path(@group)
-      @group.update!(git_repository: "422") and return
     else
       GroupMailer.with(user: current_user, time: Time.now).github_repo_api_error.deliver_now
       flash[:notice] = "There may be an issue with your github token... Please login again with Github... If the error persists, don't worry, or team has already been informated about your issue!!"
-      redirect_to @group
+      @group.update!(git_repository: nil)
+      redirect_to @group and return
     end
 =begin
     if !@group.user.gh_username.nil? #se l'utente si è autenticato con github
