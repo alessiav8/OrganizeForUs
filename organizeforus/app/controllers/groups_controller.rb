@@ -263,19 +263,84 @@ include Search
      return td.year.to_s+"-"+ms+"-"+td.day.to_s 
   end
 
+  def set_github_repo
+    @group = Group.find(params[:id])
+    url = "https://api.github.com/user/repos"
+    token = current_user.gh_access_token
+
+    if !token
+      flash[:notice] = "You must have linked your Github account to your account"
+      redirect_to :back
+    end
+
+    data = {
+      body: {
+        name: @group.name,
+        description: "Created by an amazing website: OrganizeForUs!!",
+        private: true,
+        client_id: Rails.application.credentials.dig(:github, :github_client_id),
+        client_secret: Rails.application.credentials.dig(:github, :github_client_secret)
+      },
+      headers: {
+        "accept" => "application/vnd.github+json",
+        "auth" => "Bearer "+token
+      } 
+    }.to_j
+    byebug
+    response = HTTParty.post(url, data)
+    if response.code == 201
+      token = response.parsed_response['access_token']
+      date = DateTime.now + response.parsed_response['expires_in'].seconds
+      user.update!(access_token: token, expires_at: date)
+    else
+      flash[:error] = "Your token has been expired and we can't refresh it... Please login again with google."
+      redirect_to :back
+    end
+  end
+
+
+  url = URI("https://api.github.com/user/repos")
+  https = Net::HTTP.new(url.host, url.port)
+  https.use_ssl = true
+  request = Net::HTTP::Post.new(url)
+  request["Authorization"] = "token #{token}"
+  request["Content-Type"] = 'application/json'
+  request["Accept"] = 'application/vnd.github+json'
+  request.body = {name: "palla", private: true}.to_json
+  response = https.request(request)
+  json = JSON.parse(response.body, symbolize_names: true)
+  
+  url = json[:html_url]
+
+  json[:owner][:repos_url]
+  r = HTTParty.get(json[:owner][:repos_url])
+  url_repo = r.parsed_response[0]["html_url"]
 
   def set_github_repo
     @group=Group.find(params[:id])
 
-      url = URI("https://api.github.com/user/repos")
-      
-      https = Net::HTTP.new(url.host, url.port)
-      https.use_ssl = true
-      
-      request = Net::HTTP::Post.new(url)
-      request["Authorization"] = "Bearer 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"
-      request["Content-Type"] = "text/plain"
-
+    url = URI("https://api.github.com/user/repos")
+    https = Net::HTTP.new(url.host, url.port)
+    https.use_ssl = true
+    request = Net::HTTP::Post.new(url)
+    request["Authorization"] = "token #{token}"
+    request["Content-Type"] = 'application/json'
+    request["Accept"] = 'application/vnd.github+json'
+    request.body = {name: @group.name+Group.diff, private: true}.to_json
+    response = https.request(request)
+    json = JSON.parse(response.body, symbolize_names: true)
+    if response.code == 201
+        url = json[:html_url]
+      date = DateTime.now + response.parsed_response['expires_in'].seconds
+      user.update!(access_token: token, expires_at: date)
+    elsif response.code == 422
+      flash[:notice] = "#{json[:message]} Cause: #{json[:errors][0][:message]}!!"
+    else
+      GroupMailer.with(user: current_user, time: Time.now).github_repo_api_error.deliver_now
+      flash[:notice] = "There may be an issue with your github token... Please login again with Github... If the error persists, don't worry, or team has already been informated about your issue!!"
+      redirect_to back
+    end
+=begin
     if !@group.user.gh_username.nil? #se l'utente si è autenticato con github
       request.body = "{\n    \"name\": \"#{@group.name}\",\n    \"private\" : \"true\"\n}"
       response = https.request(request)
@@ -318,8 +383,8 @@ include Search
             end
           end
       end
+=end
   end
-
 
   
   def get_total_number_of_hour(slots)
@@ -339,7 +404,7 @@ include Search
     str_s = stringfy_date(@group.date_of_start)
     str_e = stringfy_date(@group.date_of_end)
 
-    time_start=@group.strat_hour.strftime("%H:%M:%S")
+    time_start=@group.start_hour.strftime("%H:%M:%S")
     time_end=@group.end_hour.strftime("%H:%M:%S")
 
 
@@ -362,7 +427,7 @@ include Search
 
     # Only allow a list of trusted parameters through.
 
- def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.strat_hour , hf = @group.end_hour, dur = 1)
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.start_hour , hf = @group.end_hour, dur = 1)
   @group = Group.find(params[:id])
   
   @h_p_d = []
@@ -394,7 +459,7 @@ include Search
 
 
     def group_params
-      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end, :strat_hour, :end_hour)
+      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :max_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour)
     end
 
     def role_params

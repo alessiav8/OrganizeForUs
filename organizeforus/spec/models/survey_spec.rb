@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Survey, type: :model do
     before do 
         @user= User.create(name: "User",surname: "test", username: "user", birthday: "2001-07-07", email: "example@gm.com",password: "ciaociao")
-        @group=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last,hours: 6, strat_hour:"08:00:00",end_hour:"17:00:00")
+        @group=Group.create(name: "Gr",description: "sjhd",work: true ,date_of_start: "2022-08-07",date_of_end: "2022-08-10",user_id: User.last,hours: 6, start_hour:"08:00:00",end_hour:"17:00:00")
         #@user_not_admin= User.create(name: "User",surname: "test", username: "user2", birthday: "2001-07-07", email: "example2@gm.com",password: "ciaociao")
         @survey=@group.surveys.build(title:'title',body:'description')
         @survey.save

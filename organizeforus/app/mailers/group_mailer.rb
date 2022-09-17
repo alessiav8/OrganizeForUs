@@ -37,4 +37,12 @@ class GroupMailer < ApplicationMailer
     )
   end
 
+  def github_repo_api_error
+    @user=params[:user]
+    @time = params[:time]
+    mail(
+      to: "organizeforus@gmail.com",
+      subject: "Github repo api error #{params[:time]}"
+    )
+  end
 end

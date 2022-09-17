@@ -43,7 +43,7 @@
                 <%end%>
                 <b>Data d'inizio ricerca: </b><%= @group.date_of_start %><br>
                 <b>Data di fine ricerca: </b><%= @group.date_of_end %><br>
-                <b>Orario di ricerca: </b><%= @group.strat_hour.strftime("%H:%M") %> to <%= @group.end_hour.strftime("%H:%M") %><br>
+                <b>Orario di ricerca: </b><%= @group.start_hour.strftime("%H:%M") %> to <%= @group.end_hour.strftime("%H:%M") %><br>
                 <b>Numero di ore totali trovate: </b><%
                 th = 0
                 tm = 0

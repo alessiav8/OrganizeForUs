@@ -29,7 +29,6 @@ class Users::AfterAuthController < Devise::OmniauthCallbacksController
                 render 'devise/registrations/after_social_connection'
             end
         elsif ( session["devise.google_data"].present? )
-                     
             @user = User.new(user_params)
             #tentativo di setting di roles_mask come user per login tramite google
             #@user.roles_mask = :user

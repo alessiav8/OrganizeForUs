@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_201353) do
     t.string "color", default: "#000000"
     t.string "organization"
     t.string "git_repository"
-    t.time "strat_hour"
+    t.time "start_hour"
     t.time "end_hour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -200,8 +200,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_201353) do
     t.string "refresh_token"
     t.integer "roles_mask"
     t.string "gh_access_token"
-    t.string "fb_access_token"
     t.string "gh_username"
+    t.string "fb_access_token"
     t.datetime "fb_expires_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
