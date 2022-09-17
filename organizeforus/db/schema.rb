@@ -125,7 +125,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_201353) do
     t.integer "group_id"
     t.string "role_color", default: "#000000"
     t.boolean "accepted", default: false
-    t.boolean "admin", default: true
+    t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_partecipations_on_group_id"

@@ -272,7 +272,7 @@ end
 private
 
   def partecipation_params
-    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color,:admin)
+    params.require(:partecipation).permit(:user_id,:group_id,:role,:role_color, :admin)
   end
 
   def role_params

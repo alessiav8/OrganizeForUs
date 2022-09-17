@@ -334,7 +334,7 @@ include Search
           end
       end
 =end
-  redirect_to @group
+  #redirect_to @group
   end
 
   

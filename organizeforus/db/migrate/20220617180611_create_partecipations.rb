@@ -6,7 +6,7 @@ class CreatePartecipations < ActiveRecord::Migration[7.0]
       t.belongs_to :group
       t.string :role_color, default: "#000000"
       t.boolean :accepted, default: "false"
-      t.boolean :admin, default: "true"
+      t.boolean :admin, default: "false"
       t.timestamps
 
     end
