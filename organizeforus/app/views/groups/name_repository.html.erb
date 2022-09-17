@@ -1,11 +1,19 @@
 
 <center>
 <%= form_with model: @group, url: set_name_for_new_repository_path(@group), method: :post do |form| %>
-    <div class="row" style="align: center"><center> Please choose a name for repository</center> </div>
+    <div class="row" style="align: center"><center>
+     Please choose a name for repository</center> 
+     </div>
+     <br>
         <div class="row mb-3 " style="width: 50%">
             <div class="field">
                 <%= form.text_field :git_repository, class: 'form-control'  %>
             </div>
+        </div>
+        <br>
+        <div class="field mb-2">
+            <%=form.label :status %>
+            <%=form.select :status, ["public","private"], value: "private" %>
         </div>
 <div class="actions">
     <%= form.submit "Create" %>

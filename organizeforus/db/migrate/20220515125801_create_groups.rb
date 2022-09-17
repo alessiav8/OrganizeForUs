@@ -13,8 +13,10 @@ class CreateGroups < ActiveRecord::Migration[7.0]
       t.string :color, default: "#000000"
       t.string :organization
       t.string :git_repository
+      t.string :git_url
       t.time :start_hour
       t.time :end_hour
+      t.string :status, default: "private"
       t.timestamps
     end
   end

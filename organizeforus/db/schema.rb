@@ -87,8 +87,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_201353) do
     t.string "color", default: "#000000"
     t.string "organization"
     t.string "git_repository"
+    t.string "git_url"
     t.time "start_hour"
     t.time "end_hour"
+    t.string "status", default: "private"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"

@@ -269,7 +269,7 @@ include Search
     token = current_user.gh_access_token
     if !token
       flash[:notice] = "You must have linked your Github account to your account"
-      redirect_to @group
+      redirect_to @group and return 
     end
     url = URI.parse("https://api.github.com/user/repos")
     https = Net::HTTP.new(url.host, url.port)
@@ -279,17 +279,19 @@ include Search
     request["Content-Type"] = 'application/json'
     request["Accept"] = 'application/vnd.github+json'
     name_repository=@group.git_repository
-    request.body = {name: name_repository, private: true}.to_json
+    private_or_not = (@group.status=="private")? true : false
+    request.body = {name: name_repository, private: private_or_not}.to_json
     response = https.request(request)
     json = JSON.parse(response.body, symbolize_names: true)
     if eval(response.code.to_s) === 201
         url = json[:html_url]
         flash[:notice] = "Repository successfully created on your Github account!"
-        redirect_to @group
+        @group.update!(git_url: url)
+        redirect_to @group 
     elsif eval(response.code.to_s) === 422
       flash[:notice] = "#{json[:message]} Cause: #{json[:errors][0][:message]}!!"
       redirect_to name_repository_path(@group)
-      @group.update!(git_repository: "422")
+      @group.update!(git_repository: "422") and return
     else
       GroupMailer.with(user: current_user, time: Time.now).github_repo_api_error.deliver_now
       flash[:notice] = "There may be an issue with your github token... Please login again with Github... If the error persists, don't worry, or team has already been informated about your issue!!"
@@ -388,6 +390,47 @@ include Search
     end
   end
 
+  def get_github_link
+    @group=Group.find(params[:id])
+    if current_user.gh_access_token.nil?
+      flash[:notice] = "You havn't your GithHub account linked, this is a private repository!"
+      redirect_to @group and return
+    end
+    if @group.status=="private"
+      url = URI.parse("https://api.github.com/repos/#{current_user.gh_username}/#{@group.git_repository}")
+      https = Net::HTTP.new(url.host, url.port)
+      https.use_ssl = true
+      request = Net::HTTP::Post.new(url)
+      request["Authorization"] = "token #{current_user.gh_access_token}"
+      request["Content-Type"] = 'application/json'
+      request["Accept"] = 'application/vnd.github+json'
+      request["Coockies"] = 'login-yes'
+      request.body = {owner: @group.user.gh_username}.to_json
+      response = https.request(request)
+    else
+      url = URI.parse("https://api.github.com/repos/#{@group.user.gh_username}/#{@group.git_repository}")
+          https = Net::HTTP.new(url.host, url.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(url)
+        request["Authorization"] = "token #{current_user.gh_access_token}"
+        request["Accept"] = 'application/vnd.github+json'
+        request.body = {owner: @group.user.gh_username}.to_json
+        response = https.request(request)
+    end
+    #url = URI.parse("https://api.github.com/repos/"+@group.git_url.remove("https://github.com/"))
+    
+    
+    json = JSON.parse(response.body, symbolize_names: true)   
+    if eval(response.code.to_s) === 200
+      redirect_to @group.git_url, allow_other_host: true and return
+    else
+      flash[:notice] = "You have not the access to this repository, please conctact the admin"
+      redirect_to @group and return
+    end
+    
+  end
+
+
 
 
   private
@@ -428,7 +471,7 @@ include Search
 
 
     def group_params
-      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :min_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour,:git_repository)
+      params.require(:group).permit(:name, :description, :user_id, :fun, :work, :image, :color, :min_hours_in_a_day, :hours, :date_of_start, :date_of_end, :start_hour, :end_hour,:git_repository, :status)
     end
 
     def role_params
