@@ -20,14 +20,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             end
             redirect_to profile_path
         else
+            
             authentication = Identity.find_by(provider: auth.provider, uid: auth.uid)
+      
             if authentication.present?
+                
                 @user = authentication.user
+                
                 @user.update!(access_token: auth.credentials.token, expires_at: get_expiration_time(auth.credentials.expires_at.seconds), refresh_token: auth.credentials.refresh_token)
                 sign_in_and_redirect @user, :event => :authentication
                 flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
             else
-
                 @user = User.from_omniauth(auth)
                 if(auth.info.image)
                     file = URI.open(auth.info.image)
