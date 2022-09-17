@@ -211,14 +211,6 @@
 </div>
   <!-- FINE ACCORDION -->
 <br>
-<br>
-
-  
-
-
-
-
-<br><br>
   <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-pie.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-exports.min.js"></script>
@@ -267,17 +259,8 @@ anychart.onDocumentReady(function () {
     chart.draw();
 });
 
-     </script>    
-
-
-
-
-
-
-
-
+     </script>   
   <br>
-
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script type="text/javascript">
@@ -299,16 +282,15 @@ anychart.onDocumentReady(function () {
 
 <!-- Index eventi 
 <%= link_to "Events", group_events_path(@group) %>
-
-
-
 -->
-<div class="row ml-2">
+<div>
   <% if @group.git_repository.nil?%>
-    <%=link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id)  %>
+    <span><%= link_to "Create a github repository for the group", set_github_repo_path(@group,current_user.id), class:"btn btn btn-sm" %></span>
   <%else%>
     <a href="https://github.com/<%=@group.user.gh_username%>?tab=repositories" > Go to your Github </a>
   <%end%>
 </div>
   </body>
 </html>
+</br>
+</br>
