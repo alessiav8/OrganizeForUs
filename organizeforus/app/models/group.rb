@@ -16,6 +16,15 @@ class Group < ApplicationRecord
     before_destroy :remove_partecipation, if: :has_partecipation?
 
 
+    validates :name, length: { minimum: 2 }
+    validates :description, presence: true
+    validates :date_of_start, presence: true
+    validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
+    validates :start_hour, presence: true
+    validates :end_hour, presence: true, comparison: { greater_than_or_equal_to: :start_hour}
+    validates :hours, presence: true
+
+    
     scope :list_members, ->(group) {
       Partecipation.where(group_id: group)
     }
@@ -142,13 +151,7 @@ class Group < ApplicationRecord
     end
   end
   
-  validates :name, length: { minimum: 2 }
-  validates :description, presence: true
-  validates :date_of_start, presence: true
-  validates :date_of_end, presence: true, comparison: { greater_than_or_equal_to: :date_of_start}
-  validates :start_hour, presence: true
-  validates :end_hour, presence: true, comparison: { greater_than_or_equal_to: :start_hour}
-  validates :hours, presence: true
+  
 
   def is_a_work_group
     if self.work == true
@@ -174,5 +177,7 @@ class Group < ApplicationRecord
   def self.diff
     SecureRandom.hex(4)
   end
+
+
 
 end

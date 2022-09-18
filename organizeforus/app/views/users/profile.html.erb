@@ -1,3 +1,8 @@
+<html>
+<head>
+</head>
+<body>
+
 <%if !user_signed_in? %>
   <% controller.redirect_to new_user_session_path %>
 <%end%>
@@ -171,30 +176,99 @@
             <% end %>
 
     <% if current_user.access_token? %>
+
+    <style type="text/css">
+    .simple-calendar {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid #ccc;
+        font-size: 15px;
+        background-color: white;
+      }
+      .day {
+        padding: 5px;
+        text-align: center;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+      }
+      
+      .wday-0 {color: red; }
+      .wday-1 {color: black;}
+      .wday-2 {color: black;}
+      .wday-3 {color: black;}
+      .wday-4 {color: black;}
+      .wday-5 {color: black; }
+      .wday-6 {color: red; }
+
+      .today {
+          font-weight: bold;
+        }
+      .past {
+          color: black;
+      }
+      .future {
+          color: black;
+      }
+    
+      .start-date {}
+    
+      .prev-month {}
+      .next-month { }
+      .current-month {}
+    
+      .event {
+          color: black;
+      }
+    </style>
             <div class="container mt-5 text-center">
-            <h5>My calendar</h5>
+            <h5>My calendar</h5><br>
                 <%= month_calendar do |date| %> 
                             <div class="day">
-                                <%= date.day %>
+                                <%= date.day %>                
                             </div>
+                    <div class="event">
                     <% @event_list.each do |event| %>
                         <% if event.start.date_time != nil%>
-                        <% if event.start.date_time.to_date == date.to_datetime %>
-                            <div class="event">
-                                    <b><%=event.summary %></b><br>
-                                    <%=event.start.date_time.hour%> : <%=event.start.date_time.minute%>
-                                    - <%=event.end.date_time.hour%>: <%=event.end.date_time.minute%><br>
-                            </div>
-                        <%end%>
+                            <% if event.start.date_time.to_date == date.to_datetime %>
+                                <div class="container  rounded mb-1" style="background-color: #03A4E4">
+                                    <span style="font-size: 15px"><b><%=event.summary %>  </b>
+                                        <% if event.start.date_time.hour < 10 %>
+                                            <% @start = "0"+String(event.start.date_time.hour)%>
+                                        <%else%>
+                                            <% @start = String(event.start.date_time.hour)%>
+                                        <%end%>
+                                        <% if event.start.date_time.minute < 10 %>
+                                            <% @start_minute = "0"+String(event.start.date_time.minute)%>
+                                        <%else%>
+                                            <% @start_minute = String(event.start.date_time.minute)%>
+                                        <%end%>
+
+                                        <%=@start%>:<%=@start_minute%>
+                                        <% if event.end.date_time.hour < 10 %>
+                                            <% @end = "0"+String(event.end.date_time.hour)%>
+                                        <%else%>
+                                            <% @end = String(event.end.date_time.hour)%>
+                                        <%end%>
+
+                                        <% if event.end.date_time.minute < 10 %>
+                                            <% @end_minute = "0"+String(event.end.date_time.minute)%>
+                                        <%else%>
+                                            <% @end_minute = String(event.end.date_time.minute)%>
+                                        <%end%>
+                                        -<%=@end%>:<%=@end_minute%><br></span>
+                                </div>
+                            <%end%>
                         <%else%>
-                        <% if event.start.date.to_date == date.to_datetime %>
-                            <div class="event">
-                                    <b><%=event.summary %></b><br>
-                            </div>
+                            <% if event.start.date <= date && date.to_datetime < event.end.date.to_datetime %>
+                                <div class="container rounded mb-1" style="background-color: #03A4E4">
+                                        <span style="font-size: 13px"><b><%=event.summary %></b></span>      
+                                </div>
+                            <%end%>
                         <%end%>
-                        <%end%>
-                    <% end %>
+                    <% end %> 
                 <% end %>
+                </div>
             </div>
         <%end%>
     
@@ -208,3 +282,5 @@
 <br>
 <br>
 </div>
+</body>
+</html>

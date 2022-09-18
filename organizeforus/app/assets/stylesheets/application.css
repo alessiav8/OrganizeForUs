@@ -40,3 +40,57 @@
    background-repeat: no-repeat;
    background-size: cover;
 }
+.simple-calendar {
+   width: 100%;
+   border-collapse: collapse;
+   border-spacing: 0;
+   border: 1px solid #ccc;
+   font-size: 12px;
+   background-color: white;
+
+ }
+ .day {
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+
+ }
+ .wday-0 {
+    color: black;
+ }
+ .wday-1 {
+    color: black;
+ }
+ .wday-2 {
+    color: black;
+ }
+ .wday-3 {
+    color: black;
+ }
+ .wday-4 {
+    color: black;
+ }
+ .wday-5 {
+    color: red;
+ }
+ .wday-6 {
+    color: red;
+ }
+
+ .today {}
+ .past {}
+ .future {}
+
+ .start-date {
+
+ }
+
+ .prev-month {
+
+ }
+ .next-month { 
+
+ }
+ .current-month {
+
+ }

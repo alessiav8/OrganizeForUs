@@ -127,6 +127,9 @@ include Search
     end
   end
 
+
+
+
   def delete_role
     @group=Group.find(params[:id])
   end
