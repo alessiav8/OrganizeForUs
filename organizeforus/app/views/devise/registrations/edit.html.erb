@@ -63,7 +63,7 @@
 
   <div class="field form-group">
     <%= f.label :Birthday %><br />
-    <%= f.date_field :birthday, as: :date, html5: true, class:"form-control" %> 
+    <%= f.date_field :birthday, as: :date, html5: true, min: Date.today - 120.years, max: Date.today-12.years, class:"form-control" %> 
   </div>
 
   <div class="field form-group">
