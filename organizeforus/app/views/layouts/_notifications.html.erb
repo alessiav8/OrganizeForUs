@@ -9,7 +9,7 @@
                     </svg>
             </span>
         </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <% @unread.each do |notification| %>
                <%= render 'layouts/notification', notification: notification%>
             <%end%>

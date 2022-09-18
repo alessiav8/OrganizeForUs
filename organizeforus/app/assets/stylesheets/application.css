@@ -17,7 +17,13 @@
 
  li span { 
     color: black; 
-   } 
+    list-style-type: circle;
+   };
+  
+ li {
+      list-style-type: circle ;
+   };
+
 
    #map {
       height: 400px;

@@ -91,7 +91,7 @@
                 <div class="row"> 
                   <div class="col">
                     <% if @group.accepted?(member.user.id) %> 
-                      <li style="color: <%=member.role_color%>" > 
+                      <li style="list-style-type: circle ; color: <%=member.role_color%>" > 
                       <span> <%= member.user.email %> </span> 
                       </li> 
                       <% i=i+1%>
@@ -115,7 +115,7 @@
       <div class="accordion-body">
       <% if !@group.events.empty? %>
         <% @group.events.each do |event|%>
-          <li><%= event.title%> </li>
+          <li style='list-style-type: circle'><%= event.title%> </li>
         <%end %>
       <%else%>
         <p class="lead">No events yet</p>
@@ -154,13 +154,14 @@
               <% @group.surveys.active.take(3).each do |s| %>
               <% if i < 3 && i <= @group.surveys.count %>
                 <%i=i+1%>
-                <%= link_to s.title , show_survey_path(@group,s) %>
+                 <li style='list-style-type: circle'><%= link_to s.title , show_survey_path(@group,s) %></li>
                 <!--QUESTO NON FUNZIONA-->
               <%end%>
               <%end%>
             <%else%>
               <p class="lead">No surveys yet</p>
             <%end%>
+            <br>
           <span><%= link_to "Show More", index_survey_url(@group), class:"btn  btn-sm" %></span>
       </div>
     </div>

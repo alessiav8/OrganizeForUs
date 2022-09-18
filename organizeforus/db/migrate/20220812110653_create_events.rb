@@ -11,6 +11,7 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.string :members
       t.string :mode
       t.string :type_of_hours
+      t.string :meet_uri
 
       t.timestamps
     end

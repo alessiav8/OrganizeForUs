@@ -47,7 +47,7 @@ end
         end #invia notifica per accettare o meno l'invito al gruppo
         
         if @g.work==true
-          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, admin: partecipation_params[:admin])
+          @partecipation=Partecipation.new(group_id: @group, user_id: @id.id, role: @role, role_color: @color, admin: false)
           respond_to do |format|
             if @partecipation.save
               format.html { redirect_to session.delete(:return_to), notice: 'Member was succesfully added' }

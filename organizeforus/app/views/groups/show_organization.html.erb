@@ -5,7 +5,7 @@
     <div class="row" style=" text-align:right">
       <!--home-->
       <div class="col" >
-      <a href="<%= root_path %>" title="Back home" style="color: black">
+      <a href="<%= group_path(@group) %>" title="Back home" style="color: black">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z"/>
       </svg>
@@ -27,11 +27,11 @@
  <div class="row mt-5">
  <% @h_p_d = __init__ %>
     <div class="col-md-7">  
-      <h1 class="display-6">Configurazione di Ricerca attuale</h1>
+      <h1 class="display-6">Current search configuration </h1>
       <div class="card mb-4">
         <div class="card-body">
           <p>
-               <b> Partecipanti: </b><br>
+               <b> Members: </b><br>
                 <%
                 @group.partecipations.each do |part| %><li><%
                 user = User.find_by(id: part.user_id)
@@ -41,10 +41,10 @@
                  <%end%>
           </p></li>
                 <%end%>
-                <b>Data d'inizio ricerca: </b><%= @group.date_of_start %><br>
-                <b>Data di fine ricerca: </b><%= @group.date_of_end %><br>
-                <b>Orario di ricerca: </b><%= @group.start_hour.strftime("%H:%M") %> to <%= @group.end_hour.strftime("%H:%M") %><br>
-                <b>Numero di ore totali trovate: </b><%
+                <b>Start date: </b><%= @group.date_of_start %><br>
+                <b>End date: </b><%= @group.date_of_end %><br>
+                <b>Time range: </b><%= @group.start_hour.strftime("%H:%M") %> to <%= @group.end_hour.strftime("%H:%M") %><br>
+                <b>Total hours found: </b><%
                 th = 0
                 tm = 0
                 if !@h_p_d.nil?

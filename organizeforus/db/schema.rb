@@ -70,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_15_201353) do
     t.string "members"
     t.string "mode"
     t.string "type_of_hours"
+    t.string "meet_uri"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"

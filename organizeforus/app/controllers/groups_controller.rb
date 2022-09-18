@@ -2,8 +2,8 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [ :show, :edit ,:update ,:destroy ]
   before_action :authenticate_user!
   before_action :check_id, except: [:index, :new, :create]
-  before_action :correct_user, only: [:edit, :update]
-  before_action :only_real_admin, only:[:destroy,:set_organization,:set_github_repo, :name_repository]
+  before_action :correct_user, only: [:edit, :update, :set_organization]
+  before_action :only_real_admin, only:[:destroy,:set_github_repo, :name_repository]
   before_action :not_already_created, only: [:name_repository]
   before_action :delete_incomplete, only: [:index]
   before_action :surveys_terminated, only: [:show]
@@ -83,7 +83,7 @@ include Search
         format.json { render :show, location: @group, status: :unprocessable_entity }
 
       elsif @group.save 
-        Partecipation.create(group_id: @group.id, user_id: current_user.id, accepted: true, admin:true, role: "Admin")
+        Partecipation.create(group_id: @group.id, user_id: current_user.id, accepted: true, admin: true, role: "Admin")
         format.html { redirect_to new_partecipations_url(@group)}
         format.json { render :show, status: :created, location: @group }
          
@@ -129,34 +129,6 @@ include Search
 
   def delete_role
     @group=Group.find(params[:id])
-  end
-
-  def correct_user
-    @group = current_user.groups.find_by(id: params[:id])
-      if @group.nil? 
-        if !Partecipation.find_by(group_id: params[:id], user_id: current_user.id).nil?
-          if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).admin == false
-            redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
-          end
-        else 
-          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
-        end
-      end
-  end
-
-  def only_real_admin
-    @group = current_user.groups.find_by(id: params[:id])
-      if @group.nil? 
-          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized on this Group"
-      end
-  end
-
-
-  def member_or_admin
-    @group=Group.find(params[:id])
-    @debug= ( @group.user == current_user || !Partecipation.where(group_id: @group , user_id: current_user).empty? )
-    redirect_to root_path, notice: "Not Authorized on this Group" if @debug == false
-    logger.debug @debug
   end
 
   def set_created
@@ -238,9 +210,7 @@ include Search
      else
       @me=@end_d.month.to_s
      end
-
-     @try = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , @group.start_hour.strftime("%H:%M:%S") , @group.end_hour.strftime("%H:%M:%S") , @group.min_hours_in_a_day*60)
-     
+     @try = organize_for_us(@group ,@start.year.to_s+"-"+@ms+"-"+@start.day.to_s , @end_d.year.to_s+"-"+@me+"-"+@end_d.day.to_s , @group.start_hour.strftime("%H:%M:%S") , @group.end_hour.strftime("%H:%M:%S") , (@group.min_hours_in_a_day*60 - 1))
      respond_to do |format|
       if @try==nil
           format.html { redirect_to group_url(@group),notice: "Not possible to find an organizzation" }
@@ -249,7 +219,7 @@ include Search
         format.html { redirect_to group_url(@group),notice: "All members are free" }
         format.json { render json: show, status: :unprocessable_entity }
       else 
-        format.html { redirect_to show_organization_path(@group),notice: "All members are free" }
+        format.html { redirect_to show_organization_path(@group),notice: "We have found something! Press Slots" }
         format.json { render json: show, status: :unprocessable_entity } 
       end 
     end
@@ -263,7 +233,6 @@ include Search
     end
      return td.year.to_s+"-"+ms+"-"+td.day.to_s 
   end
-
   def set_github_repo
     @group=Group.find(params[:id])
     token = current_user.gh_access_token
@@ -272,7 +241,6 @@ include Search
       @group.update!(git_repository: nil)
       redirect_to @group and return 
     end
-    byebug
     url = URI.parse("https://api.github.com/user/repos")
     https = Net::HTTP.new(url.host, url.port)
     https.use_ssl = true
@@ -384,7 +352,7 @@ include Search
 
    # @group.update!(organization: @try) serve fare un metodo che data stringa restituisca i vari slots
    
-    @slots = organize_for_us(@group ,str_s, str_e , time_start , time_end , @group.min_hours_in_a_day*60)
+    @slots = organize_for_us(@group ,str_s, str_e , time_start , time_end , ( @group.min_hours_in_a_day*60 - 1))
   
   end
   helper_method :show_organization
@@ -438,6 +406,36 @@ include Search
   end
 
 
+  def correct_user
+    @group = current_user.groups.find_by(id: params[:id])
+      if @group.nil? 
+        if !Partecipation.find_by(group_id: params[:id], user_id: current_user.id).nil?
+          if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).admin == false
+            redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+          end
+        else 
+          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+        end
+      end
+  end
+
+  def only_real_admin
+    @group = current_user.groups.find_by(id: params[:id])
+      if @group.nil? 
+          redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized on this Group"
+      end
+  end
+
+
+  def member_or_admin
+    @group=Group.find(params[:id])
+    @debug= ( @group.user == current_user || !Partecipation.where(group_id: @group , user_id: current_user).empty? )
+    redirect_to root_path, notice: "Not Authorized on this Group" if @debug == false
+    logger.debug @debug
+  end
+
+
+
 
 
   private
@@ -446,7 +444,7 @@ include Search
 
     # Only allow a list of trusted parameters through.
 
- def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.start_hour , hf = @group.end_hour, dur =  @group.min_hours_in_a_day*60)
+ def __init__(s_d=@group.date_of_start , s_e=@group.date_of_end, hs = @group.start_hour , hf = @group.end_hour, dur =  (@group.min_hours_in_a_day*60-1))
   @group = Group.find(params[:id])
   
   @h_p_d = []

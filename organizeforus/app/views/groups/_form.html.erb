@@ -76,12 +76,12 @@
     </div>
     <div class="form-row">
             <div class="col">
-              <% form.label :date_of_start, style: "display: block" %> Date started: <br>
+              <% form.label :date_of_start, style: "display: block" %> Start date: <br>
               <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control", value: Date.current %>
             </div>
 
           <div class="col">
-            <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
+            <% form.label :date_of_end, style: "display: block" %> End date: <br>
             <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control ", value: Date.tomorrow %>
           </div>
           <div class="col">
@@ -93,12 +93,12 @@
        </div>
        <div class="form-row mt-3" style="width:50%">
        <div class="col">
-         <% form.label :start_hour, style: "display: block" %> Hour of start: <br>
+         <% form.label :start_hour, style: "display: block" %> Starting hour: <br>
          <%= form.time_field :start_hour , id:"StartHour", as: :date, html5: true, class:"form-control", value: "08:00" %>
        </div>
    
        <div class="col">
-         <% form.label :end_hour, style: "display: block" %> Hour of end: <br>
+         <% form.label :end_hour, style: "display: block" %> Ending hour: <br>
          <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control ", value: "18:00"%>
        </div>
      </div>
@@ -110,12 +110,12 @@
   <%elsif controller_name == 'groups' && action_name == 'edit' %>
       <div class="form-row">
             <div class="col">
-              <% form.label :date_of_start, style: "display: block" %> Date started: <br>
+              <% form.label :date_of_start, style: "display: block" %> Start date: <br>
               <%= form.date_field :date_of_start , id:"Startdata", as: :date, html5: true, class:"form-control"%>
             </div>
 
           <div class="col">
-            <% form.label :date_of_end, style: "display: block" %> Date ended: <br>
+            <% form.label :date_of_end, style: "display: block" %> End date: <br>
             <%= form.date_field :date_of_end,id:"Enddata", as: :date, html5: true, class:"form-control "%>
           </div>
           <div class="col">
@@ -127,12 +127,12 @@
       </div>
       <div class="form-row mt-3" style="width:50%">
       <div class="col">
-        <% form.label :start_hour, style: "display: block" %> Hour of start: <br>
+        <% form.label :start_hour, style: "display: block" %> Starting hour: <br>
         <%= form.time_field :start_hour , id:"StartHour", as: :date, html5: true, class:"form-control" %>
       </div>
 
       <div class="col">
-        <% form.label :end_hour, style: "display: block" %> Hour of end: <br>
+        <% form.label :end_hour, style: "display: block" %> Ending hour: <br>
         <%= form.time_field :end_hour,id:"EndHour", as: :date, html5: true, class:"form-control "%>
       </div>
     </div>

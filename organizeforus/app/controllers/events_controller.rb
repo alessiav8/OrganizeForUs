@@ -6,6 +6,7 @@ before_action :is_authorized? , only: [:destroy]
 before_action :is_authenticate?, only: [:new]
 before_action :is_ok?, except: [:create]
 before_action :is_a_member?, only:[:show]
+before_action :correct_user, only: [:new, :create]
 
   include Search
 
@@ -46,7 +47,8 @@ before_action :is_a_member?, only:[:show]
       eevent = params[:event]
       event = get_event eevent
       if @event.mode == "Online"
-        client.insert_event('primary', event, conference_data_version: 1)
+        ret=client.insert_event('primary', event, conference_data_version: 1)
+        @event.update(meet_uri: ret.conference_data.entry_points.first.uri ) 
       else
         client.insert_event('primary', event)
       end
@@ -184,6 +186,19 @@ before_action :is_a_member?, only:[:show]
           @dataI= DateTime.new(DateTime.now.year,m,d,oraI.hour,oraI.minute,oraI.sec)
           @dataF= DateTime.new(DateTime.now.year,m,d,oraF.hour,oraF.minute,oraF.sec)
           render "new"
+        end
+
+        def correct_user
+          @group = current_user.groups.find_by(id: params[:group_id])
+            if @group.nil? 
+              if !Partecipation.find_by(group_id: params[:id], user_id: current_user.id).nil?
+                if Partecipation.find_by(group_id: params[:id], user_id: current_user.id).admin == false
+                  redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+                end
+              else 
+                redirect_to group_url(Group.find(params[:id])), notice: "Not Authorized to Edit this Group"
+              end
+            end
         end
 
 

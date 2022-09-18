@@ -54,7 +54,7 @@
     
     </div>
     <div class="col-8">
-    <p><b>You have created:</b><%=Group.where(user_id: @current_user).count%> groups</p>
+    <p class="lead"><b>You have created: </b><%=Group.where(user_id: @current_user).count%> groups</p>
     <div class="row row-cols-1 row-cols-md-4 g-4">
     <%var=1%>
          <% @groups.each do |group| %>

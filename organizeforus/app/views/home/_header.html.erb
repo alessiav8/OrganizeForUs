@@ -47,8 +47,8 @@
         <!-- notifiche -->
 
   
-            <li class="nav-item "  style= "display: block">
-                <%= render "layouts/notifications" %>
+            <li class="nav-item"  style= "display: block">
+                  <%= render "layouts/notifications" %>
             </li>
 
             <li class="nav-item dropdown"  style: "display: block">
@@ -58,13 +58,14 @@
 
               <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="NavBarDropDown1" style="text-align: right">
 
-                <li class="dropdown-item">
-                  <%=link_to "My Groups", groups_path, class:"nav-link"%>
-                </li>
+              <li class="dropdown-item">
+              <%=link_to "My Groups", groups_path, class:"nav-link"%>
+               </li>
                 <li class="dropdown-item">
                     <!--non fatto-->
                      <%=link_to "Profile", profile_path, class:"nav-link"%>
                 </li>
+                
                 <li class="dropdown-item">
                     <%= link_to 'Logout', destroy_user_session_path, method: :delete, class:"nav-link" %> </a>
                 <li>
