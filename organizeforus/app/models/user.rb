@@ -82,8 +82,10 @@ class User < ApplicationRecord
         resp = HTTParty.get("https://people.googleapis.com/v1/people/me?personFields=birthdays&alt=json&key="+Rails.application.credentials.dig(:google, :google_api_key)+"&access_token="+User.token!(user))
         if eval(resp.code.to_s) === 200
           json = JSON.parse(resp.body, symbolize_names: true)
-          date = json[:birthdays][0][:date]
-          user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:day].to_s
+          if json[:birthdays]
+            date = json[:birthdays][0][:date]
+            user.birthday = date[:year].to_s+"-"+date[:month].to_s+"-"+date[:day].to_s
+          end
         end
       elsif (auth.provider === "linkedin")
         user.name = auth.info.first_name
