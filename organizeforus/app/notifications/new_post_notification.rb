@@ -12,8 +12,7 @@ class NewPostNotification < Noticed::Base
   def url
     @group=Group.find(params[:group][:id])
     @post=Post.find(params[:post][:id])
-    group_path(@group)
-    
+    group_post_path(@group,@post)    
   end  
 
 end

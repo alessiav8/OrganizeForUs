@@ -231,7 +231,7 @@
                     <% @event_list.each do |event| %>
                         <% if event.start.date_time != nil%>
                             <% if event.start.date_time.to_date == date.to_datetime %>
-                                <div class="container  rounded mb-1" style="background-color: #03A4E4">
+                                <div class="container  rounded mb-1" style="background-color: #03A4E4 ; width:85%">
                                     <span style="font-size: 15px"><b><%=event.summary %>  </b>
                                         <% if event.start.date_time.hour < 10 %>
                                             <% @start = "0"+String(event.start.date_time.hour)%>
@@ -244,24 +244,23 @@
                                             <% @start_minute = String(event.start.date_time.minute)%>
                                         <%end%>
 
-                                        <%=@start%>:<%=@start_minute%>
+                                        <%=@start%>:<%=@start_minute%> -
                                         <% if event.end.date_time.hour < 10 %>
                                             <% @end = "0"+String(event.end.date_time.hour)%>
                                         <%else%>
                                             <% @end = String(event.end.date_time.hour)%>
                                         <%end%>
-
                                         <% if event.end.date_time.minute < 10 %>
                                             <% @end_minute = "0"+String(event.end.date_time.minute)%>
                                         <%else%>
                                             <% @end_minute = String(event.end.date_time.minute)%>
                                         <%end%>
-                                        -<%=@end%>:<%=@end_minute%><br></span>
+                                            <%=@end%>:<%=@end_minute%><br></span>
                                 </div>
                             <%end%>
                         <%else%>
                             <% if event.start.date <= date && date.to_datetime < event.end.date.to_datetime %>
-                                <div class="container rounded mb-1" style="background-color: #03A4E4">
+                                <div class="container rounded mb-1" style="background-color: #03A4E4 ; width:85%">
                                         <span style="font-size: 13px"><b><%=event.summary %></b></span>      
                                 </div>
                             <%end%>

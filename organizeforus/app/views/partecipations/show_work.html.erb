@@ -75,7 +75,7 @@
 </div>
 
 <%if @group.user==current_user && member.user.email!= @group.user.email%>
-  <div class="col mb-2"> 
+  <div class="col mb-1"> 
      <%= link_to "Delete", [:destroy, member] ,class:"btn btn-danger btn-sm", data: {
                   turbo_method: :delete,
                   turbo_confirm: "Are you sure?"

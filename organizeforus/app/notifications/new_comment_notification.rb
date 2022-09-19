@@ -13,7 +13,7 @@ class NewCommentNotification < Noticed::Base
   def url
     @group=Group.find(params[:group][:id])
     @post=Post.find(params[:post][:id])
-    post_show_path(@group,@post)
+    group_post_path(@group,@post)
   end  
 
 end
