@@ -16,7 +16,6 @@
     <div class="row">
       <div class="col-sm-8">
         <%= image_tag user_avatar(@user, 200), class: "rounded-circle", :size => "120x115" %>
-        <br>
         <%= image_tag "red-arrow-standard.png", :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgArrow" %>
         <%= image_tag user_avatar(resource, 200), :size => "200x180", style: "display: none", class: "rounded-circle", id:"imgOut" %> 
       </div>
@@ -53,7 +52,7 @@
   <div class="field form-group">
     <%= f.label :Birthday %><br />
     
-    <%= f.date_field :birthday, as: :date, html5: true, class:"form-control" %> 
+    <%= f.date_field :birthday, as: :date, html5: true, min: Date.today - 120.years, max: Date.today-12.years, class:"form-control" %> 
   </div>
 
   <div class="field form-group">
